@@ -284,41 +284,41 @@ export default function RecomendadorFriko() {
       className="min-h-screen w-full flex flex-col items-center justify-start py-8 px-4"
       style={{ background: 'linear-gradient(135deg, #1B0B5E 0%, #130845 40%, #1B0B5E 100%)' }}
     >
-      {/* ── HEADER ── */}
-      <header className="flex flex-col items-center mb-6 gap-3">
-        {/* Logo — carga desde public/logo-friko.png, fallback círculo amarillo */}
-        <div className="flex items-center justify-center" style={{ height: '90px' }}>
-          {!logoError ? (
-            <img
-              src="/logo-friko.png"
-              alt="Logo Friko"
-              style={{ width: '140px', objectFit: 'contain' }}
-              className="drop-shadow-lg"
-              onError={() => setLogoError(true)}
-            />
-          ) : (
-            <div
-              className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg"
-              style={{ backgroundColor: '#FFC600' }}
-            >
-              <span className="text-3xl font-black" style={{ color: '#C41E24' }}>F</span>
-            </div>
-          )}
-        </div>
-
-        <h1 className="text-3xl font-extrabold text-white tracking-tight">
-          Recomendador Friko
-        </h1>
-        <p className="text-blue-200 text-sm font-light tracking-wide">
-          Tu receta perfecta con productos Friko
-        </p>
-      </header>
-
       {/* ── PANEL BLANCO ── */}
       <main
         className="bg-white rounded-2xl shadow-2xl w-full px-6 py-7 flex flex-col gap-6"
         style={{ maxWidth: '820px' }}
       >
+
+        {/* ── HEADER ── */}
+        <header className="flex flex-col items-center gap-3 pb-5 border-b border-gray-100 mb-5">
+          {/* Logo — carga desde public/logo-friko.png, fallback círculo amarillo */}
+          <div className="flex items-center justify-center" style={{ height: '90px' }}>
+            {!logoError ? (
+              <img
+                src="/logo-friko.png"
+                alt="Logo Friko"
+                style={{ width: '140px', objectFit: 'contain' }}
+                className="drop-shadow-lg"
+                onError={() => setLogoError(true)}
+              />
+            ) : (
+              <div
+                className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg"
+                style={{ backgroundColor: '#FFC600' }}
+              >
+                <span className="text-3xl font-black" style={{ color: '#C41E24' }}>F</span>
+              </div>
+            )}
+          </div>
+
+          <h1 className="text-3xl font-extrabold tracking-tight" style={{ color: '#1B0B5E' }}>
+            Recomendador Friko
+          </h1>
+          <p className="text-gray-400 text-sm font-light tracking-wide">
+            Tu receta perfecta con productos Friko
+          </p>
+        </header>
 
         {/* ── ESTADO DE CARGA DEL CATÁLOGO ── */}
         {cargando && (
@@ -448,131 +448,149 @@ export default function RecomendadorFriko() {
           </div>
         )}
 
-        {/* ── ZONA DE RESULTADOS ── */}
-        {!resultado && !error && (
-          <div className="flex flex-col items-center justify-center py-10 gap-3 text-gray-300">
-            <IconChef />
-            <p className="text-sm font-medium text-gray-400 text-center">
-              Selecciona tus preferencias y presiona <span className="font-bold" style={{ color: '#C41E24' }}>Generar</span>
-            </p>
-          </div>
-        )}
+        {/* ── ZONA DE RESULTADOS — siempre visible ── */}
+        <div className="grid grid-cols-2 gap-0 divide-x divide-gray-100 border border-gray-100 rounded-2xl overflow-hidden">
 
-        {resultado && receta && (
-          <div className="grid grid-cols-2 gap-0 divide-x divide-gray-100 border border-gray-100 rounded-2xl overflow-hidden">
-
-            {/* ─── IZQUIERDA: PRODUCTO ─── */}
-            <div className="p-5 flex flex-col gap-3 bg-gray-50/50">
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">
-                  Producto recomendado
-                </span>
-              </div>
-
-              <div>
-                <h2 className="text-xl font-extrabold text-gray-800 leading-tight">
-                  {resultado.Producto}
-                </h2>
-                <p className="text-sm text-gray-500 mt-1">{resultado.Descripcion}</p>
-              </div>
-
-              <div className="flex flex-col gap-1 text-sm text-gray-600">
-                <span>
-                  <span className="font-semibold text-gray-700">Presentación:</span>{' '}
-                  {resultado.Presentacion}
-                </span>
-                <span>
-                  <span className="font-semibold text-gray-700">Categoría:</span>{' '}
-                  {resultado.Categoria}
-                </span>
-                <span>
-                  <span className="font-semibold text-gray-700">SKU:</span>{' '}
-                  <code className="text-xs bg-gray-200 px-1.5 py-0.5 rounded font-mono">
-                    {resultado.SKU}
-                  </code>
-                </span>
-              </div>
-
-              {/* Badges preparación */}
-              <div className="flex flex-wrap gap-1.5 mt-1">
-                {resultado.Preparacion.map((m) => (
-                  <span
-                    key={m}
-                    className="text-xs font-semibold px-2.5 py-1 rounded-full"
-                    style={{ backgroundColor: '#FEF3C7', color: '#92400E' }}
-                  >
-                    {m}
+          {/* ─── IZQUIERDA: PRODUCTO ─── */}
+          <div className="p-5 flex flex-col gap-3 bg-gray-50/50" style={{ minHeight: '280px' }}>
+            {resultado ? (
+              <>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">
+                    Producto recomendado
                   </span>
-                ))}
-                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${marcaColor}`}>
-                  {resultado.Marca}
-                </span>
-              </div>
+                </div>
 
-              <div className="text-xs text-gray-400 mt-auto pt-2 border-t border-gray-100">
-                Región: <span className="font-medium text-gray-600">{resultado.Region}</span>
-                {' · '}
-                {resultado.Rango}
-              </div>
-            </div>
+                <div>
+                  <h2 className="text-xl font-extrabold text-gray-800 leading-tight">
+                    {resultado.Producto}
+                  </h2>
+                  <p className="text-sm text-gray-500 mt-1">{resultado.Descripcion}</p>
+                </div>
 
-            {/* ─── DERECHA: RECETA ─── */}
-            <div className="p-5 flex flex-col gap-3">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">
-                  Receta sugerida
-                </span>
-                <span
-                  className="flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full"
-                  style={{ backgroundColor: '#FFF8E1', color: '#92400E', border: '1px solid rgba(255,198,0,0.4)' }}
-                >
-                  <IconStar />
-                  Generado por IA
-                </span>
-              </div>
+                <div className="flex flex-col gap-1 text-sm text-gray-600">
+                  <span>
+                    <span className="font-semibold text-gray-700">Presentación:</span>{' '}
+                    {resultado.Presentacion}
+                  </span>
+                  <span>
+                    <span className="font-semibold text-gray-700">Categoría:</span>{' '}
+                    {resultado.Categoria}
+                  </span>
+                  <span>
+                    <span className="font-semibold text-gray-700">SKU:</span>{' '}
+                    <code className="text-xs bg-gray-200 px-1.5 py-0.5 rounded font-mono">
+                      {resultado.SKU}
+                    </code>
+                  </span>
+                </div>
 
-              <h2 className="text-lg font-extrabold text-gray-800 leading-tight">
-                {receta.nombre}
-              </h2>
-
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5">
-                  Ingredientes
-                </p>
-                <ul className="space-y-1">
-                  {receta.ingredientes.map((ing, i) => (
-                    <li key={i} className="flex items-start gap-1.5 text-sm text-gray-600">
-                      <span
-                        className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0"
-                        style={{ backgroundColor: '#FFC600' }}
-                      />
-                      {ing}
-                    </li>
+                {/* Badges preparación */}
+                <div className="flex flex-wrap gap-1.5 mt-1">
+                  {resultado.Preparacion.map((m) => (
+                    <span
+                      key={m}
+                      className="text-xs font-semibold px-2.5 py-1 rounded-full"
+                      style={{ backgroundColor: '#FEF3C7', color: '#92400E' }}
+                    >
+                      {m}
+                    </span>
                   ))}
-                </ul>
-              </div>
+                  <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${marcaColor}`}>
+                    {resultado.Marca}
+                  </span>
+                </div>
 
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5">
-                  Preparación
-                </p>
-                <ol className="space-y-1.5">
-                  {receta.pasos.map((paso, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                      <span
-                        className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black text-white mt-0.5"
-                        style={{ backgroundColor: '#C41E24' }}
-                      >
-                        {i + 1}
-                      </span>
-                      {paso}
-                    </li>
-                  ))}
-                </ol>
+                <div className="text-xs text-gray-400 mt-auto pt-2 border-t border-gray-100">
+                  Región: <span className="font-medium text-gray-600">{resultado.Region}</span>
+                  {' · '}
+                  {resultado.Rango}
+                </div>
+              </>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full gap-2 text-gray-300">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M16.5 9.4 7.55 4.24"/>
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                  <polyline points="3.29 7 12 12 20.71 7"/>
+                  <line x1="12" x2="12" y1="22" y2="12"/>
+                </svg>
+                <span className="text-xs font-medium text-gray-400">Producto recomendado</span>
+                <span className="text-[11px] text-gray-300">Aparecerá aquí al generar</span>
               </div>
-            </div>
+            )}
           </div>
-        )}
+
+          {/* ─── DERECHA: RECETA ─── */}
+          <div className="p-5 flex flex-col gap-3" style={{ minHeight: '280px' }}>
+            {resultado && receta ? (
+              <>
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">
+                    Receta sugerida
+                  </span>
+                  <span
+                    className="flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full"
+                    style={{ backgroundColor: '#FFF8E1', color: '#92400E', border: '1px solid rgba(255,198,0,0.4)' }}
+                  >
+                    <IconStar />
+                    Generado por IA
+                  </span>
+                </div>
+
+                <h2 className="text-lg font-extrabold text-gray-800 leading-tight">
+                  {receta.nombre}
+                </h2>
+
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5">
+                    Ingredientes
+                  </p>
+                  <ul className="space-y-1">
+                    {receta.ingredientes.map((ing, i) => (
+                      <li key={i} className="flex items-start gap-1.5 text-sm text-gray-600">
+                        <span
+                          className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0"
+                          style={{ backgroundColor: '#FFC600' }}
+                        />
+                        {ing}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5">
+                    Preparación
+                  </p>
+                  <ol className="space-y-1.5">
+                    {receta.pasos.map((paso, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
+                        <span
+                          className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black text-white mt-0.5"
+                          style={{ backgroundColor: '#C41E24' }}
+                        >
+                          {i + 1}
+                        </span>
+                        {paso}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              </>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full gap-2 text-gray-300">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"/>
+                  <line x1="6" y1="17" x2="18" y2="17"/>
+                </svg>
+                <span className="text-xs font-medium text-gray-400">Receta sugerida</span>
+                <span className="text-[11px] text-gray-300">Aparecerá aquí al generar</span>
+              </div>
+            )}
+          </div>
+
+        </div>
       </main>
 
       {/* ── FOOTER ── */}
