@@ -1,0 +1,1197 @@
+[
+  {
+    "SKU":"FRIK-001",
+    "Marca":"FRIKO",
+    "Producto":"Chuzos de contramuslo",
+    "Descripción":"Contramuslo marinado",
+    "Presentación":"10 und \/ 1.900 g",
+    "Categoría":"Pollo",
+    "Región":"Antioquia",
+    "Tipo_Preparación":"Parrilla \/ Sartén",
+    "Preparacion_Lista":[
+      "Parrilla",
+      "Sartén"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-002",
+    "Marca":"FRIKO",
+    "Producto":"Mini chuzos",
+    "Descripción":"Contramuslo marinado pequeño",
+    "Presentación":"6 und \/ 540 g",
+    "Categoría":"Pollo",
+    "Región":"Eje Cafetero",
+    "Tipo_Preparación":"Sartén \/ Airfryer",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Airfryer"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"FRIK-003",
+    "Marca":"FRIKO",
+    "Producto":"Alitas BBQ",
+    "Descripción":"Alitas marinadas BBQ",
+    "Presentación":"12 und \/ 900 g",
+    "Categoría":"Pollo",
+    "Región":"Santander",
+    "Tipo_Preparación":"Horno \/ Airfryer",
+    "Preparacion_Lista":[
+      "Horno",
+      "Airfryer"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-004",
+    "Marca":"FRIKO",
+    "Producto":"Alitas picantes",
+    "Descripción":"Alitas marinadas picantes",
+    "Presentación":"12 und \/ 900 g",
+    "Categoría":"Pollo",
+    "Región":"Atlántico",
+    "Tipo_Preparación":"Horno \/ Airfryer",
+    "Preparacion_Lista":[
+      "Horno",
+      "Airfryer"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-005",
+    "Marca":"FRIKO",
+    "Producto":"Nuggets de pollo",
+    "Descripción":"Nuggets apanados",
+    "Presentación":"24 und \/ 520 g",
+    "Categoría":"Pollo Procesado",
+    "Región":"Bogotá",
+    "Tipo_Preparación":"Horno \/ Airfryer",
+    "Preparacion_Lista":[
+      "Horno",
+      "Airfryer"
+    ],
+    "Rango_Personas":"16+ personas",
+    "Ocasion":"Evento"
+  },
+  {
+    "SKU":"FRIK-006",
+    "Marca":"FRIKO",
+    "Producto":"Bombones BBQ",
+    "Descripción":"Pollo apanado precocido",
+    "Presentación":"10 und \/ 500 g",
+    "Categoría":"Pollo Procesado",
+    "Región":"Antioquia",
+    "Tipo_Preparación":"Sartén \/ Horno",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Horno"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-007",
+    "Marca":"FRIKO",
+    "Producto":"Chorizo de pollo",
+    "Descripción":"Chorizo tipo parrillero",
+    "Presentación":"20 und \/ 2.000 g",
+    "Categoría":"Carnes frias",
+    "Región":"Eje Cafetero",
+    "Tipo_Preparación":"Parrilla \/ Sartén",
+    "Preparacion_Lista":[
+      "Parrilla",
+      "Sartén"
+    ],
+    "Rango_Personas":"16+ personas",
+    "Ocasion":"Evento"
+  },
+  {
+    "SKU":"FRIK-008",
+    "Marca":"FRIKO",
+    "Producto":"Filete de pechuga",
+    "Descripción":"Pechuga sin piel",
+    "Presentación":"900 g",
+    "Categoría":"Pollo",
+    "Región":"Norte de Santander",
+    "Tipo_Preparación":"Sartén \/ Plancha",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Plancha"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-009",
+    "Marca":"FRIKO",
+    "Producto":"Lomitos de pechuga",
+    "Descripción":"Lomitos congelados",
+    "Presentación":"2.000 g",
+    "Categoría":"Pollo",
+    "Región":"Bogotá",
+    "Tipo_Preparación":"Sartén \/ Wok",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Wok"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"ANTI-001",
+    "Marca":"ANTILLANA",
+    "Producto":"Hamburguesa de salmón",
+    "Descripción":"Hamburguesa gourmet",
+    "Presentación":"6 und \/ 454 g",
+    "Categoría":"Pescado Procesado",
+    "Región":"Atlántico",
+    "Tipo_Preparación":"Sartén \/ Parrilla",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Parrilla"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"ANTI-002",
+    "Marca":"ANTILLANA",
+    "Producto":"Brochetas de langostino",
+    "Descripción":"Langostino en pincho",
+    "Presentación":"6 und \/ 600 g",
+    "Categoría":"Mariscos",
+    "Región":"Antioquia",
+    "Tipo_Preparación":"Parrilla",
+    "Preparacion_Lista":[
+      "Parrilla"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"ANTI-003",
+    "Marca":"ANTILLANA",
+    "Producto":"Medallones de pescado",
+    "Descripción":"Pescado blanco porcionado",
+    "Presentación":"12 und \/ 1.200 g",
+    "Categoría":"Pescado",
+    "Región":"Norte de Santander",
+    "Tipo_Preparación":"Horno \/ Sartén",
+    "Preparacion_Lista":[
+      "Horno",
+      "Sartén"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"ANTI-004",
+    "Marca":"ANTILLANA",
+    "Producto":"Dedos de merluza",
+    "Descripción":"Merluza apanada",
+    "Presentación":"20 und \/ 800 g",
+    "Categoría":"Pescado Procesado",
+    "Región":"Atlántico",
+    "Tipo_Preparación":"Horno \/ Airfryer",
+    "Preparacion_Lista":[
+      "Horno",
+      "Airfryer"
+    ],
+    "Rango_Personas":"16+ personas",
+    "Ocasion":"Evento"
+  },
+  {
+    "SKU":"ANTI-005",
+    "Marca":"ANTILLANA",
+    "Producto":"Filete de salmón premium",
+    "Descripción":"Salmón importado",
+    "Presentación":"450 g",
+    "Categoría":"Pescado",
+    "Región":"Eje Cafetero",
+    "Tipo_Preparación":"Plancha \/ Horno",
+    "Preparacion_Lista":[
+      "Plancha",
+      "Horno"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"ANTI-006",
+    "Marca":"ANTILLANA",
+    "Producto":"Camarón tití",
+    "Descripción":"Camarón precocido",
+    "Presentación":"700 g",
+    "Categoría":"Mariscos",
+    "Región":"Santander",
+    "Tipo_Preparación":"Sartén \/ Salteado",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Salteado"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-010",
+    "Marca":"FRIKO",
+    "Producto":"Chuzos de contramuslo",
+    "Descripción":"Contramuslo marinado",
+    "Presentación":"10 und \/ 1.900 g",
+    "Categoría":"Pollo",
+    "Región":"Bogotá",
+    "Tipo_Preparación":"Parrilla \/ Sartén",
+    "Preparacion_Lista":[
+      "Parrilla",
+      "Sartén"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-011",
+    "Marca":"FRIKO",
+    "Producto":"Mini chuzos",
+    "Descripción":"Contramuslo marinado pequeño",
+    "Presentación":"6 und \/ 540 g",
+    "Categoría":"Pollo",
+    "Región":"Santander",
+    "Tipo_Preparación":"Sartén \/ Airfryer",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Airfryer"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"FRIK-012",
+    "Marca":"FRIKO",
+    "Producto":"Alitas BBQ",
+    "Descripción":"Alitas marinadas BBQ",
+    "Presentación":"12 und \/ 900 g",
+    "Categoría":"Pollo",
+    "Región":"Santander",
+    "Tipo_Preparación":"Horno \/ Airfryer",
+    "Preparacion_Lista":[
+      "Horno",
+      "Airfryer"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-013",
+    "Marca":"FRIKO",
+    "Producto":"Alitas picantes",
+    "Descripción":"Alitas marinadas picantes",
+    "Presentación":"12 und \/ 900 g",
+    "Categoría":"Pollo",
+    "Región":"Eje Cafetero",
+    "Tipo_Preparación":"Horno \/ Airfryer",
+    "Preparacion_Lista":[
+      "Horno",
+      "Airfryer"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-014",
+    "Marca":"FRIKO",
+    "Producto":"Nuggets de pollo",
+    "Descripción":"Nuggets apanados",
+    "Presentación":"24 und \/ 520 g",
+    "Categoría":"Pollo Procesado",
+    "Región":"Atlántico",
+    "Tipo_Preparación":"Horno \/ Airfryer",
+    "Preparacion_Lista":[
+      "Horno",
+      "Airfryer"
+    ],
+    "Rango_Personas":"16+ personas",
+    "Ocasion":"Evento"
+  },
+  {
+    "SKU":"FRIK-015",
+    "Marca":"FRIKO",
+    "Producto":"Bombones BBQ",
+    "Descripción":"Pollo apanado precocido",
+    "Presentación":"10 und \/ 500 g",
+    "Categoría":"Pollo Procesado",
+    "Región":"Antioquia",
+    "Tipo_Preparación":"Sartén \/ Horno",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Horno"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-016",
+    "Marca":"FRIKO",
+    "Producto":"Chorizo de pollo",
+    "Descripción":"Chorizo tipo parrillero",
+    "Presentación":"20 und \/ 2.000 g",
+    "Categoría":"Carnes frias",
+    "Región":"Atlántico",
+    "Tipo_Preparación":"Parrilla \/ Sartén",
+    "Preparacion_Lista":[
+      "Parrilla",
+      "Sartén"
+    ],
+    "Rango_Personas":"16+ personas",
+    "Ocasion":"Evento"
+  },
+  {
+    "SKU":"FRIK-017",
+    "Marca":"FRIKO",
+    "Producto":"Filete de pechuga",
+    "Descripción":"Pechuga sin piel",
+    "Presentación":"900 g",
+    "Categoría":"Pollo",
+    "Región":"Antioquia",
+    "Tipo_Preparación":"Sartén \/ Plancha",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Plancha"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-018",
+    "Marca":"FRIKO",
+    "Producto":"Lomitos de pechuga",
+    "Descripción":"Lomitos congelados",
+    "Presentación":"2.000 g",
+    "Categoría":"Pollo",
+    "Región":"Norte de Santander",
+    "Tipo_Preparación":"Sartén \/ Wok",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Wok"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"ANTI-007",
+    "Marca":"ANTILLANA",
+    "Producto":"Hamburguesa de salmón",
+    "Descripción":"Hamburguesa gourmet",
+    "Presentación":"6 und \/ 454 g",
+    "Categoría":"Pescado Procesado",
+    "Región":"Santander",
+    "Tipo_Preparación":"Sartén \/ Parrilla",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Parrilla"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"ANTI-008",
+    "Marca":"ANTILLANA",
+    "Producto":"Brochetas de langostino",
+    "Descripción":"Langostino en pincho",
+    "Presentación":"6 und \/ 600 g",
+    "Categoría":"Mariscos",
+    "Región":"Norte de Santander",
+    "Tipo_Preparación":"Parrilla",
+    "Preparacion_Lista":[
+      "Parrilla"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"ANTI-009",
+    "Marca":"ANTILLANA",
+    "Producto":"Medallones de pescado",
+    "Descripción":"Pescado blanco porcionado",
+    "Presentación":"12 und \/ 1.200 g",
+    "Categoría":"Pescado",
+    "Región":"Norte de Santander",
+    "Tipo_Preparación":"Horno \/ Sartén",
+    "Preparacion_Lista":[
+      "Horno",
+      "Sartén"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"ANTI-010",
+    "Marca":"ANTILLANA",
+    "Producto":"Dedos de merluza",
+    "Descripción":"Merluza apanada",
+    "Presentación":"20 und \/ 800 g",
+    "Categoría":"Pescado Procesado",
+    "Región":"Antioquia",
+    "Tipo_Preparación":"Horno \/ Airfryer",
+    "Preparacion_Lista":[
+      "Horno",
+      "Airfryer"
+    ],
+    "Rango_Personas":"16+ personas",
+    "Ocasion":"Evento"
+  },
+  {
+    "SKU":"ANTI-011",
+    "Marca":"ANTILLANA",
+    "Producto":"Filete de salmón premium",
+    "Descripción":"Salmón importado",
+    "Presentación":"450 g",
+    "Categoría":"Pescado",
+    "Región":"Eje Cafetero",
+    "Tipo_Preparación":"Plancha \/ Horno",
+    "Preparacion_Lista":[
+      "Plancha",
+      "Horno"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"ANTI-012",
+    "Marca":"ANTILLANA",
+    "Producto":"Camarón tití",
+    "Descripción":"Camarón precocido",
+    "Presentación":"700 g",
+    "Categoría":"Mariscos",
+    "Región":"Antioquia",
+    "Tipo_Preparación":"Sartén \/ Salteado",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Salteado"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-019",
+    "Marca":"FRIKO",
+    "Producto":"Chuzos de contramuslo",
+    "Descripción":"Contramuslo marinado",
+    "Presentación":"10 und \/ 1.900 g",
+    "Categoría":"Pollo",
+    "Región":"Atlántico",
+    "Tipo_Preparación":"Parrilla \/ Sartén",
+    "Preparacion_Lista":[
+      "Parrilla",
+      "Sartén"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-020",
+    "Marca":"FRIKO",
+    "Producto":"Mini chuzos",
+    "Descripción":"Contramuslo marinado pequeño",
+    "Presentación":"6 und \/ 540 g",
+    "Categoría":"Pollo",
+    "Región":"Santander",
+    "Tipo_Preparación":"Sartén \/ Airfryer",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Airfryer"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"FRIK-021",
+    "Marca":"FRIKO",
+    "Producto":"Alitas BBQ",
+    "Descripción":"Alitas marinadas BBQ",
+    "Presentación":"12 und \/ 900 g",
+    "Categoría":"Pollo",
+    "Región":"Norte de Santander",
+    "Tipo_Preparación":"Horno \/ Airfryer",
+    "Preparacion_Lista":[
+      "Horno",
+      "Airfryer"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-022",
+    "Marca":"FRIKO",
+    "Producto":"Alitas picantes",
+    "Descripción":"Alitas marinadas picantes",
+    "Presentación":"12 und \/ 900 g",
+    "Categoría":"Pollo",
+    "Región":"Atlántico",
+    "Tipo_Preparación":"Horno \/ Airfryer",
+    "Preparacion_Lista":[
+      "Horno",
+      "Airfryer"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-023",
+    "Marca":"FRIKO",
+    "Producto":"Nuggets de pollo",
+    "Descripción":"Nuggets apanados",
+    "Presentación":"24 und \/ 520 g",
+    "Categoría":"Pollo Procesado",
+    "Región":"Antioquia",
+    "Tipo_Preparación":"Horno \/ Airfryer",
+    "Preparacion_Lista":[
+      "Horno",
+      "Airfryer"
+    ],
+    "Rango_Personas":"16+ personas",
+    "Ocasion":"Evento"
+  },
+  {
+    "SKU":"FRIK-024",
+    "Marca":"FRIKO",
+    "Producto":"Bombones BBQ",
+    "Descripción":"Pollo apanado precocido",
+    "Presentación":"10 und \/ 500 g",
+    "Categoría":"Pollo Procesado",
+    "Región":"Bogotá",
+    "Tipo_Preparación":"Sartén \/ Horno",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Horno"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-025",
+    "Marca":"FRIKO",
+    "Producto":"Chorizo de pollo",
+    "Descripción":"Chorizo tipo parrillero",
+    "Presentación":"20 und \/ 2.000 g",
+    "Categoría":"Carnes frias",
+    "Región":"Bogotá",
+    "Tipo_Preparación":"Parrilla \/ Sartén",
+    "Preparacion_Lista":[
+      "Parrilla",
+      "Sartén"
+    ],
+    "Rango_Personas":"16+ personas",
+    "Ocasion":"Evento"
+  },
+  {
+    "SKU":"FRIK-026",
+    "Marca":"FRIKO",
+    "Producto":"Filete de pechuga",
+    "Descripción":"Pechuga sin piel",
+    "Presentación":"900 g",
+    "Categoría":"Pollo",
+    "Región":"Bogotá",
+    "Tipo_Preparación":"Sartén \/ Plancha",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Plancha"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-027",
+    "Marca":"FRIKO",
+    "Producto":"Lomitos de pechuga",
+    "Descripción":"Lomitos congelados",
+    "Presentación":"2.000 g",
+    "Categoría":"Pollo",
+    "Región":"Antioquia",
+    "Tipo_Preparación":"Sartén \/ Wok",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Wok"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"ANTI-013",
+    "Marca":"ANTILLANA",
+    "Producto":"Hamburguesa de salmón",
+    "Descripción":"Hamburguesa gourmet",
+    "Presentación":"6 und \/ 454 g",
+    "Categoría":"Pescado Procesado",
+    "Región":"Norte de Santander",
+    "Tipo_Preparación":"Sartén \/ Parrilla",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Parrilla"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"ANTI-014",
+    "Marca":"ANTILLANA",
+    "Producto":"Brochetas de langostino",
+    "Descripción":"Langostino en pincho",
+    "Presentación":"6 und \/ 600 g",
+    "Categoría":"Mariscos",
+    "Región":"Eje Cafetero",
+    "Tipo_Preparación":"Parrilla",
+    "Preparacion_Lista":[
+      "Parrilla"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"ANTI-015",
+    "Marca":"ANTILLANA",
+    "Producto":"Medallones de pescado",
+    "Descripción":"Pescado blanco porcionado",
+    "Presentación":"12 und \/ 1.200 g",
+    "Categoría":"Pescado",
+    "Región":"Bogotá",
+    "Tipo_Preparación":"Horno \/ Sartén",
+    "Preparacion_Lista":[
+      "Horno",
+      "Sartén"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"ANTI-016",
+    "Marca":"ANTILLANA",
+    "Producto":"Dedos de merluza",
+    "Descripción":"Merluza apanada",
+    "Presentación":"20 und \/ 800 g",
+    "Categoría":"Pescado Procesado",
+    "Región":"Santander",
+    "Tipo_Preparación":"Horno \/ Airfryer",
+    "Preparacion_Lista":[
+      "Horno",
+      "Airfryer"
+    ],
+    "Rango_Personas":"16+ personas",
+    "Ocasion":"Evento"
+  },
+  {
+    "SKU":"ANTI-017",
+    "Marca":"ANTILLANA",
+    "Producto":"Filete de salmón premium",
+    "Descripción":"Salmón importado",
+    "Presentación":"450 g",
+    "Categoría":"Pescado",
+    "Región":"Eje Cafetero",
+    "Tipo_Preparación":"Plancha \/ Horno",
+    "Preparacion_Lista":[
+      "Plancha",
+      "Horno"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"ANTI-018",
+    "Marca":"ANTILLANA",
+    "Producto":"Camarón tití",
+    "Descripción":"Camarón precocido",
+    "Presentación":"700 g",
+    "Categoría":"Mariscos",
+    "Región":"Norte de Santander",
+    "Tipo_Preparación":"Sartén \/ Salteado",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Salteado"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-028",
+    "Marca":"FRIKO",
+    "Producto":"Chuzos de contramuslo",
+    "Descripción":"Contramuslo marinado",
+    "Presentación":"10 und \/ 1.900 g",
+    "Categoría":"Pollo",
+    "Región":"Bogotá",
+    "Tipo_Preparación":"Parrilla \/ Sartén",
+    "Preparacion_Lista":[
+      "Parrilla",
+      "Sartén"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-029",
+    "Marca":"FRIKO",
+    "Producto":"Mini chuzos",
+    "Descripción":"Contramuslo marinado pequeño",
+    "Presentación":"6 und \/ 540 g",
+    "Categoría":"Pollo",
+    "Región":"Bogotá",
+    "Tipo_Preparación":"Sartén \/ Airfryer",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Airfryer"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"FRIK-030",
+    "Marca":"FRIKO",
+    "Producto":"Alitas BBQ",
+    "Descripción":"Alitas marinadas BBQ",
+    "Presentación":"12 und \/ 900 g",
+    "Categoría":"Pollo",
+    "Región":"Atlántico",
+    "Tipo_Preparación":"Horno \/ Airfryer",
+    "Preparacion_Lista":[
+      "Horno",
+      "Airfryer"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-031",
+    "Marca":"FRIKO",
+    "Producto":"Alitas picantes",
+    "Descripción":"Alitas marinadas picantes",
+    "Presentación":"12 und \/ 900 g",
+    "Categoría":"Pollo",
+    "Región":"Atlántico",
+    "Tipo_Preparación":"Horno \/ Airfryer",
+    "Preparacion_Lista":[
+      "Horno",
+      "Airfryer"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-032",
+    "Marca":"FRIKO",
+    "Producto":"Nuggets de pollo",
+    "Descripción":"Nuggets apanados",
+    "Presentación":"24 und \/ 520 g",
+    "Categoría":"Pollo Procesado",
+    "Región":"Santander",
+    "Tipo_Preparación":"Horno \/ Airfryer",
+    "Preparacion_Lista":[
+      "Horno",
+      "Airfryer"
+    ],
+    "Rango_Personas":"16+ personas",
+    "Ocasion":"Evento"
+  },
+  {
+    "SKU":"FRIK-033",
+    "Marca":"FRIKO",
+    "Producto":"Bombones BBQ",
+    "Descripción":"Pollo apanado precocido",
+    "Presentación":"10 und \/ 500 g",
+    "Categoría":"Pollo Procesado",
+    "Región":"Eje Cafetero",
+    "Tipo_Preparación":"Sartén \/ Horno",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Horno"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-034",
+    "Marca":"FRIKO",
+    "Producto":"Chorizo de pollo",
+    "Descripción":"Chorizo tipo parrillero",
+    "Presentación":"20 und \/ 2.000 g",
+    "Categoría":"Carnes frias",
+    "Región":"Norte de Santander",
+    "Tipo_Preparación":"Parrilla \/ Sartén",
+    "Preparacion_Lista":[
+      "Parrilla",
+      "Sartén"
+    ],
+    "Rango_Personas":"16+ personas",
+    "Ocasion":"Evento"
+  },
+  {
+    "SKU":"FRIK-035",
+    "Marca":"FRIKO",
+    "Producto":"Filete de pechuga",
+    "Descripción":"Pechuga sin piel",
+    "Presentación":"900 g",
+    "Categoría":"Pollo",
+    "Región":"Norte de Santander",
+    "Tipo_Preparación":"Sartén \/ Plancha",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Plancha"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-036",
+    "Marca":"FRIKO",
+    "Producto":"Lomitos de pechuga",
+    "Descripción":"Lomitos congelados",
+    "Presentación":"2.000 g",
+    "Categoría":"Pollo",
+    "Región":"Atlántico",
+    "Tipo_Preparación":"Sartén \/ Wok",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Wok"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"ANTI-019",
+    "Marca":"ANTILLANA",
+    "Producto":"Hamburguesa de salmón",
+    "Descripción":"Hamburguesa gourmet",
+    "Presentación":"6 und \/ 454 g",
+    "Categoría":"Pescado Procesado",
+    "Región":"Santander",
+    "Tipo_Preparación":"Sartén \/ Parrilla",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Parrilla"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"ANTI-020",
+    "Marca":"ANTILLANA",
+    "Producto":"Brochetas de langostino",
+    "Descripción":"Langostino en pincho",
+    "Presentación":"6 und \/ 600 g",
+    "Categoría":"Mariscos",
+    "Región":"Santander",
+    "Tipo_Preparación":"Parrilla",
+    "Preparacion_Lista":[
+      "Parrilla"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"ANTI-021",
+    "Marca":"ANTILLANA",
+    "Producto":"Medallones de pescado",
+    "Descripción":"Pescado blanco porcionado",
+    "Presentación":"12 und \/ 1.200 g",
+    "Categoría":"Pescado",
+    "Región":"Norte de Santander",
+    "Tipo_Preparación":"Horno \/ Sartén",
+    "Preparacion_Lista":[
+      "Horno",
+      "Sartén"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"ANTI-022",
+    "Marca":"ANTILLANA",
+    "Producto":"Dedos de merluza",
+    "Descripción":"Merluza apanada",
+    "Presentación":"20 und \/ 800 g",
+    "Categoría":"Pescado Procesado",
+    "Región":"Eje Cafetero",
+    "Tipo_Preparación":"Horno \/ Airfryer",
+    "Preparacion_Lista":[
+      "Horno",
+      "Airfryer"
+    ],
+    "Rango_Personas":"16+ personas",
+    "Ocasion":"Evento"
+  },
+  {
+    "SKU":"ANTI-023",
+    "Marca":"ANTILLANA",
+    "Producto":"Filete de salmón premium",
+    "Descripción":"Salmón importado",
+    "Presentación":"450 g",
+    "Categoría":"Pescado",
+    "Región":"Bogotá",
+    "Tipo_Preparación":"Plancha \/ Horno",
+    "Preparacion_Lista":[
+      "Plancha",
+      "Horno"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"ANTI-024",
+    "Marca":"ANTILLANA",
+    "Producto":"Camarón tití",
+    "Descripción":"Camarón precocido",
+    "Presentación":"700 g",
+    "Categoría":"Mariscos",
+    "Región":"Atlántico",
+    "Tipo_Preparación":"Sartén \/ Salteado",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Salteado"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-037",
+    "Marca":"FRIKO",
+    "Producto":"Chuzos de contramuslo",
+    "Descripción":"Contramuslo marinado",
+    "Presentación":"10 und \/ 1.900 g",
+    "Categoría":"Pollo",
+    "Región":"Eje Cafetero",
+    "Tipo_Preparación":"Parrilla \/ Sartén",
+    "Preparacion_Lista":[
+      "Parrilla",
+      "Sartén"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-038",
+    "Marca":"FRIKO",
+    "Producto":"Mini chuzos",
+    "Descripción":"Contramuslo marinado pequeño",
+    "Presentación":"6 und \/ 540 g",
+    "Categoría":"Pollo",
+    "Región":"Eje Cafetero",
+    "Tipo_Preparación":"Sartén \/ Airfryer",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Airfryer"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"FRIK-039",
+    "Marca":"FRIKO",
+    "Producto":"Alitas BBQ",
+    "Descripción":"Alitas marinadas BBQ",
+    "Presentación":"12 und \/ 900 g",
+    "Categoría":"Pollo",
+    "Región":"Atlántico",
+    "Tipo_Preparación":"Horno \/ Airfryer",
+    "Preparacion_Lista":[
+      "Horno",
+      "Airfryer"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-040",
+    "Marca":"FRIKO",
+    "Producto":"Alitas picantes",
+    "Descripción":"Alitas marinadas picantes",
+    "Presentación":"12 und \/ 900 g",
+    "Categoría":"Pollo",
+    "Región":"Antioquia",
+    "Tipo_Preparación":"Horno \/ Airfryer",
+    "Preparacion_Lista":[
+      "Horno",
+      "Airfryer"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-041",
+    "Marca":"FRIKO",
+    "Producto":"Nuggets de pollo",
+    "Descripción":"Nuggets apanados",
+    "Presentación":"24 und \/ 520 g",
+    "Categoría":"Pollo Procesado",
+    "Región":"Eje Cafetero",
+    "Tipo_Preparación":"Horno \/ Airfryer",
+    "Preparacion_Lista":[
+      "Horno",
+      "Airfryer"
+    ],
+    "Rango_Personas":"16+ personas",
+    "Ocasion":"Evento"
+  },
+  {
+    "SKU":"FRIK-042",
+    "Marca":"FRIKO",
+    "Producto":"Bombones BBQ",
+    "Descripción":"Pollo apanado precocido",
+    "Presentación":"10 und \/ 500 g",
+    "Categoría":"Pollo Procesado",
+    "Región":"Antioquia",
+    "Tipo_Preparación":"Sartén \/ Horno",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Horno"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-043",
+    "Marca":"FRIKO",
+    "Producto":"Chorizo de pollo",
+    "Descripción":"Chorizo tipo parrillero",
+    "Presentación":"20 und \/ 2.000 g",
+    "Categoría":"Carnes frias",
+    "Región":"Norte de Santander",
+    "Tipo_Preparación":"Parrilla \/ Sartén",
+    "Preparacion_Lista":[
+      "Parrilla",
+      "Sartén"
+    ],
+    "Rango_Personas":"16+ personas",
+    "Ocasion":"Evento"
+  },
+  {
+    "SKU":"FRIK-044",
+    "Marca":"FRIKO",
+    "Producto":"Filete de pechuga",
+    "Descripción":"Pechuga sin piel",
+    "Presentación":"900 g",
+    "Categoría":"Pollo",
+    "Región":"Norte de Santander",
+    "Tipo_Preparación":"Sartén \/ Plancha",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Plancha"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"FRIK-045",
+    "Marca":"FRIKO",
+    "Producto":"Lomitos de pechuga",
+    "Descripción":"Lomitos congelados",
+    "Presentación":"2.000 g",
+    "Categoría":"Pollo",
+    "Región":"Atlántico",
+    "Tipo_Preparación":"Sartén \/ Wok",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Wok"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"ANTI-025",
+    "Marca":"ANTILLANA",
+    "Producto":"Hamburguesa de salmón",
+    "Descripción":"Hamburguesa gourmet",
+    "Presentación":"6 und \/ 454 g",
+    "Categoría":"Pescado Procesado",
+    "Región":"Eje Cafetero",
+    "Tipo_Preparación":"Sartén \/ Parrilla",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Parrilla"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"ANTI-026",
+    "Marca":"ANTILLANA",
+    "Producto":"Brochetas de langostino",
+    "Descripción":"Langostino en pincho",
+    "Presentación":"6 und \/ 600 g",
+    "Categoría":"Mariscos",
+    "Región":"Atlántico",
+    "Tipo_Preparación":"Parrilla",
+    "Preparacion_Lista":[
+      "Parrilla"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"ANTI-027",
+    "Marca":"ANTILLANA",
+    "Producto":"Medallones de pescado",
+    "Descripción":"Pescado blanco porcionado",
+    "Presentación":"12 und \/ 1.200 g",
+    "Categoría":"Pescado",
+    "Región":"Bogotá",
+    "Tipo_Preparación":"Horno \/ Sartén",
+    "Preparacion_Lista":[
+      "Horno",
+      "Sartén"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  },
+  {
+    "SKU":"ANTI-028",
+    "Marca":"ANTILLANA",
+    "Producto":"Dedos de merluza",
+    "Descripción":"Merluza apanada",
+    "Presentación":"20 und \/ 800 g",
+    "Categoría":"Pescado Procesado",
+    "Región":"Norte de Santander",
+    "Tipo_Preparación":"Horno \/ Airfryer",
+    "Preparacion_Lista":[
+      "Horno",
+      "Airfryer"
+    ],
+    "Rango_Personas":"16+ personas",
+    "Ocasion":"Evento"
+  },
+  {
+    "SKU":"ANTI-029",
+    "Marca":"ANTILLANA",
+    "Producto":"Filete de salmón premium",
+    "Descripción":"Salmón importado",
+    "Presentación":"450 g",
+    "Categoría":"Pescado",
+    "Región":"Atlántico",
+    "Tipo_Preparación":"Plancha \/ Horno",
+    "Preparacion_Lista":[
+      "Plancha",
+      "Horno"
+    ],
+    "Rango_Personas":"1-4 personas",
+    "Ocasion":"Hogar"
+  },
+  {
+    "SKU":"ANTI-030",
+    "Marca":"ANTILLANA",
+    "Producto":"Camarón tití",
+    "Descripción":"Camarón precocido",
+    "Presentación":"700 g",
+    "Categoría":"Mariscos",
+    "Región":"Santander",
+    "Tipo_Preparación":"Sartén \/ Salteado",
+    "Preparacion_Lista":[
+      "Sartén",
+      "Salteado"
+    ],
+    "Rango_Personas":"5-15 personas",
+    "Ocasion":"Hogar \/ Evento"
+  }
+]
