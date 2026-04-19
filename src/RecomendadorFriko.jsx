@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { ChefHat, CookingPot, Utensils, Carrot, Fish, Beef, Cherry, Egg, Pizza, Soup, Wine, Wheat } from 'lucide-react'
 
 // ─────────────────────────────────────────────
 // MAPEO DE PROPIEDADES DEL JSON EXTERNO
@@ -178,7 +177,7 @@ const labelStyle = {
   alignItems: 'center',
   gap: '6px',
   color: '#475569',
-  fontSize: '11px',
+  fontSize: '15px',
   fontWeight: 600,
   textTransform: 'uppercase',
   letterSpacing: '1.5px',
@@ -186,8 +185,70 @@ const labelStyle = {
 }
 
 // ─────────────────────────────────────────────
+// CARRUSEL FADE — imágenes en cross-dissolve
+// ─────────────────────────────────────────────
+const CarruselFade = ({ imagenes, indice, alt, modo = 'producto' }) => {
+  const esReceta = modo === 'receta'
+  return (
+    <div style={{
+      position: 'relative',
+      width: '100%',
+      height: '200px',
+      overflow: 'hidden',
+      borderRadius: '12px',
+      backgroundColor: esReceta ? 'transparent' : '#FFFFFF',
+      padding: esReceta ? 0 : '8px',
+      boxSizing: 'border-box',
+    }}>
+      {imagenes.map((src, i) => (
+        <img
+          key={src}
+          src={src}
+          alt={alt}
+          style={{
+            position: 'absolute',
+            top: esReceta ? 0 : '8px',
+            left: esReceta ? 0 : '8px',
+            width: esReceta ? '100%' : 'calc(100% - 16px)',
+            height: esReceta ? '100%' : 'calc(100% - 16px)',
+            objectFit: esReceta ? 'cover' : 'contain',
+            opacity: i === indice ? 1 : 0,
+            transition: 'opacity 1.2s ease-in-out',
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────
 // COMPONENTE PRINCIPAL
 // ─────────────────────────────────────────────
+
+// Arrays de imágenes para el carrusel (agregar más sin tocar la lógica)
+const CARRUSEL_PRODUCTOS = [
+  '/productos%20y%20recetas/producto-01-surtido-pescado.jpg',
+  '/productos%20y%20recetas/producto-02-alitas-bbq.webp',
+  '/productos%20y%20recetas/producto-03-camaron-tigre.webp',
+  '/productos%20y%20recetas/producto-04-filete-robalo.webp',
+  '/productos%20y%20recetas/producto-05-filete-salmon.webp',
+  '/productos%20y%20recetas/producto-06-muslos-pollo.webp',
+  '/productos%20y%20recetas/producto-07-trucha-mariposa.webp',
+  '/productos%20y%20recetas/producto-08-pollo-molido.png',
+  '/productos%20y%20recetas/producto-09-salmon-noruego.webp',
+]
+
+const CARRUSEL_RECETAS = [
+  '/productos%20y%20recetas/receta-01-arepa-pollo.png',
+  '/productos%20y%20recetas/receta-02-banderas-salchicha.jpg',
+  '/productos%20y%20recetas/receta-03-sandwich-pollo.png',
+  '/productos%20y%20recetas/receta-04-canelones-thai.jpg',
+  '/productos%20y%20recetas/receta-05-crispetas-pollo.jpg',
+  '/productos%20y%20recetas/receta-06-muslos-asados.jpg',
+  '/productos%20y%20recetas/receta-07-ensalada-pollo.png',
+  '/productos%20y%20recetas/receta-08-pizza.png',
+]
+
 export default function RecomendadorFriko() {
   // ── Estado del catálogo (cargado desde public/) ──
   const [catalogo, setCatalogo] = useState([])
@@ -224,6 +285,22 @@ export default function RecomendadorFriko() {
   const [error, setError] = useState('')
   const [nota, setNota] = useState('')
   const [logoError, setLogoError] = useState(false)
+
+  // ── Estado del carrusel ──
+  const [indiceProducto, setIndiceProducto] = useState(0)
+  const [indiceReceta, setIndiceReceta] = useState(0)
+
+  // ── Efecto carrusel: rota cada 5 segundos mientras no hay resultado ──
+  useEffect(() => {
+    if (resultado !== null) return
+
+    const interval = setInterval(() => {
+      setIndiceProducto(i => (i + 1) % CARRUSEL_PRODUCTOS.length)
+      setIndiceReceta(i => (i + 1) % CARRUSEL_RECETAS.length)
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [resultado])
 
   const handleGenerar = () => {
     setError('')
@@ -300,7 +377,7 @@ export default function RecomendadorFriko() {
   return (
     <div
       style={{
-        background: 'radial-gradient(ellipse at 50% 30%, #1a2d6b 0%, #111f54 30%, #0c1842 60%, #070f30 100%)',
+        background: 'radial-gradient(ellipse at 50% 40%, #1A3BA0 0%, #102B88 60%, #0A1F66 100%)',
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
@@ -312,543 +389,534 @@ export default function RecomendadorFriko() {
       }}
     >
 
-      {/* ── Íconos decorativos del fondo ── */}
-      <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }} aria-hidden="true">
-        {/* Columna izquierda */}
-        <ChefHat style={{ position:'absolute', top:'3%', left:'3%', opacity:0.07, transform:'rotate(-15deg)' }} size={44} color="white" strokeWidth={1} />
-        <Soup style={{ position:'absolute', top:'12%', left:'8%', opacity:0.06, transform:'rotate(8deg)' }} size={38} color="white" strokeWidth={1} />
-        <Carrot style={{ position:'absolute', top:'24%', left:'2%', opacity:0.07, transform:'rotate(25deg)' }} size={40} color="white" strokeWidth={1} />
-        <Beef style={{ position:'absolute', top:'36%', left:'6%', opacity:0.06, transform:'rotate(-10deg)' }} size={42} color="white" strokeWidth={1} />
-        <Wine style={{ position:'absolute', top:'48%', left:'3%', opacity:0.05, transform:'rotate(18deg)' }} size={36} color="white" strokeWidth={1} />
-        <CookingPot style={{ position:'absolute', top:'60%', left:'7%', opacity:0.06, transform:'rotate(-5deg)' }} size={44} color="white" strokeWidth={1} />
-        <Egg style={{ position:'absolute', top:'72%', left:'2%', opacity:0.07, transform:'rotate(12deg)' }} size={34} color="white" strokeWidth={1} />
-        <Fish style={{ position:'absolute', top:'84%', left:'6%', opacity:0.06, transform:'rotate(-18deg)' }} size={40} color="white" strokeWidth={1} />
-        {/* Columna derecha */}
-        <Utensils style={{ position:'absolute', top:'5%', right:'4%', opacity:0.07, transform:'rotate(12deg)' }} size={42} color="white" strokeWidth={1} />
-        <Pizza style={{ position:'absolute', top:'15%', right:'8%', opacity:0.06, transform:'rotate(-8deg)' }} size={38} color="white" strokeWidth={1} />
-        <Cherry style={{ position:'absolute', top:'27%', right:'3%', opacity:0.07, transform:'rotate(20deg)' }} size={34} color="white" strokeWidth={1} />
-        <Wheat style={{ position:'absolute', top:'39%', right:'7%', opacity:0.06, transform:'rotate(-12deg)' }} size={40} color="white" strokeWidth={1} />
-        <ChefHat style={{ position:'absolute', top:'51%', right:'4%', opacity:0.05, transform:'rotate(6deg)' }} size={38} color="white" strokeWidth={1} />
-        <Carrot style={{ position:'absolute', top:'63%', right:'8%', opacity:0.06, transform:'rotate(-22deg)' }} size={36} color="white" strokeWidth={1} />
-        <Soup style={{ position:'absolute', top:'75%', right:'3%', opacity:0.07, transform:'rotate(10deg)' }} size={42} color="white" strokeWidth={1} />
-        <Beef style={{ position:'absolute', top:'87%', right:'6%', opacity:0.06, transform:'rotate(-8deg)' }} size={38} color="white" strokeWidth={1} />
-        {/* Columna central */}
-        <CookingPot style={{ position:'absolute', top:'8%', left:'35%', opacity:0.04, transform:'rotate(-10deg)' }} size={36} color="white" strokeWidth={1} />
-        <Fish style={{ position:'absolute', top:'18%', right:'30%', opacity:0.04, transform:'rotate(15deg)' }} size={34} color="white" strokeWidth={1} />
-        <Wine style={{ position:'absolute', top:'45%', left:'25%', opacity:0.03, transform:'rotate(-8deg)' }} size={32} color="white" strokeWidth={1} />
-        <Pizza style={{ position:'absolute', top:'55%', right:'25%', opacity:0.03, transform:'rotate(12deg)' }} size={34} color="white" strokeWidth={1} />
-        <Egg style={{ position:'absolute', top:'70%', left:'30%', opacity:0.04, transform:'rotate(-15deg)' }} size={30} color="white" strokeWidth={1} />
-        <Wheat style={{ position:'absolute', top:'80%', right:'35%', opacity:0.04, transform:'rotate(8deg)' }} size={32} color="white" strokeWidth={1} />
-        <Utensils style={{ position:'absolute', top:'92%', left:'40%', opacity:0.03, transform:'rotate(-5deg)' }} size={34} color="white" strokeWidth={1} />
-      </div>
-
-      {/* ── Efecto de lucecitas en el fondo ── */}
-      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }} aria-hidden="true">
-        {[...Array(15)].map((_, i) => (
-          <div key={i} style={{
-            position: 'absolute',
-            width: `${3 + (i % 4) * 2}px`,
-            height: `${3 + (i % 4) * 2}px`,
-            borderRadius: '50%',
-            background: 'rgba(255, 255, 255, 0.15)',
-            filter: 'blur(1px)',
-            top: `${5 + (i * 6.3) % 90}%`,
-            left: `${3 + (i * 7.7) % 94}%`,
-          }} />
-        ))}
-      </div>
-
-      {/* ── GLASS CARD ── */}
+      {/* ── CONTENEDOR PRINCIPAL (dos paneles) ── */}
       <main style={{
-        background: 'linear-gradient(180deg, rgba(255,255,255,0.48) 0%, rgba(255,255,255,0.35) 50%, rgba(255,255,255,0.42) 100%)',
-        backdropFilter: 'blur(24px)',
-        WebkitBackdropFilter: 'blur(24px)',
-        borderRadius: '2.5rem',
-        border: '1px solid rgba(255, 255, 255, 0.55)',
-        boxShadow: '0 25px 60px rgba(0, 0, 0, 0.25), inset 0 2px 0 rgba(255, 255, 255, 0.7), inset 0 -2px 4px rgba(0, 0, 0, 0.06)',
         maxWidth: '900px',
         width: '100%',
-        padding: '2rem 2rem 2rem',
-        position: 'relative',
         marginTop: '1rem',
+        position: 'relative',
         zIndex: 1,
         display: 'flex',
         flexDirection: 'column',
-        gap: '1.25rem',
+        gap: '1.5rem',
       }}>
 
-        {/* ── Logos Friko + Antillana ── */}
-        <div style={{
+        {/* ── PANEL A: Amarillo — logos + título ── */}
+        <section style={{
+          background: 'radial-gradient(ellipse at center, rgba(251, 191, 36, 0.92) 0%, rgba(248, 178, 28, 0.94) 60%, rgba(245, 158, 11, 0.96) 100%)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderRadius: '2rem',
+          border: '2px solid rgba(212, 135, 16, 0.55)',
+          boxShadow: '0 15px 40px rgba(200, 130, 20, 0.35), inset 0 0 35px rgba(0, 0, 0, 0.08), inset 0 2px 4px rgba(255, 255, 255, 0.80), inset 0 -3px 6px rgba(150, 100, 10, 0.18)',
+          padding: '2rem 2rem 1.5rem',
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
-          gap: '1rem',
-          marginBottom: '0',
+          gap: '0.5rem',
         }}>
-          <img
-            src="/logo-friko-improved.png"
-            alt="Logo Friko"
-            style={{ height: '100px', width: 'auto', objectFit: 'contain' }}
-            onError={(e) => { e.currentTarget.style.display = 'none' }}
-          />
-          <img
-            src="/logo-antillana-improved.png"
-            alt="Logo Antillana"
-            style={{ height: '55px', width: 'auto', objectFit: 'contain' }}
-            onError={(e) => { e.currentTarget.style.display = 'none' }}
-          />
-        </div>
 
-        {/* ── TÍTULO Y SUBTÍTULO ── */}
-        <div style={{ textAlign: 'center', marginTop: '0' }}>
-          <h1 style={{
-            color: '#0d1b6f',
-            fontSize: '2rem',
-            fontWeight: 800,
-            marginBottom: '0.25rem',
-            letterSpacing: '-0.5px',
-            textShadow: '0 1px 2px rgba(0,0,0,0.06)',
-          }}>
-            Recomendador de Recetas
-          </h1>
-          <p style={{
-            color: '#3b4a6b',
-            fontSize: '0.875rem',
-            fontWeight: 300,
-          }}>
-            Tu receta perfecta con productos Friko y Antillana
-          </p>
-        </div>
-
-        {/* ── ESTADO DE CARGA DEL CATÁLOGO ── */}
-        {cargando && (
-          <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:'8px', padding:'1rem 0', color:'#64748b', fontSize:'0.875rem' }}>
-            <svg className="animate-spin" style={{ width:16, height:16, color:'#64748b' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-            </svg>
-            Cargando catálogo...
-          </div>
-        )}
-        {errorCarga && (
+          {/* ── Logos Friko + Antillana — igualados por área óptica ── */}
           <div style={{
-            background: 'rgba(249, 115, 22, 0.1)',
-            border: '1px solid rgba(249, 115, 22, 0.3)',
-            color: '#c2410c',
-            borderRadius: '0.75rem',
-            padding: '0.75rem 1rem',
-            fontSize: '0.875rem',
-            fontWeight: 500,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'flex-end',
+            gap: '24px',
+            marginBottom: '16px',
           }}>
-            {errorCarga}
-          </div>
-        )}
-
-        {/* ── SELECTORES 2×2 ── */}
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1.25rem' }}>
-
-          {/* Región */}
-          <div>
-            <label style={{...labelStyle, color: '#4ade80'}}>
-              <IconRegion color="#4ade80" /> Región
-            </label>
-            <select
-              value={region}
-              onChange={(e) => setRegion(e.target.value)}
-              disabled={cargando}
-              style={{ ...selectStyle, opacity: cargando ? 0.5 : 1 }}
-              onFocus={(e) => { e.currentTarget.style.boxShadow = '0 0 0 3px rgba(13,27,111,0.2)'; e.currentTarget.style.borderColor = '#0d1b6f' }}
-              onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#e2e8f0' }}
-            >
-              <option value="" style={{ background: '#ffffff', color: '#1e293b' }}>Todas las regiones</option>
-              {regiones.map((r) => <option key={r} style={{ background: '#ffffff', color: '#1e293b' }}>{r}</option>)}
-            </select>
-          </div>
-
-          {/* Ocasión */}
-          <div>
-            <label style={{...labelStyle, color: '#60a5fa'}}>
-              <IconOcasion color="#60a5fa" /> Ocasión
-            </label>
-            <select
-              value={ocasion}
-              onChange={(e) => setOcasion(e.target.value)}
-              style={selectStyle}
-              onFocus={(e) => { e.currentTarget.style.boxShadow = '0 0 0 3px rgba(13,27,111,0.2)'; e.currentTarget.style.borderColor = '#0d1b6f' }}
-              onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#e2e8f0' }}
-            >
-              <option value="" style={{ background: '#ffffff', color: '#1e293b' }}>Cualquier ocasión</option>
-              <option style={{ background: '#ffffff', color: '#1e293b' }}>Hogar</option>
-              <option style={{ background: '#ffffff', color: '#1e293b' }}>Evento</option>
-            </select>
-          </div>
-
-          {/* Preparación */}
-          <div>
-            <label style={{...labelStyle, color: '#f59e0b'}}>
-              <IconPreparacion color="#f59e0b" /> Preparación
-            </label>
-            <select
-              value={preparacion}
-              onChange={(e) => setPreparacion(e.target.value)}
-              disabled={cargando}
-              style={{ ...selectStyle, opacity: cargando ? 0.5 : 1 }}
-              onFocus={(e) => { e.currentTarget.style.boxShadow = '0 0 0 3px rgba(13,27,111,0.2)'; e.currentTarget.style.borderColor = '#0d1b6f' }}
-              onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#e2e8f0' }}
-            >
-              <option value="" style={{ background: '#ffffff', color: '#1e293b' }}>Cualquier método</option>
-              {metodos.map((m) => <option key={m} style={{ background: '#ffffff', color: '#1e293b' }}>{m}</option>)}
-            </select>
-          </div>
-
-          {/* Personas */}
-          <div>
-            <label style={{...labelStyle, color: '#a78bfa'}}>
-              <IconPersonas color="#a78bfa" /> Personas
-            </label>
-            <input
-              type="number"
-              min="1"
-              max="50"
-              placeholder="¿Cuántas personas?"
-              value={personas}
-              onChange={(e) => {
-                const val = e.target.value
-                if (val === '' || (parseInt(val) >= 1 && parseInt(val) <= 50)) {
-                  setPersonas(val)
-                }
-              }}
-              style={{
-                ...selectStyle,
-                color: personas ? '#0d1b6f' : '#7b8fa8',
-              }}
-              onFocus={(e) => { e.currentTarget.style.boxShadow = '0 0 0 3px rgba(13,27,111,0.2)'; e.currentTarget.style.borderColor = '#0d1b6f'; e.currentTarget.style.color = '#0d1b6f' }}
-              onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#e2e8f0' }}
+            <img
+              src="/logo-friko-cropped.png"
+              alt="Friko"
+              style={{ height: '87px', width: '120px', objectFit: 'contain' }}
+              onError={(e) => { e.currentTarget.style.display = 'none' }}
+            />
+            <img
+              src="/logo-antillana-improved.png"
+              alt="Antillana"
+              style={{ height: '70px', width: '149px', objectFit: 'contain' }}
+              onError={(e) => { e.currentTarget.style.display = 'none' }}
             />
           </div>
 
-        </div>
+          {/* ── TÍTULO Y SUBTÍTULO ── */}
+          <div style={{ textAlign: 'center', marginTop: '0' }}>
+            <h1 style={{
+              color: '#0d1b6f',
+              fontSize: '2rem',
+              fontWeight: 800,
+              marginBottom: '0.25rem',
+              letterSpacing: '-0.5px',
+              textShadow: '0 1px 2px rgba(0,0,0,0.06)',
+            }}>
+              Recomendador de Recetas
+            </h1>
+            <p style={{
+              color: '#0d1b6f',
+              fontSize: '1rem',
+              fontWeight: 400,
+            }}>
+              Tu receta perfecta con productos Friko y Antillana
+            </p>
+          </div>
 
-        {/* ── BOTONES ── */}
-        <div style={{ display:'flex', justifyContent:'center', gap:'1rem' }}>
+        </section>
 
-          {/* Botón Generar */}
-          <button
-            onClick={handleGenerar}
-            disabled={cargando || !!errorCarga}
-            style={{
-              background: 'linear-gradient(180deg, #ef4444 0%, #dc2626 100%)',
-              color: '#fff',
-              fontWeight: 700,
+        {/* ── PANEL B: Blanco — selectores, botones, resultados ── */}
+        <section style={{
+          background: 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.78) 65%, rgba(255, 255, 255, 0.92) 100%)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderRadius: '2rem',
+          border: '1.5px solid rgba(220, 225, 240, 0.75)',
+          boxShadow: '0 15px 40px rgba(30, 40, 80, 0.18), inset 0 0 25px rgba(180, 190, 220, 0.15), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -2px 5px rgba(30, 40, 80, 0.06)',
+          padding: '2rem',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1.25rem',
+        }}>
+
+          {/* ── ESTADO DE CARGA DEL CATÁLOGO ── */}
+          {cargando && (
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:'8px', padding:'1rem 0', color:'#64748b', fontSize:'0.875rem' }}>
+              <svg className="animate-spin" style={{ width:16, height:16, color:'#64748b' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+              </svg>
+              Cargando catálogo...
+            </div>
+          )}
+          {errorCarga && (
+            <div style={{
+              background: 'rgba(249, 115, 22, 0.1)',
+              border: '1px solid rgba(249, 115, 22, 0.3)',
+              color: '#c2410c',
+              borderRadius: '0.75rem',
+              padding: '0.75rem 1rem',
               fontSize: '0.875rem',
-              textTransform: 'uppercase',
-              letterSpacing: '1px',
-              padding: '0.85rem 2.5rem',
-              borderRadius: '1rem',
-              border: 'none',
-              cursor: cargando || !!errorCarga ? 'not-allowed' : 'pointer',
-              boxShadow: '0 6px 0 #991b1b, 0 8px 20px rgba(0,0,0,0.3)',
-              transform: 'translateY(0)',
-              transition: 'all 0.15s ease',
-              opacity: cargando || !!errorCarga ? 0.5 : 1,
-            }}
-            onMouseEnter={(e) => {
-              if (!e.currentTarget.disabled) {
-                e.currentTarget.style.filter = 'brightness(1.1)'
+              fontWeight: 500,
+            }}>
+              {errorCarga}
+            </div>
+          )}
+
+          {/* ── SELECTORES 2×2 ── */}
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1.25rem' }}>
+
+            {/* Región */}
+            <div>
+              <label style={{...labelStyle, color: '#0d1b6f'}}>
+                <IconRegion color="#0d1b6f" /> Región
+              </label>
+              <select
+                value={region}
+                onChange={(e) => setRegion(e.target.value)}
+                disabled={cargando}
+                style={{ ...selectStyle, opacity: cargando ? 0.5 : 1 }}
+                onFocus={(e) => { e.currentTarget.style.boxShadow = '0 0 0 3px rgba(13,27,111,0.2)'; e.currentTarget.style.borderColor = '#0d1b6f' }}
+                onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#e2e8f0' }}
+              >
+                <option value="" style={{ background: '#ffffff', color: '#1e293b' }}>Todas las regiones</option>
+                {regiones.map((r) => <option key={r} style={{ background: '#ffffff', color: '#1e293b' }}>{r}</option>)}
+              </select>
+            </div>
+
+            {/* Ocasión */}
+            <div>
+              <label style={{...labelStyle, color: '#0d1b6f'}}>
+                <IconOcasion color="#0d1b6f" /> Ocasión
+              </label>
+              <select
+                value={ocasion}
+                onChange={(e) => setOcasion(e.target.value)}
+                style={selectStyle}
+                onFocus={(e) => { e.currentTarget.style.boxShadow = '0 0 0 3px rgba(13,27,111,0.2)'; e.currentTarget.style.borderColor = '#0d1b6f' }}
+                onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#e2e8f0' }}
+              >
+                <option value="" style={{ background: '#ffffff', color: '#1e293b' }}>Cualquier ocasión</option>
+                <option style={{ background: '#ffffff', color: '#1e293b' }}>Hogar</option>
+                <option style={{ background: '#ffffff', color: '#1e293b' }}>Evento</option>
+              </select>
+            </div>
+
+            {/* Preparación */}
+            <div>
+              <label style={{...labelStyle, color: '#0d1b6f'}}>
+                <IconPreparacion color="#0d1b6f" /> Preparación
+              </label>
+              <select
+                value={preparacion}
+                onChange={(e) => setPreparacion(e.target.value)}
+                disabled={cargando}
+                style={{ ...selectStyle, opacity: cargando ? 0.5 : 1 }}
+                onFocus={(e) => { e.currentTarget.style.boxShadow = '0 0 0 3px rgba(13,27,111,0.2)'; e.currentTarget.style.borderColor = '#0d1b6f' }}
+                onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#e2e8f0' }}
+              >
+                <option value="" style={{ background: '#ffffff', color: '#1e293b' }}>Cualquier método</option>
+                {metodos.map((m) => <option key={m} style={{ background: '#ffffff', color: '#1e293b' }}>{m}</option>)}
+              </select>
+            </div>
+
+            {/* Personas */}
+            <div>
+              <label style={{...labelStyle, color: '#0d1b6f'}}>
+                <IconPersonas color="#0d1b6f" /> Personas
+              </label>
+              <input
+                type="number"
+                min="1"
+                max="50"
+                placeholder="¿Cuántas personas?"
+                value={personas}
+                onChange={(e) => {
+                  const val = e.target.value
+                  if (val === '' || (parseInt(val) >= 1 && parseInt(val) <= 50)) {
+                    setPersonas(val)
+                  }
+                }}
+                style={{
+                  ...selectStyle,
+                  color: personas ? '#0d1b6f' : '#7b8fa8',
+                }}
+                onFocus={(e) => { e.currentTarget.style.boxShadow = '0 0 0 3px rgba(13,27,111,0.2)'; e.currentTarget.style.borderColor = '#0d1b6f'; e.currentTarget.style.color = '#0d1b6f' }}
+                onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#e2e8f0' }}
+              />
+            </div>
+
+          </div>
+
+          {/* ── BOTONES ── */}
+          <div style={{ display:'flex', justifyContent:'center', gap:'1rem' }}>
+
+            {/* Botón Generar */}
+            <button
+              onClick={handleGenerar}
+              disabled={cargando || !!errorCarga}
+              style={{
+                background: 'linear-gradient(180deg, #ef4444 0%, #dc2626 100%)',
+                color: '#fff',
+                fontWeight: 700,
+                fontSize: '0.875rem',
+                textTransform: 'uppercase',
+                letterSpacing: '1px',
+                padding: '0.85rem 2.5rem',
+                borderRadius: '1rem',
+                border: 'none',
+                cursor: cargando || !!errorCarga ? 'not-allowed' : 'pointer',
+                boxShadow: '0 6px 0 #991b1b, 0 8px 20px rgba(0,0,0,0.3)',
+                transform: 'translateY(0)',
+                transition: 'all 0.15s ease',
+                opacity: cargando || !!errorCarga ? 0.5 : 1,
+              }}
+              onMouseEnter={(e) => {
+                if (!e.currentTarget.disabled) {
+                  e.currentTarget.style.filter = 'brightness(1.1)'
+                  e.currentTarget.style.transform = 'translateY(-2px)'
+                  e.currentTarget.style.boxShadow = '0 8px 0 #991b1b, 0 10px 25px rgba(0,0,0,0.35)'
+                }
+              }}
+              onMouseDown={(e) => {
+                if (!e.currentTarget.disabled) {
+                  e.currentTarget.style.boxShadow = 'none'
+                  e.currentTarget.style.transform = 'translateY(6px)'
+                }
+              }}
+              onMouseUp={(e) => {
+                e.currentTarget.style.boxShadow = '0 6px 0 #991b1b, 0 8px 20px rgba(0,0,0,0.3)'
+                e.currentTarget.style.transform = 'translateY(0)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 6px 0 #991b1b, 0 8px 20px rgba(0,0,0,0.3)'
+                e.currentTarget.style.transform = 'translateY(0)'
+                e.currentTarget.style.filter = 'brightness(1)'
+              }}
+            >
+              Generar
+            </button>
+
+            {/* Botón Reiniciar */}
+            <button
+              onClick={handleReiniciar}
+              style={{
+                background: 'linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%)',
+                color: '#1e293b',
+                fontWeight: 700,
+                fontSize: '0.875rem',
+                textTransform: 'uppercase',
+                letterSpacing: '1px',
+                padding: '0.85rem 2.5rem',
+                borderRadius: '1rem',
+                border: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 6px 0 #b45309, 0 8px 20px rgba(0,0,0,0.3)',
+                transform: 'translateY(0)',
+                transition: 'all 0.15s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.filter = 'brightness(1.08)'
                 e.currentTarget.style.transform = 'translateY(-2px)'
-                e.currentTarget.style.boxShadow = '0 8px 0 #991b1b, 0 10px 25px rgba(0,0,0,0.35)'
-              }
-            }}
-            onMouseDown={(e) => {
-              if (!e.currentTarget.disabled) {
+                e.currentTarget.style.boxShadow = '0 8px 0 #b45309, 0 10px 25px rgba(0,0,0,0.35)'
+              }}
+              onMouseDown={(e) => {
                 e.currentTarget.style.boxShadow = 'none'
                 e.currentTarget.style.transform = 'translateY(6px)'
-              }
-            }}
-            onMouseUp={(e) => {
-              e.currentTarget.style.boxShadow = '0 6px 0 #991b1b, 0 8px 20px rgba(0,0,0,0.3)'
-              e.currentTarget.style.transform = 'translateY(0)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = '0 6px 0 #991b1b, 0 8px 20px rgba(0,0,0,0.3)'
-              e.currentTarget.style.transform = 'translateY(0)'
-              e.currentTarget.style.filter = 'brightness(1)'
-            }}
-          >
-            Generar
-          </button>
+              }}
+              onMouseUp={(e) => {
+                e.currentTarget.style.boxShadow = '0 6px 0 #b45309, 0 8px 20px rgba(0,0,0,0.3)'
+                e.currentTarget.style.transform = 'translateY(0)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 6px 0 #b45309, 0 8px 20px rgba(0,0,0,0.3)'
+                e.currentTarget.style.transform = 'translateY(0)'
+                e.currentTarget.style.filter = 'brightness(1)'
+              }}
+            >
+              Reiniciar
+            </button>
 
-          {/* Botón Reiniciar */}
-          <button
-            onClick={handleReiniciar}
-            style={{
-              background: 'linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%)',
-              color: '#1e293b',
-              fontWeight: 700,
+          </div>
+
+          {/* ── Línea separadora ── */}
+          <div style={{
+            height: '1px',
+            background: 'linear-gradient(90deg, transparent 0%, rgba(13,27,111,0.15) 20%, rgba(13,27,111,0.2) 50%, rgba(13,27,111,0.15) 80%, transparent 100%)',
+            margin: '0.25rem 0',
+          }} />
+
+          {/* ── ERROR ── */}
+          {error && (
+            <div style={{
+              background: 'rgba(239, 68, 68, 0.08)',
+              border: '1px solid rgba(239, 68, 68, 0.2)',
+              color: '#b91c1c',
+              borderRadius: '0.75rem',
+              padding: '0.75rem 1rem',
               fontSize: '0.875rem',
-              textTransform: 'uppercase',
-              letterSpacing: '1px',
-              padding: '0.85rem 2.5rem',
-              borderRadius: '1rem',
-              border: 'none',
-              cursor: 'pointer',
-              boxShadow: '0 6px 0 #b45309, 0 8px 20px rgba(0,0,0,0.3)',
-              transform: 'translateY(0)',
-              transition: 'all 0.15s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.filter = 'brightness(1.08)'
-              e.currentTarget.style.transform = 'translateY(-2px)'
-              e.currentTarget.style.boxShadow = '0 8px 0 #b45309, 0 10px 25px rgba(0,0,0,0.35)'
-            }}
-            onMouseDown={(e) => {
-              e.currentTarget.style.boxShadow = 'none'
-              e.currentTarget.style.transform = 'translateY(6px)'
-            }}
-            onMouseUp={(e) => {
-              e.currentTarget.style.boxShadow = '0 6px 0 #b45309, 0 8px 20px rgba(0,0,0,0.3)'
-              e.currentTarget.style.transform = 'translateY(0)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = '0 6px 0 #b45309, 0 8px 20px rgba(0,0,0,0.3)'
-              e.currentTarget.style.transform = 'translateY(0)'
-              e.currentTarget.style.filter = 'brightness(1)'
-            }}
-          >
-            Reiniciar
-          </button>
-
-        </div>
-
-        {/* ── Línea separadora ── */}
-        <div style={{
-          height: '1px',
-          background: 'linear-gradient(90deg, transparent 0%, rgba(13,27,111,0.15) 20%, rgba(13,27,111,0.2) 50%, rgba(13,27,111,0.15) 80%, transparent 100%)',
-          margin: '0.25rem 0',
-        }} />
-
-        {/* ── ERROR ── */}
-        {error && (
-          <div style={{
-            background: 'rgba(239, 68, 68, 0.08)',
-            border: '1px solid rgba(239, 68, 68, 0.2)',
-            color: '#b91c1c',
-            borderRadius: '0.75rem',
-            padding: '0.75rem 1rem',
-            fontSize: '0.875rem',
-            fontWeight: 500,
-          }}>
-            {error}
-          </div>
-        )}
-
-        {/* ── NOTA DE AJUSTE ── */}
-        {nota && (
-          <div style={{
-            background: 'rgba(245, 158, 11, 0.08)',
-            border: '1px solid rgba(245, 158, 11, 0.2)',
-            color: '#92400e',
-            borderRadius: '0.75rem',
-            padding: '0.75rem 1rem',
-            fontSize: '0.875rem',
-          }}>
-            💡 {nota}
-          </div>
-        )}
-
-        {/* ── ZONA DE RESULTADOS — siempre visible ── */}
-        <div style={{
-          border: '1.5px dashed rgba(13, 27, 111, 0.15)',
-          borderRadius: '1.5rem',
-          padding: '1rem',
-        }}>
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1rem' }}>
-
-          {/* ─── IZQUIERDA: PRODUCTO ─── */}
-          {resultado ? (
-            <div style={{
-              background: 'rgba(255, 252, 245, 0.75)',
-              border: '1.5px solid rgba(13, 27, 111, 0.1)',
-              borderRadius: '1.25rem',
-              padding: '1.25rem',
-              minHeight: '280px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '0.75rem',
+              fontWeight: 500,
             }}>
-              <span style={{ color:'#7c5a28', fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px' }}>
-                Producto recomendado
-              </span>
-
-              <div>
-                <h2 style={{ color:'#1a2332', fontSize:'18px', fontWeight:800, lineHeight:1.3, margin:0 }}>
-                  {resultado.Producto}
-                </h2>
-                <p style={{ color:'#374151', fontSize:'14px', marginTop:'4px', marginBottom:0 }}>
-                  {resultado.Descripcion}
-                </p>
-              </div>
-
-              <div style={{ display:'flex', flexDirection:'column', gap:'4px', fontSize:'13px' }}>
-                <span>
-                  <span style={{ color:'#5a6b7a', fontWeight:600 }}>Presentación:</span>
-                  <span style={{ color:'#1a2332' }}>{resultado.Presentacion}</span>
-                </span>
-                <span>
-                  <span style={{ color:'#5a6b7a', fontWeight:600 }}>Categoría:</span>
-                  <span style={{ color:'#1a2332' }}>{resultado.Categoria}</span>
-                </span>
-                <span style={{ display:'flex', alignItems:'center', gap:'6px' }}>
-                  <span style={{ color:'#5a6b7a', fontWeight:600 }}>SKU:</span>
-                  <code style={{ background:'rgba(255,255,255,0.8)', borderRadius:'4px', padding:'2px 6px', fontSize:'11px', fontFamily:'monospace', color:'#374151' }}>
-                    {resultado.SKU}
-                  </code>
-                </span>
-              </div>
-
-              {/* Badges preparación + marca */}
-              <div style={{ display:'flex', flexWrap:'wrap', gap:'6px', marginTop:'4px' }}>
-                {resultado.Preparacion.map((m) => (
-                  <span key={m} style={{ background:'#FEF3C7', color:'#92400e', fontSize:'11px', fontWeight:600, padding:'3px 10px', borderRadius:'9999px' }}>
-                    {m}
-                  </span>
-                ))}
-                {resultado.Marca === 'FRIKO' ? (
-                  <span style={{ background:'#DBEAFE', color:'#1e40af', fontSize:'11px', fontWeight:600, padding:'3px 10px', borderRadius:'9999px' }}>
-                    FRIKO
-                  </span>
-                ) : (
-                  <span style={{ background:'#CCFBF1', color:'#115e59', fontSize:'11px', fontWeight:600, padding:'3px 10px', borderRadius:'9999px', display:'inline-flex', alignItems:'center', gap:'5px' }}>
-                    <img src="/logo-antillana-improved.png" alt="Antillana" style={{ height:'14px', width:'auto', objectFit:'contain' }} onError={(e) => { e.currentTarget.style.display='none' }} />
-                    ANTILLANA
-                  </span>
-                )}
-              </div>
-
-              {/* Footer región/rango */}
-              <div style={{ marginTop:'auto', paddingTop:'10px', borderTop:'1px solid rgba(255,255,255,0.3)', color:'#5a6b7a', fontSize:'12px' }}>
-                Región: <span style={{ fontWeight:600, color:'#374151' }}>{resultado.Region}</span>
-                {' · '}
-                {resultado.Rango}
-              </div>
-            </div>
-          ) : (
-            <div style={{
-              background: 'rgba(255, 255, 255, 0.25)',
-              border: '1.5px dashed rgba(13, 27, 111, 0.12)',
-              borderRadius: '1.25rem',
-              padding: '2rem',
-              minHeight: '280px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.75rem',
-              position: 'relative',
-              overflow: 'hidden',
-            }}>
-              <div style={{
-                background: 'linear-gradient(135deg, #e8dcc8 0%, #d4c4a8 100%)',
-                borderRadius: '1rem',
-                padding: '0.75rem',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.5)',
-              }}>
-                <Beef size={48} color="#8b7355" strokeWidth={1.5} />
-              </div>
-              <span style={{ color: 'rgba(13, 27, 111, 0.45)', fontSize: '13px', fontWeight: 500 }}>Producto recomendado</span>
-              <span style={{ color: 'rgba(13, 27, 111, 0.3)', fontSize: '11px' }}>Aparecerá aquí al generar</span>
+              {error}
             </div>
           )}
 
-          {/* ─── DERECHA: RECETA ─── */}
-          {resultado && receta ? (
+          {/* ── NOTA DE AJUSTE ── */}
+          {nota && (
             <div style={{
-              background: 'rgba(255, 252, 245, 0.75)',
-              border: '1.5px solid rgba(13, 27, 111, 0.1)',
-              borderRadius: '1.25rem',
-              padding: '1.25rem',
-              minHeight: '280px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '0.75rem',
+              background: 'rgba(245, 158, 11, 0.08)',
+              border: '1px solid rgba(245, 158, 11, 0.2)',
+              color: '#92400e',
+              borderRadius: '0.75rem',
+              padding: '0.75rem 1rem',
+              fontSize: '0.875rem',
             }}>
-              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+              💡 {nota}
+            </div>
+          )}
+
+          {/* ── ZONA DE RESULTADOS — siempre visible ── */}
+          <div style={{
+            border: '1.5px dashed rgba(13, 27, 111, 0.15)',
+            borderRadius: '1.5rem',
+            padding: '1rem',
+          }}>
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1rem' }}>
+
+            {/* ─── IZQUIERDA: PRODUCTO ─── */}
+            {resultado ? (
+              <div style={{
+                background: 'rgba(255, 252, 245, 0.75)',
+                border: '1.5px solid rgba(13, 27, 111, 0.1)',
+                borderRadius: '1.25rem',
+                padding: '1.25rem',
+                minHeight: '280px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.75rem',
+              }}>
                 <span style={{ color:'#7c5a28', fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px' }}>
-                  Receta sugerida
+                  Producto recomendado
                 </span>
-                <span style={{ background:'#D1FAE5', color:'#065f46', fontSize:'10px', fontWeight:700, padding:'3px 10px', borderRadius:'9999px', display:'inline-flex', alignItems:'center', gap:'4px' }}>
-                  <IconStar /> Generado por IA
-                </span>
-              </div>
 
-              <h2 style={{ color:'#1a2332', fontSize:'18px', fontWeight:800, lineHeight:1.3, margin:0 }}>
-                {receta.nombre}
-              </h2>
+                <div>
+                  <h2 style={{ color:'#1a2332', fontSize:'18px', fontWeight:800, lineHeight:1.3, margin:0 }}>
+                    {resultado.Producto}
+                  </h2>
+                  <p style={{ color:'#374151', fontSize:'14px', marginTop:'4px', marginBottom:0 }}>
+                    {resultado.Descripcion}
+                  </p>
+                </div>
 
-              <div>
-                <p style={{ color:'#7c5a28', fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px', marginBottom:'8px', marginTop:0 }}>
-                  Ingredientes
-                </p>
-                <ul style={{ listStyle:'none', margin:0, padding:0, display:'flex', flexDirection:'column', gap:'4px' }}>
-                  {receta.ingredientes.map((ing, i) => (
-                    <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:'8px', fontSize:'13px', color:'#374151' }}>
-                      <span style={{ width:'6px', height:'6px', borderRadius:'50%', background:'#fbbf24', flexShrink:0, marginTop:'5px' }} />
-                      {ing}
-                    </li>
+                <div style={{ display:'flex', flexDirection:'column', gap:'4px', fontSize:'13px' }}>
+                  <span>
+                    <span style={{ color:'#5a6b7a', fontWeight:600 }}>Presentación:</span>
+                    <span style={{ color:'#1a2332' }}>{resultado.Presentacion}</span>
+                  </span>
+                  <span>
+                    <span style={{ color:'#5a6b7a', fontWeight:600 }}>Categoría:</span>
+                    <span style={{ color:'#1a2332' }}>{resultado.Categoria}</span>
+                  </span>
+                  <span style={{ display:'flex', alignItems:'center', gap:'6px' }}>
+                    <span style={{ color:'#5a6b7a', fontWeight:600 }}>SKU:</span>
+                    <code style={{ background:'rgba(255,255,255,0.8)', borderRadius:'4px', padding:'2px 6px', fontSize:'11px', fontFamily:'monospace', color:'#374151' }}>
+                      {resultado.SKU}
+                    </code>
+                  </span>
+                </div>
+
+                {/* Badges preparación + marca */}
+                <div style={{ display:'flex', flexWrap:'wrap', gap:'6px', marginTop:'4px' }}>
+                  {resultado.Preparacion.map((m) => (
+                    <span key={m} style={{ background:'#FEF3C7', color:'#92400e', fontSize:'11px', fontWeight:600, padding:'3px 10px', borderRadius:'9999px' }}>
+                      {m}
+                    </span>
                   ))}
-                </ul>
-              </div>
+                  {resultado.Marca === 'FRIKO' ? (
+                    <span style={{ background:'#DBEAFE', color:'#1e40af', fontSize:'11px', fontWeight:600, padding:'3px 10px', borderRadius:'9999px' }}>
+                      FRIKO
+                    </span>
+                  ) : (
+                    <span style={{ background:'#CCFBF1', color:'#115e59', fontSize:'11px', fontWeight:600, padding:'3px 10px', borderRadius:'9999px', display:'inline-flex', alignItems:'center', gap:'5px' }}>
+                      <img src="/logo-antillana-improved.png" alt="Antillana" style={{ height:'14px', width:'auto', objectFit:'contain' }} onError={(e) => { e.currentTarget.style.display='none' }} />
+                      ANTILLANA
+                    </span>
+                  )}
+                </div>
 
-              <div>
-                <p style={{ color:'#7c5a28', fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px', marginBottom:'8px', marginTop:0 }}>
-                  Preparación
-                </p>
-                <ol style={{ listStyle:'none', margin:0, padding:0, display:'flex', flexDirection:'column', gap:'8px' }}>
-                  {receta.pasos.map((paso, i) => (
-                    <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:'8px', fontSize:'13px', color:'#374151' }}>
-                      <span style={{ background:'#dc2626', color:'#fff', width:'20px', height:'20px', borderRadius:'50%', fontSize:'10px', fontWeight:800, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginTop:'1px' }}>
-                        {i + 1}
-                      </span>
-                      {paso}
-                    </li>
-                  ))}
-                </ol>
+                {/* Footer región/rango */}
+                <div style={{ marginTop:'auto', paddingTop:'10px', borderTop:'1px solid rgba(255,255,255,0.3)', color:'#5a6b7a', fontSize:'12px' }}>
+                  Región: <span style={{ fontWeight:600, color:'#374151' }}>{resultado.Region}</span>
+                  {' · '}
+                  {resultado.Rango}
+                </div>
               </div>
-            </div>
-          ) : (
-            <div style={{
-              background: 'rgba(255, 255, 255, 0.25)',
-              border: '1.5px dashed rgba(13, 27, 111, 0.12)',
-              borderRadius: '1.25rem',
-              padding: '2rem',
-              minHeight: '280px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.75rem',
-              position: 'relative',
-              overflow: 'hidden',
-            }}>
+            ) : (
               <div style={{
-                background: 'linear-gradient(135deg, #dfe8f0 0%, #c8d4e0 100%)',
-                borderRadius: '1rem',
-                padding: '0.75rem',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.5)',
+                background: 'rgba(255, 255, 255, 0.25)',
+                border: '1.5px dashed rgba(13, 27, 111, 0.12)',
+                borderRadius: '1.25rem',
+                padding: '1rem',
+                minHeight: '280px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.75rem',
+                position: 'relative',
+                overflow: 'hidden',
               }}>
-                <ChefHat size={48} color="#5a7a96" strokeWidth={1.5} />
+                <a
+                  href="https://www.campoazul.co/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ display: 'block', width: '100%', cursor: 'pointer', textDecoration: 'none' }}
+                >
+                  <CarruselFade
+                    imagenes={CARRUSEL_PRODUCTOS}
+                    indice={indiceProducto}
+                    alt="Producto de muestra"
+                    modo="producto"
+                  />
+                </a>
+                <span style={{ color: 'rgba(13, 27, 111, 0.75)', fontSize: '16px', fontWeight: 600 }}>Producto recomendado</span>
+                <span style={{ color: 'rgba(13, 27, 111, 0.60)', fontSize: '14px' }}>Aparecerá aquí al generar</span>
               </div>
-              <span style={{ color: 'rgba(13, 27, 111, 0.45)', fontSize: '13px', fontWeight: 500 }}>Receta sugerida</span>
-              <span style={{ color: 'rgba(13, 27, 111, 0.3)', fontSize: '11px' }}>Aparecerá aquí al generar</span>
-            </div>
-          )}
+            )}
 
-        </div>
-        </div>
+            {/* ─── DERECHA: RECETA ─── */}
+            {resultado && receta ? (
+              <div style={{
+                background: 'rgba(255, 252, 245, 0.75)',
+                border: '1.5px solid rgba(13, 27, 111, 0.1)',
+                borderRadius: '1.25rem',
+                padding: '1.25rem',
+                minHeight: '280px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.75rem',
+              }}>
+                <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+                  <span style={{ color:'#7c5a28', fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px' }}>
+                    Receta sugerida
+                  </span>
+                  <span style={{ background:'#D1FAE5', color:'#065f46', fontSize:'10px', fontWeight:700, padding:'3px 10px', borderRadius:'9999px', display:'inline-flex', alignItems:'center', gap:'4px' }}>
+                    <IconStar /> Generado por IA
+                  </span>
+                </div>
+
+                <h2 style={{ color:'#1a2332', fontSize:'18px', fontWeight:800, lineHeight:1.3, margin:0 }}>
+                  {receta.nombre}
+                </h2>
+
+                <div>
+                  <p style={{ color:'#7c5a28', fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px', marginBottom:'8px', marginTop:0 }}>
+                    Ingredientes
+                  </p>
+                  <ul style={{ listStyle:'none', margin:0, padding:0, display:'flex', flexDirection:'column', gap:'4px' }}>
+                    {receta.ingredientes.map((ing, i) => (
+                      <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:'8px', fontSize:'13px', color:'#374151' }}>
+                        <span style={{ width:'6px', height:'6px', borderRadius:'50%', background:'#fbbf24', flexShrink:0, marginTop:'5px' }} />
+                        {ing}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <p style={{ color:'#7c5a28', fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px', marginBottom:'8px', marginTop:0 }}>
+                    Preparación
+                  </p>
+                  <ol style={{ listStyle:'none', margin:0, padding:0, display:'flex', flexDirection:'column', gap:'8px' }}>
+                    {receta.pasos.map((paso, i) => (
+                      <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:'8px', fontSize:'13px', color:'#374151' }}>
+                        <span style={{ background:'#dc2626', color:'#fff', width:'20px', height:'20px', borderRadius:'50%', fontSize:'10px', fontWeight:800, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginTop:'1px' }}>
+                          {i + 1}
+                        </span>
+                        {paso}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              </div>
+            ) : (
+              <div style={{
+                background: 'rgba(255, 255, 255, 0.25)',
+                border: '1.5px dashed rgba(13, 27, 111, 0.12)',
+                borderRadius: '1.25rem',
+                padding: '1rem',
+                minHeight: '280px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.75rem',
+                position: 'relative',
+                overflow: 'hidden',
+              }}>
+                <a
+                  href="https://www.momentosfriko.com/recetas"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ display: 'block', width: '100%', cursor: 'pointer', textDecoration: 'none' }}
+                >
+                  <CarruselFade
+                    imagenes={CARRUSEL_RECETAS}
+                    indice={indiceReceta}
+                    alt="Receta de muestra"
+                    modo="receta"
+                  />
+                </a>
+                <span style={{ color: 'rgba(13, 27, 111, 0.75)', fontSize: '16px', fontWeight: 600 }}>Receta sugerida</span>
+                <span style={{ color: 'rgba(13, 27, 111, 0.60)', fontSize: '14px' }}>Aparecerá aquí al generar</span>
+              </div>
+            )}
+
+          </div>
+          </div>
+
+        </section>
+
       </main>
 
       {/* ── FOOTER ── */}
       <footer style={{
-        color: 'rgba(255, 255, 255, 0.3)',
+        color: 'rgba(13, 27, 111, 0.35)',
         fontSize: '0.75rem',
         fontWeight: 300,
         letterSpacing: '2px',
