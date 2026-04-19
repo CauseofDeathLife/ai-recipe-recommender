@@ -335,6 +335,31 @@ const CARRUSEL_RECETAS = [
   '/productos%20y%20recetas/receta-08-pizza.png',
 ]
 
+const INTEGRANTES = [
+  { nombre: 'Daniel Quintero', url: 'https://www.linkedin.com/in/danielesban/'},
+  { nombre: 'Juan Herrera', url: null  },
+  { nombre: 'Luisa Quiceno', url: null },
+  { nombre: 'Héctor Mejía', url: null },
+  { nombre: 'Brayan Pabón', url: null },
+]
+
+// ─────────────────────────────────────────────
+// HOOK DE DETECCIÓN DE VIEWPORT
+// ─────────────────────────────────────────────
+function useIsMobile() {
+  const query = '(max-width: 767px)'
+  const [isMobile, setIsMobile] = useState(() => window.matchMedia(query).matches)
+
+  useEffect(() => {
+    const mq = window.matchMedia(query)
+    const handler = (e) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
+  return isMobile
+}
+
 export default function RecomendadorFriko() {
   // ── Estado del catálogo (cargado desde public/) ──
   const [catalogo, setCatalogo] = useState([])
@@ -376,6 +401,9 @@ export default function RecomendadorFriko() {
   // ── Estado del carrusel ──
   const [indiceProducto, setIndiceProducto] = useState(0)
   const [indiceReceta, setIndiceReceta] = useState(0)
+
+  // ── Detección de móvil ──
+  const isMobile = useIsMobile()
 
   // ── Efecto carrusel: rota cada 5 segundos mientras no hay resultado ──
   useEffect(() => {
@@ -488,7 +516,7 @@ export default function RecomendadorFriko() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        padding: '5rem 1rem 3rem',
+        padding: isMobile ? '2rem 1rem 2rem' : '5rem 1rem 3rem',
         position: 'relative',
         overflowX: 'hidden',
       }}
@@ -514,7 +542,7 @@ export default function RecomendadorFriko() {
           borderRadius: '2rem',
           border: '2px solid rgba(212, 135, 16, 0.55)',
           boxShadow: '0 15px 40px rgba(200, 130, 20, 0.35), inset 0 0 35px rgba(0, 0, 0, 0.08), inset 0 2px 4px rgba(255, 255, 255, 0.80), inset 0 -3px 6px rgba(150, 100, 10, 0.18)',
-          padding: '2rem 2rem 1.5rem',
+          padding: isMobile ? '1.25rem 1rem 1rem' : '2rem 2rem 1.5rem',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -526,7 +554,7 @@ export default function RecomendadorFriko() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            gap: '24px',
+            gap: isMobile ? '12px' : '24px',
             marginBottom: '16px',
           }}>
             <img
@@ -547,7 +575,7 @@ export default function RecomendadorFriko() {
           <div style={{ textAlign: 'center', marginTop: '0' }}>
             <h1 style={{
               color: '#0d1b6f',
-              fontSize: '2rem',
+              fontSize: isMobile ? '1.4rem' : '2rem',
               fontWeight: 800,
               marginBottom: '0.25rem',
               letterSpacing: '-0.5px',
@@ -557,7 +585,7 @@ export default function RecomendadorFriko() {
             </h1>
             <p style={{
               color: '#0d1b6f',
-              fontSize: '1rem',
+              fontSize: isMobile ? '0.875rem' : '1rem',
               fontWeight: 400,
             }}>
               Tu receta perfecta con productos Friko y Antillana
@@ -574,7 +602,7 @@ export default function RecomendadorFriko() {
           borderRadius: '2rem',
           border: '1.5px solid rgba(220, 225, 240, 0.75)',
           boxShadow: '0 15px 40px rgba(30, 40, 80, 0.18), inset 0 0 25px rgba(180, 190, 220, 0.15), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -2px 5px rgba(30, 40, 80, 0.06)',
-          padding: '2rem',
+          padding: isMobile ? '1rem 0.75rem' : '2rem',
           display: 'flex',
           flexDirection: 'column',
           gap: '1.25rem',
@@ -604,7 +632,7 @@ export default function RecomendadorFriko() {
           )}
 
           {/* ── SELECTORES 2×2 ── */}
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1.25rem' }}>
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap: isMobile ? '0.75rem' : '1.25rem' }}>
 
             {/* Región */}
             <div>
@@ -689,7 +717,7 @@ export default function RecomendadorFriko() {
           </div>
 
           {/* ── BOTONES ── */}
-          <div style={{ display:'flex', justifyContent:'center', gap:'1rem' }}>
+          <div style={{ display:'flex', justifyContent:'center', gap: isMobile ? '0.75rem' : '1rem' }}>
 
             {/* Botón Generar */}
             <button
@@ -702,7 +730,7 @@ export default function RecomendadorFriko() {
                 fontSize: '0.875rem',
                 textTransform: 'uppercase',
                 letterSpacing: '1px',
-                padding: '0.85rem 2.5rem',
+                padding: isMobile ? '0.85rem 1.5rem' : '0.85rem 2.5rem',
                 borderRadius: '1rem',
                 border: 'none',
                 cursor: cargando || !!errorCarga ? 'not-allowed' : 'pointer',
@@ -747,7 +775,7 @@ export default function RecomendadorFriko() {
                 fontSize: '0.875rem',
                 textTransform: 'uppercase',
                 letterSpacing: '1px',
-                padding: '0.85rem 2.5rem',
+                padding: isMobile ? '0.85rem 1.5rem' : '0.85rem 2.5rem',
                 borderRadius: '1rem',
                 border: 'none',
                 cursor: 'pointer',
@@ -819,9 +847,9 @@ export default function RecomendadorFriko() {
           <div style={{
             border: '1.5px dashed rgba(13, 27, 111, 0.15)',
             borderRadius: '1.5rem',
-            padding: '1rem',
+            padding: isMobile ? '0.75rem' : '1rem',
           }}>
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1rem' }}>
+          <div style={{ display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap:'1rem' }}>
 
             {/* ─── IZQUIERDA: PRODUCTO ─── */}
             {resultado ? (
@@ -829,8 +857,8 @@ export default function RecomendadorFriko() {
                 background: 'rgba(255, 252, 245, 0.75)',
                 border: '1.5px solid rgba(13, 27, 111, 0.1)',
                 borderRadius: '1.25rem',
-                padding: '1.25rem',
-                minHeight: '280px',
+                padding: isMobile ? '1rem' : '1.25rem',
+                minHeight: isMobile ? '220px' : '280px',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '0.75rem',
@@ -891,7 +919,7 @@ export default function RecomendadorFriko() {
                 border: '1.5px dashed rgba(13, 27, 111, 0.12)',
                 borderRadius: '1.25rem',
                 padding: '1rem',
-                minHeight: '280px',
+                minHeight: isMobile ? '220px' : '280px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -925,7 +953,7 @@ export default function RecomendadorFriko() {
                 border: '1.5px dashed rgba(13, 27, 111, 0.12)',
                 borderRadius: '1.25rem',
                 padding: '1rem',
-                minHeight: '280px',
+                minHeight: isMobile ? '220px' : '280px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -942,8 +970,8 @@ export default function RecomendadorFriko() {
                 background: 'rgba(255, 252, 245, 0.75)',
                 border: '1.5px solid rgba(13, 27, 111, 0.1)',
                 borderRadius: '1.25rem',
-                padding: '1.25rem',
-                minHeight: '280px',
+                padding: isMobile ? '1rem' : '1.25rem',
+                minHeight: isMobile ? '220px' : '280px',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '0.75rem',
@@ -997,7 +1025,7 @@ export default function RecomendadorFriko() {
                 border: '1.5px dashed rgba(13, 27, 111, 0.12)',
                 borderRadius: '1.25rem',
                 padding: '1rem',
-                minHeight: '280px',
+                minHeight: isMobile ? '220px' : '280px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -1033,7 +1061,7 @@ export default function RecomendadorFriko() {
             border: '1px solid rgba(13, 27, 111, 0.1)',
             borderLeft: '4px solid #0d1b6f',
             borderRadius: '0 0.75rem 0.75rem 0',
-            padding: '1rem 1.25rem',
+            padding: isMobile ? '0.75rem 1rem' : '1rem 1.25rem',
             marginTop: '1rem',
           }}>
             <p style={{ color: '#0d1b6f', fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', margin: 0 }}>
@@ -1059,7 +1087,28 @@ export default function RecomendadorFriko() {
         zIndex: 1,
         position: 'relative',
       }}>
-        Reto 12 · Grupo 5 · NODO EAFIT × Friko
+        <div>Reto 12 · Grupo 5 · NODO EAFIT × Friko</div>
+        <div style={{ marginTop: '4px', letterSpacing: '1px' }}>
+          {INTEGRANTES.map((p, i) => (
+            <span key={p.nombre}>
+              {p.url ? (
+                <a
+                  href={p.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: 'rgba(255, 255, 255, 0.6)', textDecoration: 'none' }}
+                  onMouseOver={(e) => { e.currentTarget.style.textDecoration = 'underline' }}
+                  onMouseOut={(e) => { e.currentTarget.style.textDecoration = 'none' }}
+                >
+                  {p.nombre}
+                </a>
+              ) : (
+                p.nombre
+              )}
+              {i < INTEGRANTES.length - 1 && ' · '}
+            </span>
+          ))}
+        </div>
       </footer>
 
     </div>
