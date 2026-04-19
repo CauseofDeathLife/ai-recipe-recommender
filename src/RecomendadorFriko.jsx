@@ -117,6 +117,92 @@ function generarRecetaPlaceholder(producto) {
 }
 
 // ─────────────────────────────────────────────
+// FETCH AL WEBHOOK N8N (con timeout y validación)
+// ─────────────────────────────────────────────
+async function obtenerRecetaDesdeN8N(producto, preparacionElegida, personas) {
+  const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL
+  if (!webhookUrl) {
+    console.warn('VITE_N8N_WEBHOOK_URL no está definida. Usando receta local como fallback.')
+    throw new Error('Variable de entorno VITE_N8N_WEBHOOK_URL no configurada.')
+  }
+
+  let personasNum
+  if (personas && personas !== '') {
+    personasNum = parseInt(personas, 10)
+    if (isNaN(personasNum)) {
+      const rango = producto.Rango
+      personasNum = rango === '1-4 personas' ? 4 : rango === '5-15 personas' ? 10 : 20
+    }
+  } else {
+    const rango = producto.Rango
+    personasNum = rango === '1-4 personas' ? 4 : rango === '5-15 personas' ? 10 : 20
+  }
+
+  const preparacion_elegida = preparacionElegida && preparacionElegida !== ''
+    ? preparacionElegida
+    : producto.Preparacion[0]
+
+  const payload = {
+    producto: producto.Producto,
+    descripcion: producto.Descripcion,
+    presentacion: producto.Presentacion,
+    preparacion_elegida,
+    personas: personasNum,
+  }
+
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), 15000)
+
+  try {
+    const res = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    })
+
+    clearTimeout(timeoutId)
+
+    if (!res.ok) {
+      console.error(`N8N respondió con error HTTP ${res.status}. Payload enviado:`, payload)
+      throw new Error(`HTTP ${res.status}`)
+    }
+
+    let data
+    try {
+      data = await res.json()
+    } catch (parseErr) {
+      console.error('N8N devolvió JSON inválido:', parseErr.message)
+      throw parseErr
+    }
+
+    if (Array.isArray(data)) {
+      if (data.length === 0) {
+        console.error('N8N devolvió un array vacío. Payload enviado:', payload)
+        throw new Error('N8N devolvió un array vacío.')
+      }
+      console.info('Respuesta de N8N venía envuelta en array. Desempacada correctamente.')
+      data = data[0]
+    }
+
+    if (
+      typeof data.nombre !== 'string' || data.nombre.trim() === '' ||
+      !Array.isArray(data.ingredientes) || data.ingredientes.length === 0 ||
+      !Array.isArray(data.pasos) || data.pasos.length === 0
+    ) {
+      console.error('N8N devolvió estructura inválida:', data)
+      throw new Error('Respuesta de N8N no tiene la estructura esperada.')
+    }
+
+    return { nombre: data.nombre, ingredientes: data.ingredientes, pasos: data.pasos }
+  } catch (err) {
+    clearTimeout(timeoutId)
+    console.error('Error al obtener receta desde N8N:', err.message)
+    throw err
+  }
+}
+
+// ─────────────────────────────────────────────
 // ÍCONOS SVG DE LABELS (con color como prop)
 // ─────────────────────────────────────────────
 const IconRegion = ({ color }) => (
@@ -285,6 +371,7 @@ export default function RecomendadorFriko() {
   const [error, setError] = useState('')
   const [nota, setNota] = useState('')
   const [logoError, setLogoError] = useState(false)
+  const [cargandoReceta, setCargandoReceta] = useState(false)
 
   // ── Estado del carrusel ──
   const [indiceProducto, setIndiceProducto] = useState(0)
@@ -302,7 +389,7 @@ export default function RecomendadorFriko() {
     return () => clearInterval(interval)
   }, [resultado])
 
-  const handleGenerar = () => {
+  const handleGenerar = async () => {
     setError('')
     setNota('')
 
@@ -337,7 +424,16 @@ export default function RecomendadorFriko() {
     if (encontrados.length > 0) {
       const producto = encontrados[0]
       setResultado(producto)
-      setReceta(generarRecetaPlaceholder(producto))
+      setCargandoReceta(true)
+      try {
+        const recetaN8N = await obtenerRecetaDesdeN8N(producto, preparacion, personas)
+        setReceta(recetaN8N)
+      } catch (err) {
+        console.error('Fallback a receta local por error en N8N:', err)
+        setReceta(generarRecetaPlaceholder(producto))
+      } finally {
+        setCargandoReceta(false)
+      }
       return
     }
 
@@ -348,7 +444,16 @@ export default function RecomendadorFriko() {
       if (sinPersonas.length > 0) {
         const producto = sinPersonas[0]
         setResultado(producto)
-        setReceta(generarRecetaPlaceholder(producto))
+        setCargandoReceta(true)
+        try {
+          const recetaN8N = await obtenerRecetaDesdeN8N(producto, preparacion, personas)
+          setReceta(recetaN8N)
+        } catch (err) {
+          console.error('Fallback a receta local por error en N8N:', err)
+          setReceta(generarRecetaPlaceholder(producto))
+        } finally {
+          setCargandoReceta(false)
+        }
         setNota(
           `No hay productos exactos para ${personas} persona${parseInt(personas) !== 1 ? 's' : ''} con esos criterios. ` +
           `Te recomendamos este producto que es para ${producto.Rango}.`
@@ -420,7 +525,7 @@ export default function RecomendadorFriko() {
           <div style={{
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'flex-end',
+            alignItems: 'center',
             gap: '24px',
             marginBottom: '16px',
           }}>
@@ -752,12 +857,6 @@ export default function RecomendadorFriko() {
                     <span style={{ color:'#5a6b7a', fontWeight:600 }}>Categoría:</span>
                     <span style={{ color:'#1a2332' }}>{resultado.Categoria}</span>
                   </span>
-                  <span style={{ display:'flex', alignItems:'center', gap:'6px' }}>
-                    <span style={{ color:'#5a6b7a', fontWeight:600 }}>SKU:</span>
-                    <code style={{ background:'rgba(255,255,255,0.8)', borderRadius:'4px', padding:'2px 6px', fontSize:'11px', fontFamily:'monospace', color:'#374151' }}>
-                      {resultado.SKU}
-                    </code>
-                  </span>
                 </div>
 
                 {/* Badges preparación + marca */}
@@ -820,7 +919,25 @@ export default function RecomendadorFriko() {
             )}
 
             {/* ─── DERECHA: RECETA ─── */}
-            {resultado && receta ? (
+            {cargandoReceta ? (
+              <div style={{
+                background: 'rgba(255, 255, 255, 0.25)',
+                border: '1.5px dashed rgba(13, 27, 111, 0.12)',
+                borderRadius: '1.25rem',
+                padding: '1rem',
+                minHeight: '280px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.75rem',
+              }}>
+                <svg className="animate-spin" style={{ width: 28, height: 28, color: '#7c5a28' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                </svg>
+                <span style={{ color: '#7c5a28', fontSize: '14px', fontWeight: 600 }}>Generando receta...</span>
+              </div>
+            ) : resultado && receta ? (
               <div style={{
                 background: 'rgba(255, 252, 245, 0.75)',
                 border: '1.5px solid rgba(13, 27, 111, 0.1)',
@@ -910,13 +1027,30 @@ export default function RecomendadorFriko() {
           </div>
           </div>
 
+          {/* ── AVISO DE PRIVACIDAD ── */}
+          <div style={{
+            background: 'rgba(248, 250, 252, 0.85)',
+            border: '1px solid rgba(13, 27, 111, 0.1)',
+            borderLeft: '4px solid #0d1b6f',
+            borderRadius: '0 0.75rem 0.75rem 0',
+            padding: '1rem 1.25rem',
+            marginTop: '1rem',
+          }}>
+            <p style={{ color: '#0d1b6f', fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', margin: 0 }}>
+              Aviso de privacidad
+            </p>
+            <p style={{ color: '#374151', fontSize: '12px', lineHeight: 1.6, marginTop: '6px', marginBottom: 0 }}>
+              Este es un proyecto académico desarrollado en el marco del Reto 12 del NODO EAFIT, sin fines comerciales ni operación real en producción. La aplicación no solicita, recolecta ni almacena datos personales de los usuarios: las selecciones de región, ocasión, método de preparación y número de comensales son parámetros anónimos que no permiten identificar a la persona que las realiza. Por lo anterior, al no existir tratamiento de datos personales en los términos del artículo 3 de la Ley 1581 de 2012, no se configura la obligación de autorización previa ni las demás cargas derivadas del régimen de protección de datos personales en Colombia.
+            </p>
+          </div>
+
         </section>
 
       </main>
 
       {/* ── FOOTER ── */}
       <footer style={{
-        color: 'rgba(13, 27, 111, 0.35)',
+        color: 'rgba(255, 255, 255, 0.6)',
         fontSize: '0.75rem',
         fontWeight: 300,
         letterSpacing: '2px',
