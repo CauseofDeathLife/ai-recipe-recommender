@@ -337,11 +337,45 @@ const CARRUSEL_RECETAS = [
 
 const INTEGRANTES = [
   { nombre: 'Daniel Quintero', url: 'https://www.linkedin.com/in/danielesban/'},
-  { nombre: 'Juan Herrera', url: null  },
-  { nombre: 'Luisa Quiceno', url: null },
-  { nombre: 'Héctor Mejía', url: null },
+  { nombre: 'Juan Herrera', url: 'https://www.linkedin.com/in/juanherrera9/'  },
+  { nombre: 'Luisa Quiceno', url: 'https://www.linkedin.com/in/luisafernandaquicenogiraldo' },
+  { nombre: 'Héctor Mejía', url: 'https://www.linkedin.com/in/himv82' },
   { nombre: 'Brayan Pabón', url: null },
 ]
+
+// ─────────────────────────────────────────────
+// MENSAJE DE FALLBACK DINÁMICO
+// ─────────────────────────────────────────────
+function construirMensajeFallback(seleccion, producto) {
+  const { ocasion, preparacion, personas } = seleccion
+  const frases = []
+
+  if (preparacion && !producto.Preparacion.includes(preparacion)) {
+    frases.push(`Ajustamos la preparación de ${preparacion} a ${producto.Preparacion[0]}`)
+  }
+
+  if (ocasion && !producto.Ocasion.includes(ocasion)) {
+    frases.push(`la ocasión de ${ocasion} a ${producto.Ocasion}`)
+  }
+
+  if (personas) {
+    const rango = personasARango(personas)
+    if (rango && rango !== producto.Rango) {
+      frases.push(`el tamaño del grupo de ${personas} personas a un producto para ${producto.Rango}`)
+    }
+  }
+
+  let ajustes = ''
+  if (frases.length === 1) {
+    ajustes = ` ${frases[0]}.`
+  } else if (frases.length === 2) {
+    ajustes = ` ${frases[0]} y ${frases[1]}.`
+  } else if (frases.length >= 3) {
+    ajustes = ` ${frases.slice(0, -1).join(', ')} y ${frases[frases.length - 1]}.`
+  }
+
+  return `No encontramos un producto que coincida exactamente con tu selección.${ajustes} Te recomendamos este producto disponible en tu región:`
+}
 
 // ─────────────────────────────────────────────
 // HOOK DE DETECCIÓN DE VIEWPORT
@@ -394,6 +428,7 @@ export default function RecomendadorFriko() {
   const [resultado, setResultado] = useState(null)
   const [receta, setReceta] = useState(null)
   const [error, setError] = useState('')
+  const [mensajeFallback, setMensajeFallback] = useState('')
   const [nota, setNota] = useState('')
   const [logoError, setLogoError] = useState(false)
   const [cargandoReceta, setCargandoReceta] = useState(false)
@@ -419,6 +454,7 @@ export default function RecomendadorFriko() {
 
   const handleGenerar = async () => {
     setError('')
+    setMensajeFallback('')
     setNota('')
 
     // Validación: al menos un filtro debe estar seleccionado
@@ -465,35 +501,70 @@ export default function RecomendadorFriko() {
       return
     }
 
-    // === FALLBACK: si no hay resultado y hay filtro de personas, relajarlo ===
-    if (personas) {
-      const sinPersonas = filtrarCatalogo(catalogo, { region, ocasion, preparacion, personas: '' })
-
-      if (sinPersonas.length > 0) {
-        const producto = sinPersonas[0]
-        setResultado(producto)
-        setCargandoReceta(true)
-        try {
-          const recetaN8N = await obtenerRecetaDesdeN8N(producto, preparacion, personas)
-          setReceta(recetaN8N)
-        } catch (err) {
-          console.error('Fallback a receta local por error en N8N:', err)
-          setReceta(generarRecetaPlaceholder(producto))
-        } finally {
-          setCargandoReceta(false)
-        }
-        setNota(
-          `No hay productos exactos para ${personas} persona${parseInt(personas) !== 1 ? 's' : ''} con esos criterios. ` +
-          `Te recomendamos este producto que es para ${producto.Rango}.`
-        )
-        return
+    // === FALLBACK 1: sin preparación ===
+    const fallback1 = filtrarCatalogo(catalogo, { region, ocasion, preparacion: '', personas })
+    if (fallback1.length > 0) {
+      const producto = fallback1[0]
+      setMensajeFallback(construirMensajeFallback({ region, ocasion, preparacion, personas }, producto))
+      setResultado(producto)
+      setCargandoReceta(true)
+      try {
+        const preparacionReal = producto.Preparacion?.[0] ?? ''
+        const recetaN8N = await obtenerRecetaDesdeN8N(producto, preparacionReal, personas)
+        setReceta(recetaN8N)
+      } catch (err) {
+        console.error('Fallback a receta local por error en N8N:', err)
+        setReceta(generarRecetaPlaceholder(producto))
+      } finally {
+        setCargandoReceta(false)
       }
+      return
     }
 
-    // === SIN RESULTADOS incluso con fallback ===
+    // === FALLBACK 2: sin preparación ni ocasión ===
+    const fallback2 = filtrarCatalogo(catalogo, { region, ocasion: '', preparacion: '', personas })
+    if (fallback2.length > 0) {
+      const producto = fallback2[0]
+      setMensajeFallback(construirMensajeFallback({ region, ocasion, preparacion, personas }, producto))
+      setResultado(producto)
+      setCargandoReceta(true)
+      try {
+        const preparacionReal = producto.Preparacion?.[0] ?? ''
+        const recetaN8N = await obtenerRecetaDesdeN8N(producto, preparacionReal, personas)
+        setReceta(recetaN8N)
+      } catch (err) {
+        console.error('Fallback a receta local por error en N8N:', err)
+        setReceta(generarRecetaPlaceholder(producto))
+      } finally {
+        setCargandoReceta(false)
+      }
+      return
+    }
+
+    // === FALLBACK 3: solo región ===
+    const fallback3 = filtrarCatalogo(catalogo, { region, ocasion: '', preparacion: '', personas: '' })
+    if (fallback3.length > 0) {
+      const producto = fallback3[0]
+      setMensajeFallback(construirMensajeFallback({ region, ocasion, preparacion, personas }, producto))
+      setResultado(producto)
+      setCargandoReceta(true)
+      try {
+        const preparacionReal = producto.Preparacion?.[0] ?? ''
+        const recetaN8N = await obtenerRecetaDesdeN8N(producto, preparacionReal, personas)
+        setReceta(recetaN8N)
+      } catch (err) {
+        console.error('Fallback a receta local por error en N8N:', err)
+        setReceta(generarRecetaPlaceholder(producto))
+      } finally {
+        setCargandoReceta(false)
+      }
+      return
+    }
+
+    // === SIN RESULTADOS incluso con todos los fallbacks ===
     setResultado(null)
     setReceta(null)
-    setError('No encontramos un producto que coincida con tus preferencias. Intenta con otras combinaciones.')
+    setError('No se encontraron productos con esos criterios. Intenta con menos filtros.')
   }
 
   const handleReiniciar = () => {
@@ -504,6 +575,7 @@ export default function RecomendadorFriko() {
     setResultado(null)
     setReceta(null)
     setError('')
+    setMensajeFallback('')
     setNota('')
   }
 
@@ -697,7 +769,7 @@ export default function RecomendadorFriko() {
                 type="number"
                 min="1"
                 max="50"
-                placeholder="¿Cuántas personas?"
+                placeholder="Máximo 50 personas"
                 value={personas}
                 onChange={(e) => {
                   const val = e.target.value
@@ -826,6 +898,21 @@ export default function RecomendadorFriko() {
               fontWeight: 500,
             }}>
               {error}
+            </div>
+          )}
+
+          {/* ── MENSAJE FALLBACK ── */}
+          {mensajeFallback && (
+            <div style={{
+              background: '#FEF3C7',
+              border: '1px solid #FCD34D',
+              color: '#92400E',
+              borderRadius: '0.75rem',
+              padding: '0.75rem 1rem',
+              fontSize: '0.875rem',
+              fontWeight: 500,
+            }}>
+              {mensajeFallback}
             </div>
           )}
 
