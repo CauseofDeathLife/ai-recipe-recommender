@@ -151,7 +151,7 @@ async function obtenerRecetaDesdeN8N(producto, preparacionElegida, personas) {
   }
 
   const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), 15000)
+  const timeoutId = setTimeout(() => controller.abort(), 25000)
 
   try {
     const res = await fetch(webhookUrl, {
