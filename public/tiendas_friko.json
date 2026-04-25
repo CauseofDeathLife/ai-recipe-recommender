@@ -1,0 +1,46 @@
+{
+  "Antioquia": [
+    { "nombre": "Andes", "direccion": "CL .51 # 49-56", "ciudad": "Andes, Antioquia", "telefono": "312 286 36 96", "horarios": ["Lun-Mar 8:00-16:00", "Jue 8:00-16:00", "Vie-Dom 8:00-16:00"] },
+    { "nombre": "Caldas", "direccion": "Km 2 Vereda La Miel", "ciudad": "Caldas, Antioquia", "telefono": "320 789 62 03", "horarios": ["Lun-Vie 8:00-17:00", "Sab 9:00-15:00"] },
+    { "nombre": "Envigado", "direccion": "Calle 36 sur # 39-46", "ciudad": "Envigado, Antioquia", "telefono": "310 232 27 13", "horarios": ["Lun-Vie 8:00-17:00", "Sab 9:00-15:00"] },
+    { "nombre": "Minorista", "direccion": "Carrera 56 C, Calle 51-165, San Benito", "ciudad": "Medellín, Antioquia", "telefono": "314 700 44 74", "horarios": ["Lun-Vie 8:00-17:00", "Sab 9:00-15:00"] },
+    { "nombre": "Rionegro", "direccion": "Calle 56 #44-40, Sector Galería", "ciudad": "Rionegro, Antioquia", "telefono": "313 649 47 30", "horarios": ["Lun-Vie 8:00-17:00", "Sab 9:00-15:00"] },
+    { "nombre": "Santa Gema", "direccion": "Cra 81 #32 EE-44", "ciudad": "Medellín, Antioquia", "telefono": "313 463 70 65", "horarios": ["Lun-Vie 8:00-17:00", "Sab 9:00-15:00"] }
+  ],
+  "Eje Cafetero": [
+    { "nombre": "Armenia", "direccion": "Carrera 19 N° 36-10, Local 1 Barrio Santander", "ciudad": "Armenia, Quindío", "telefono": "310 834 84 57", "horarios": ["Lun-Vie 6:00-14:00", "Sab 6:00-14:00"] },
+    { "nombre": "Dosquebradas", "direccion": "Calle 25 N° 10-05, Local 2, Zona Industrial Balalaika", "ciudad": "Dosquebradas, Risaralda", "telefono": "310 834 84 70", "horarios": ["Lun-Vie 6:30-12:00/14:00-16:00", "Sab 6:00-14:00"] },
+    { "nombre": "Pinares", "direccion": "Av Juan B Gutierrez N° 17-21, Local 19, Edificio Pinares de Aragón", "ciudad": "Pereira, Risaralda", "telefono": "314 819 43 86", "horarios": ["Lun-Vie 7:00-15:00", "Sab 6:30-13:30"] }
+  ],
+  "Atlántico": [
+    { "nombre": "Barranquilla", "direccion": "Carrera 43 No 75-48, Barrio Porvenir", "ciudad": "Barranquilla, Atlántico", "telefono": "310 209 61 17", "horarios": ["Lun-Sab 8:00-19:00"] }
+  ],
+  "Santander": [
+    { "nombre": "Barrancabermeja", "direccion": "Calle 54 No 19-55", "ciudad": "Barrancabermeja, Santander", "telefono": "316 521 60 95", "horarios": ["Lun-Vie 6:00-14:00", "Sab 6:00-14:30"] },
+    { "nombre": "Cañaveral", "direccion": "Calle 31 No 24-33", "ciudad": "Floridablanca, Santander", "telefono": "310 217 78 82", "horarios": ["Lun-Vie 5:00-13:00", "Sab 5:00-13:30"] },
+    { "nombre": "Centrometro", "direccion": "Calle 34 No 15-51", "ciudad": "Bucaramanga, Santander", "telefono": "310 217 79 07", "horarios": ["Lun-Vie 4:30-12:30", "Sab 4:30-13:00"] },
+    { "nombre": "Concesión Piedecuesta", "direccion": "Centro comercial de la Cuesta", "ciudad": "Piedecuesta, Santander", "telefono": "320 788 98 47", "horarios": ["Lun-Sab 8:00-12:00 / 3:00-19:00"] },
+    { "nombre": "Concordia", "direccion": "Calle 50 No 21-24", "ciudad": "Bucaramanga, Santander", "telefono": "320 788 22 75", "horarios": ["Lun-Jue 5:30-13:30", "Vie 5:30-14:00", "Sab 5:30-3:30"] },
+    { "nombre": "Floridablanca", "direccion": "Cra 8 No 4-46", "ciudad": "Floridablanca, Santander", "telefono": "320 787 84 64", "horarios": ["Lun-Vie 5:00-13:00", "Sab 5:00-13:30"] },
+    { "nombre": "Guarín", "direccion": "Calle 33 # 33A-06", "ciudad": "Bucaramanga, Santander", "telefono": "310 217 79 09", "horarios": ["Lun-Vie 5:30-13:30", "Sab 5:30-14:00"] },
+    { "nombre": "Lebrija", "direccion": "Calle 12 No 9-62, Local 1", "ciudad": "Lebrija, Santander", "telefono": "310 217 79 27", "horarios": ["Lun-Vie 5:00-13:00", "Sab 5:00-13:30"] },
+    { "nombre": "Plaza Girón", "direccion": "Cra 22 No 42-09, Local 1, El Poblado", "ciudad": "Girón, Santander", "telefono": "320 789 10 96", "horarios": ["Lun-Vie 5:00-13:00", "Sab 5:00-13:30"] },
+    { "nombre": "San Francisco", "direccion": "Calle 13 No 22-48", "ciudad": "Bucaramanga, Santander", "telefono": "312 259 45 51", "horarios": ["Lun-Sab 4:30-12:30"] }
+  ],
+  "Norte de Santander": [
+    { "nombre": "Avenida Cero", "direccion": "Av 0 # 5-95 Ceiba", "ciudad": "Cúcuta, Norte de Santander", "telefono": "310 221 06 76", "horarios": ["Lun-Vie 7:00-15:00", "Dom y Fest 7:00-13:00"] },
+    { "nombre": "Cenabastos", "direccion": "Galpón H Local 20 Cenabastos", "ciudad": "Cúcuta, Norte de Santander", "telefono": "310 221 05 21", "horarios": ["Lun 5:30-1:00", "Mar-Sab 4:30-13:00", "Dom-Fest 5:00-13:00"] },
+    { "nombre": "Cenabastos 2", "direccion": "Galpón Azul B 10-11 Cenabastos", "ciudad": "Cúcuta, Norte de Santander", "telefono": "310 221 06 36", "horarios": ["Lun 5:30-1:00", "Mar-Sab 4:30-13:00", "Dom-Fest 5:00-13:00"] },
+    { "nombre": "La Sexta", "direccion": "Calle 7 # 5-64 Centro", "ciudad": "Cúcuta, Norte de Santander", "telefono": "310 221 05 79", "horarios": ["Lun-Sab 5:30-13:30", "Dom-Fest 6:00-14:00"] },
+    { "nombre": "Nueva Sexta", "direccion": "Módulo 1 Bodega 39 Nueva Sexta, Central Mayoristas Nueva Sexta", "ciudad": "Cúcuta, Norte de Santander", "telefono": "310 221 06 46", "horarios": ["Lun 5:30-1:00", "Mar-Sab 4:30-13:00", "Dom-Fest 5:00-13:00"] },
+    { "nombre": "Pamplona", "direccion": "Calle 6 # 3-94 Centro", "ciudad": "Pamplona, Norte de Santander", "telefono": "310 221 05 98", "horarios": ["Lun-Sab 6:00-14:00", "Dom-Fest 8:30-2:30"] }
+  ],
+  "Bogotá": [
+    { "nombre": "Álamos", "direccion": "Av Calle 72 No. 100-16", "ciudad": "Bogotá, Cundinamarca", "telefono": "322 813 45 94", "horarios": ["Lun-Jue 7:00-13:00", "Vie 7:00-13:30", "Sab 7:00-14:00", "Dom 8:00-13:00"] },
+    { "nombre": "Bosa", "direccion": "Carrera 88 C No. 57-07 Sur", "ciudad": "Bogotá, Cundinamarca", "telefono": "322 813 45 40", "horarios": ["Lun-Vie 7:00-13:00", "Vie 7:00-14:00", "Sab 7:00-14:00", "Dom 8:00-13:00"] },
+    { "nombre": "Fontibón", "direccion": "Calle 25 D No. 99-08", "ciudad": "Bogotá, Cundinamarca", "telefono": "315 544 60 56", "horarios": ["Lun-Jue 7:00-13:00", "Vie 7:00-13:30", "Sab 7:00-14:00"] },
+    { "nombre": "Quiroga", "direccion": "Calle 32 Sur No. 23 B-13", "ciudad": "Bogotá, Cundinamarca", "telefono": "311 225 37 84", "horarios": ["Lun-Jue 7:00-13:30", "Vie 7:00-13:30", "Sab 7:00-14:00", "Dom 8:00-13:00"] },
+    { "nombre": "Soacha", "direccion": "Carrera 7A No. 16-80", "ciudad": "Bogotá, Cundinamarca", "telefono": "322 813 45 37", "horarios": ["Lun-Jue 7:00-13:00", "Vie 7:00-13:30", "Sab 7:00-14:00", "Dom 8:00-13:00"] },
+    { "nombre": "Suba", "direccion": "Carrera 91 No. 134 A-13", "ciudad": "Bogotá, Cundinamarca", "telefono": "310 416 75 32", "horarios": ["Lun-Jue 7:00-14:00", "Vie 7:00-14:30", "Sab 7:00-14:00", "Dom 8:00-13:00"] }
+  ]
+}

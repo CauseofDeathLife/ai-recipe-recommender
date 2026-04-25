@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 // ─────────────────────────────────────────────
 // MAPEO DE PROPIEDADES DEL JSON EXTERNO
@@ -45,8 +45,6 @@ function filtrarCatalogo(catalogo, { region, ocasion, preparacion, personas }) {
 
 // ─────────────────────────────────────────────
 // RECETA PLACEHOLDER
-// TODO: Conectar con webhook N8N cuando el equipo lo tenga listo
-// fetch("https://TU-N8N/webhook/receta", { method: "POST", body: JSON.stringify({ producto, preparacion, personas }) })
 // ─────────────────────────────────────────────
 function generarRecetaPlaceholder(producto) {
   const metodo = producto.Preparacion[0]
@@ -242,6 +240,33 @@ const IconStar = () => (
   </svg>
 )
 
+const IconBook = () => (
+  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+  </svg>
+)
+
+const IconWhatsApp = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+  </svg>
+)
+
+const IconDownload = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+    <polyline points="7 10 12 15 17 10"/>
+    <line x1="12" y1="15" x2="12" y2="3"/>
+  </svg>
+)
+
+const IconPhone = () => (
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.64 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.55 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.54a16 16 0 0 0 6.06 6.06l1.96-1.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+  </svg>
+)
+
 // ─────────────────────────────────────────────
 // ESTILOS REUTILIZABLES
 // ─────────────────────────────────────────────
@@ -311,7 +336,6 @@ const CarruselFade = ({ imagenes, indice, alt, modo = 'producto' }) => {
 // COMPONENTE PRINCIPAL
 // ─────────────────────────────────────────────
 
-// Arrays de imágenes para el carrusel (agregar más sin tocar la lógica)
 const CARRUSEL_PRODUCTOS = [
   '/productos%20y%20recetas/producto-01-surtido-pescado.jpg',
   '/productos%20y%20recetas/producto-02-alitas-bbq.webp',
@@ -329,7 +353,7 @@ const CARRUSEL_RECETAS = [
   '/productos%20y%20recetas/receta-02-banderas-salchicha.jpg',
   '/productos%20y%20recetas/receta-03-sandwich-pollo.png',
   '/productos%20y%20recetas/receta-04-canelones-thai.jpg',
-  '/productos%20y%20recetas/receta-05-crispetas-pollo.jpg',
+  '/productos%20y%20recetas/receta-05-pescado-alaska.jpg',
   '/productos%20y%20recetas/receta-06-muslos-asados.jpg',
   '/productos%20y%20recetas/receta-07-ensalada-pollo.png',
   '/productos%20y%20recetas/receta-08-pizza.png',
@@ -416,6 +440,19 @@ export default function RecomendadorFriko() {
       })
   }, [])
 
+  // ── Estado de tiendas (cargado desde public/) ──
+  const [tiendasData, setTiendasData] = useState(null)
+
+  useEffect(() => {
+    fetch('/tiendas_friko.json')
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        return res.json()
+      })
+      .then((data) => setTiendasData(data))
+      .catch(() => {})
+  }, [])
+
   // Opciones derivadas dinámicamente del catálogo cargado
   const regiones = [...new Set(catalogo.map((p) => p.Region))].sort()
   const metodos = [...new Set(catalogo.flatMap((p) => p.Preparacion))].sort()
@@ -432,6 +469,11 @@ export default function RecomendadorFriko() {
   const [nota, setNota] = useState('')
   const [logoError, setLogoError] = useState(false)
   const [cargandoReceta, setCargandoReceta] = useState(false)
+  const [origenReceta, setOrigenReceta] = useState(null)
+  const [descargando, setDescargando] = useState(false)
+
+  // ── Ref para captura de imagen ──
+  const recetaContainerRef = useRef(null)
 
   // ── Estado del carrusel ──
   const [indiceProducto, setIndiceProducto] = useState(0)
@@ -457,7 +499,6 @@ export default function RecomendadorFriko() {
     setMensajeFallback('')
     setNota('')
 
-    // Validación: al menos un filtro debe estar seleccionado
     if (!region && !ocasion && !preparacion && !personas) {
       setResultado(null)
       setReceta(null)
@@ -465,7 +506,6 @@ export default function RecomendadorFriko() {
       return
     }
 
-    // Validación: número de personas debe ser válido y estar en rango
     if (personas) {
       const num = parseInt(personas, 10)
       if (isNaN(num) || num < 1) {
@@ -492,9 +532,11 @@ export default function RecomendadorFriko() {
       try {
         const recetaN8N = await obtenerRecetaDesdeN8N(producto, preparacion, personas)
         setReceta(recetaN8N)
+        setOrigenReceta('ia')
       } catch (err) {
         console.error('Fallback a receta local por error en N8N:', err)
         setReceta(generarRecetaPlaceholder(producto))
+        setOrigenReceta('local')
       } finally {
         setCargandoReceta(false)
       }
@@ -512,9 +554,11 @@ export default function RecomendadorFriko() {
         const preparacionReal = producto.Preparacion?.[0] ?? ''
         const recetaN8N = await obtenerRecetaDesdeN8N(producto, preparacionReal, personas)
         setReceta(recetaN8N)
+        setOrigenReceta('ia')
       } catch (err) {
         console.error('Fallback a receta local por error en N8N:', err)
         setReceta(generarRecetaPlaceholder(producto))
+        setOrigenReceta('local')
       } finally {
         setCargandoReceta(false)
       }
@@ -532,9 +576,11 @@ export default function RecomendadorFriko() {
         const preparacionReal = producto.Preparacion?.[0] ?? ''
         const recetaN8N = await obtenerRecetaDesdeN8N(producto, preparacionReal, personas)
         setReceta(recetaN8N)
+        setOrigenReceta('ia')
       } catch (err) {
         console.error('Fallback a receta local por error en N8N:', err)
         setReceta(generarRecetaPlaceholder(producto))
+        setOrigenReceta('local')
       } finally {
         setCargandoReceta(false)
       }
@@ -552,9 +598,11 @@ export default function RecomendadorFriko() {
         const preparacionReal = producto.Preparacion?.[0] ?? ''
         const recetaN8N = await obtenerRecetaDesdeN8N(producto, preparacionReal, personas)
         setReceta(recetaN8N)
+        setOrigenReceta('ia')
       } catch (err) {
         console.error('Fallback a receta local por error en N8N:', err)
         setReceta(generarRecetaPlaceholder(producto))
+        setOrigenReceta('local')
       } finally {
         setCargandoReceta(false)
       }
@@ -577,6 +625,59 @@ export default function RecomendadorFriko() {
     setError('')
     setMensajeFallback('')
     setNota('')
+    setOrigenReceta(null)
+  }
+
+  const handleCompartir = () => {
+    if (!receta || !resultado) return
+    const personasText = personas ? `${personas} personas` : resultado.Rango
+    const ingredientesText = receta.ingredientes.map(i => `• ${i}`).join('\n')
+    const pasosText = receta.pasos.map((p, i) => `${i + 1}. ${p}`).join('\n')
+    const texto = `⭐ *${receta.nombre}* (${personasText})\n\n*Ingredientes:*\n${ingredientesText}\n\n*Preparación:*\n${pasosText}\n\nGenerada en https://recetasbios.vercel.app`
+    window.open(`https://wa.me/?text=${encodeURIComponent(texto)}`, '_blank')
+  }
+
+  const handleDescargar = async () => {
+    if (!recetaContainerRef.current || !resultado) return
+    setDescargando(true)
+    try {
+      const { domToPng } = await import('modern-screenshot')
+      const dataUrl = await domToPng(recetaContainerRef.current, {
+        scale: 2,
+        backgroundColor: '#f8fafc',
+      })
+      const nombreArchivo = resultado.Producto
+        .toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/[^a-z0-9-]/g, '')
+      const link = document.createElement('a')
+      link.download = `receta-${nombreArchivo}.png`
+      link.href = dataUrl
+      link.click()
+    } catch {
+      alert('No se pudo descargar la imagen, intenta de nuevo')
+    } finally {
+      setDescargando(false)
+    }
+  }
+
+  // ── Tiendas para la región seleccionada ──
+  const tiendas = region && tiendasData ? (tiendasData[region] || []) : []
+
+  // ── Personas: lógica de contador ──
+  const personasNum = personas === '' ? 0 : (parseInt(personas, 10) || 0)
+  const puedeDecrementar = personasNum >= 2
+  const puedeIncrementar = personasNum < 50
+
+  const handleDecrement = () => {
+    if (!puedeDecrementar) return
+    setPersonas(String(personasNum - 1))
+  }
+
+  const handleIncrement = () => {
+    if (!puedeIncrementar) return
+    setPersonas(String(personasNum + 1))
   }
 
   return (
@@ -594,7 +695,7 @@ export default function RecomendadorFriko() {
       }}
     >
 
-      {/* ── CONTENEDOR PRINCIPAL (dos paneles) ── */}
+      {/* ── CONTENEDOR PRINCIPAL (tres paneles) ── */}
       <main style={{
         maxWidth: '900px',
         width: '100%',
@@ -621,7 +722,7 @@ export default function RecomendadorFriko() {
           gap: '0.5rem',
         }}>
 
-          {/* ── Logos Friko + Antillana — igualados por área óptica ── */}
+          {/* ── Logos Friko + Antillana ── */}
           <div style={{
             display: 'flex',
             justifyContent: 'center',
@@ -706,10 +807,10 @@ export default function RecomendadorFriko() {
           {/* ── SELECTORES 2×2 ── */}
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap: isMobile ? '0.75rem' : '1.25rem' }}>
 
-            {/* Región */}
+            {/* Dónde estás (región) */}
             <div>
-              <label style={{...labelStyle, color: '#0d1b6f'}}>
-                <IconRegion color="#0d1b6f" /> Región
+              <label style={{ ...labelStyle, color: '#0d1b6f', fontSize: isMobile ? '12px' : '15px' }}>
+                <IconRegion color="#0d1b6f" /> Dónde estás
               </label>
               <select
                 value={region}
@@ -724,10 +825,10 @@ export default function RecomendadorFriko() {
               </select>
             </div>
 
-            {/* Ocasión */}
+            {/* Para qué ocasión */}
             <div>
-              <label style={{...labelStyle, color: '#0d1b6f'}}>
-                <IconOcasion color="#0d1b6f" /> Ocasión
+              <label style={{ ...labelStyle, color: '#0d1b6f', fontSize: isMobile ? '12px' : '15px' }}>
+                <IconOcasion color="#0d1b6f" /> Para qué ocasión
               </label>
               <select
                 value={ocasion}
@@ -744,7 +845,7 @@ export default function RecomendadorFriko() {
 
             {/* Preparación */}
             <div>
-              <label style={{...labelStyle, color: '#0d1b6f'}}>
+              <label style={{ ...labelStyle, color: '#0d1b6f', fontSize: isMobile ? '12px' : '15px' }}>
                 <IconPreparacion color="#0d1b6f" /> Preparación
               </label>
               <select
@@ -760,30 +861,105 @@ export default function RecomendadorFriko() {
               </select>
             </div>
 
-            {/* Personas */}
+            {/* Personas — con botones +/- */}
             <div>
-              <label style={{...labelStyle, color: '#0d1b6f'}}>
+              <label style={{ ...labelStyle, color: '#0d1b6f', fontSize: isMobile ? '12px' : '15px' }}>
                 <IconPersonas color="#0d1b6f" /> Personas
               </label>
-              <input
-                type="number"
-                min="1"
-                max="50"
-                placeholder="Máximo 50 personas"
-                value={personas}
-                onChange={(e) => {
-                  const val = e.target.value
-                  if (val === '' || (parseInt(val) >= 1 && parseInt(val) <= 50)) {
-                    setPersonas(val)
-                  }
-                }}
-                style={{
-                  ...selectStyle,
-                  color: personas ? '#0d1b6f' : '#7b8fa8',
-                }}
-                onFocus={(e) => { e.currentTarget.style.boxShadow = '0 0 0 3px rgba(13,27,111,0.2)'; e.currentTarget.style.borderColor = '#0d1b6f'; e.currentTarget.style.color = '#0d1b6f' }}
-                onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#e2e8f0' }}
-              />
+              <div style={{
+                display: 'flex',
+                alignItems: 'stretch',
+                border: '1.5px solid #e2e8f0',
+                borderRadius: '0.75rem',
+                overflow: 'hidden',
+                background: 'rgba(255, 255, 255, 0.95)',
+                transition: 'border-color 0.2s',
+              }}>
+                <button
+                  type="button"
+                  onClick={handleDecrement}
+                  disabled={!puedeDecrementar}
+                  aria-label="Menos personas"
+                  style={{
+                    minWidth: '44px',
+                    width: '44px',
+                    background: puedeDecrementar ? 'linear-gradient(180deg, #ef4444 0%, #dc2626 100%)' : 'rgba(254, 226, 226, 0.5)',
+                    color: puedeDecrementar ? '#fff' : '#fca5a5',
+                    border: 'none',
+                    cursor: puedeDecrementar ? 'pointer' : 'not-allowed',
+                    fontSize: '1.25rem',
+                    fontWeight: 700,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    transition: 'background 0.15s',
+                    padding: 0,
+                  }}
+                >
+                  −
+                </button>
+                <input
+                  type="number"
+                  min="1"
+                  max="50"
+                  placeholder="Máximo 50 personas"
+                  value={personas}
+                  onChange={(e) => {
+                    const val = e.target.value
+                    if (val === '' || (parseInt(val) >= 1 && parseInt(val) <= 50)) {
+                      setPersonas(val)
+                    }
+                  }}
+                  style={{
+                    flex: 1,
+                    minWidth: 0,
+                    background: 'transparent',
+                    border: 'none',
+                    borderLeft: '1.5px solid #e2e8f0',
+                    borderRight: '1.5px solid #e2e8f0',
+                    borderRadius: 0,
+                    padding: '0.75rem 0.5rem',
+                    fontSize: '0.9rem',
+                    color: personas ? '#0d1b6f' : '#7b8fa8',
+                    textAlign: 'center',
+                    outline: 'none',
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.parentElement.style.borderColor = '#0d1b6f'
+                    e.currentTarget.parentElement.style.boxShadow = '0 0 0 3px rgba(13,27,111,0.2)'
+                    e.currentTarget.style.color = '#0d1b6f'
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.parentElement.style.borderColor = '#e2e8f0'
+                    e.currentTarget.parentElement.style.boxShadow = 'none'
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={handleIncrement}
+                  disabled={!puedeIncrementar}
+                  aria-label="Más personas"
+                  style={{
+                    minWidth: '44px',
+                    width: '44px',
+                    background: puedeIncrementar ? 'linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%)' : 'rgba(254, 243, 199, 0.5)',
+                    color: puedeIncrementar ? '#0d1b6f' : '#d97706',
+                    border: 'none',
+                    cursor: puedeIncrementar ? 'pointer' : 'not-allowed',
+                    fontSize: '1.25rem',
+                    fontWeight: 700,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    transition: 'background 0.15s',
+                    padding: 0,
+                  }}
+                >
+                  +
+                </button>
+              </div>
             </div>
 
           </div>
@@ -931,11 +1107,14 @@ export default function RecomendadorFriko() {
           )}
 
           {/* ── ZONA DE RESULTADOS — siempre visible ── */}
-          <div style={{
-            border: '1.5px dashed rgba(13, 27, 111, 0.15)',
-            borderRadius: '1.5rem',
-            padding: isMobile ? '0.75rem' : '1rem',
-          }}>
+          <div
+            ref={recetaContainerRef}
+            style={{
+              border: '1.5px dashed rgba(13, 27, 111, 0.15)',
+              borderRadius: '1.5rem',
+              padding: isMobile ? '0.75rem' : '1rem',
+            }}
+          >
           <div style={{ display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap:'1rem' }}>
 
             {/* ─── IZQUIERDA: PRODUCTO ─── */}
@@ -982,7 +1161,8 @@ export default function RecomendadorFriko() {
                     </span>
                   ))}
                   {resultado.Marca === 'FRIKO' ? (
-                    <span style={{ background:'#DBEAFE', color:'#1e40af', fontSize:'11px', fontWeight:600, padding:'3px 10px', borderRadius:'9999px' }}>
+                    <span style={{ background:'#DBEAFE', color:'#1e40af', fontSize:'11px', fontWeight:600, padding:'3px 10px', borderRadius:'9999px', display:'inline-flex', alignItems:'center', gap:'5px' }}>
+                      <img src="/logo-friko-improved.png" alt="Friko" style={{ height:'16px', width:'auto', objectFit:'contain' }} onError={(e) => { e.currentTarget.style.display='none' }} />
                       FRIKO
                     </span>
                   ) : (
@@ -1045,12 +1225,41 @@ export default function RecomendadorFriko() {
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '0.75rem',
+                gap: '1rem',
               }}>
-                <svg className="animate-spin" style={{ width: 28, height: 28, color: '#7c5a28' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-                </svg>
-                <span style={{ color: '#7c5a28', fontSize: '14px', fontWeight: 600 }}>Generando receta...</span>
+                {/* Logo spinner: Friko y Antillana alternándose con CSS */}
+                <div style={{ position: 'relative', width: '149px', height: '87px' }}>
+                  <img
+                    src="/logo-friko-improved.png"
+                    alt="Friko"
+                    style={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      width: '120px',
+                      height: '87px',
+                      objectFit: 'contain',
+                      animation: 'logoFricoFade 3s infinite ease-in-out',
+                    }}
+                  />
+                  <img
+                    src="/logo-antillana-improved.png"
+                    alt="Antillana"
+                    style={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      width: '149px',
+                      height: '70px',
+                      objectFit: 'contain',
+                      animation: 'logoAntillanaFade 3s infinite ease-in-out',
+                      opacity: 0,
+                    }}
+                  />
+                </div>
+                <span style={{ color: '#7c5a28', fontSize: '14px', fontWeight: 600 }}>Generando tu receta...</span>
               </div>
             ) : resultado && receta ? (
               <div style={{
@@ -1067,9 +1276,16 @@ export default function RecomendadorFriko() {
                   <span style={{ color:'#7c5a28', fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px' }}>
                     Receta sugerida
                   </span>
-                  <span style={{ background:'#D1FAE5', color:'#065f46', fontSize:'10px', fontWeight:700, padding:'3px 10px', borderRadius:'9999px', display:'inline-flex', alignItems:'center', gap:'4px' }}>
-                    <IconStar /> Generado por IA
-                  </span>
+                  {origenReceta === 'ia' && (
+                    <span style={{ background:'#D1FAE5', color:'#065f46', fontSize:'10px', fontWeight:700, padding:'3px 10px', borderRadius:'9999px', display:'inline-flex', alignItems:'center', gap:'4px' }}>
+                      <IconStar /> Generado por IA
+                    </span>
+                  )}
+                  {origenReceta === 'local' && (
+                    <span style={{ background:'#E0E7FF', color:'#3730a3', fontSize:'10px', fontWeight:700, padding:'3px 10px', borderRadius:'9999px', display:'inline-flex', alignItems:'center', gap:'4px' }}>
+                      <IconBook /> Receta sugerida
+                    </span>
+                  )}
                 </div>
 
                 <h2 style={{ color:'#1a2332', fontSize:'18px', fontWeight:800, lineHeight:1.3, margin:0 }}>
@@ -1142,14 +1358,152 @@ export default function RecomendadorFriko() {
           </div>
           </div>
 
-          {/* ── AVISO DE PRIVACIDAD ── */}
+          {/* ── BOTONES COMPARTIR / DESCARGAR — solo cuando hay receta ── */}
+          {resultado && receta && !cargandoReceta && (
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '0.75rem',
+              flexWrap: 'wrap',
+            }}>
+              <button
+                onClick={handleCompartir}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  background: '#25D366',
+                  color: '#fff',
+                  fontWeight: 700,
+                  fontSize: '0.875rem',
+                  padding: isMobile ? '0.65rem 1.2rem' : '0.65rem 1.5rem',
+                  borderRadius: '0.75rem',
+                  border: 'none',
+                  cursor: 'pointer',
+                  boxShadow: '0 3px 0 #1aab52, 0 4px 12px rgba(0,0,0,0.2)',
+                  transition: 'all 0.15s ease',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.filter = 'brightness(1.08)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+                onMouseLeave={(e) => { e.currentTarget.style.filter = 'brightness(1)'; e.currentTarget.style.transform = 'translateY(0)' }}
+              >
+                <IconWhatsApp />
+                Compartir por WhatsApp
+              </button>
+
+              <button
+                onClick={handleDescargar}
+                disabled={descargando}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  background: '#0d1b6f',
+                  color: '#fff',
+                  fontWeight: 700,
+                  fontSize: '0.875rem',
+                  padding: isMobile ? '0.65rem 1.2rem' : '0.65rem 1.5rem',
+                  borderRadius: '0.75rem',
+                  border: 'none',
+                  cursor: descargando ? 'not-allowed' : 'pointer',
+                  boxShadow: '0 3px 0 #050d3a, 0 4px 12px rgba(0,0,0,0.2)',
+                  transition: 'all 0.15s ease',
+                  opacity: descargando ? 0.7 : 1,
+                }}
+                onMouseEnter={(e) => { if (!descargando) { e.currentTarget.style.filter = 'brightness(1.2)'; e.currentTarget.style.transform = 'translateY(-1px)' } }}
+                onMouseLeave={(e) => { e.currentTarget.style.filter = 'brightness(1)'; e.currentTarget.style.transform = 'translateY(0)' }}
+              >
+                <IconDownload />
+                {descargando ? 'Generando imagen...' : 'Descargar imagen'}
+              </button>
+            </div>
+          )}
+
+          {/* ── PUNTOS DE VENTA — solo cuando hay región y resultado ── */}
+          {region && resultado && tiendas.length > 0 && (
+            <div>
+              <p style={{
+                color: '#0d1b6f',
+                fontSize: '13px',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '1.5px',
+                marginBottom: '0.75rem',
+                marginTop: 0,
+              }}>
+                Puntos de venta en tu región
+              </p>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: isMobile
+                  ? '1fr'
+                  : tiendas.length === 2
+                  ? '1fr 1fr'
+                  : '1fr 1fr 1fr',
+                gap: '0.75rem',
+              }}>
+                {tiendas.map((tienda, i) => (
+                  <div key={i} style={{
+                    background: 'rgba(255, 255, 255, 0.85)',
+                    border: '1px solid rgba(13, 27, 111, 0.1)',
+                    borderRadius: '1rem',
+                    padding: '0.875rem 1rem',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: '0.75rem',
+                    alignItems: 'flex-start',
+                  }}>
+                    <img
+                      src="/marcador-de-posicion.png"
+                      alt=""
+                      style={{
+                        width: isMobile ? '40px' : '48px',
+                        height: isMobile ? '40px' : '48px',
+                        objectFit: 'contain',
+                        flexShrink: 0,
+                        alignSelf: 'flex-start',
+                      }}
+                    />
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', flex: 1, minWidth: 0 }}>
+                      <p style={{ color: '#0d1b6f', fontSize: isMobile ? '16px' : '17px', fontWeight: 700, margin: 0, lineHeight: 1.2 }}>
+                        {tienda.nombre}
+                      </p>
+                      <p style={{ color: '#374151', fontSize: '12px', margin: 0, lineHeight: 1.4 }}>
+                        {tienda.direccion}
+                      </p>
+                      <p style={{ color: '#7b8fa8', fontSize: '11px', margin: 0 }}>
+                        {tienda.ciudad}
+                      </p>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
+                        <IconPhone />
+                        <span style={{ color: '#7b8fa8', fontSize: '11px' }}>{tienda.telefono}</span>
+                      </div>
+                      <div style={{ marginTop: '2px', display: 'flex', flexDirection: 'column', gap: '1px' }}>
+                        {tienda.horarios.map((h, hi) => (
+                          <span key={hi} style={{ color: '#7b8fa8', fontSize: '11px' }}>{h}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+        </section>
+
+        {/* ── PANEL C: Aviso de privacidad — panel independiente ── */}
+        <section style={{
+          background: 'radial-gradient(ellipse at top, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.78) 50%, rgba(255, 255, 255, 0.62) 100%)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderRadius: '2rem',
+          border: '1.5px solid rgba(255, 255, 255, 0.6)',
+          boxShadow: '0 18px 40px rgba(20, 30, 70, 0.22), 0 4px 12px rgba(20, 30, 70, 0.12), inset 0 2px 4px rgba(255, 255, 255, 1), inset 0 -1px 2px rgba(20, 30, 70, 0.08)',
+          padding: isMobile ? '1rem 1rem' : '1.25rem 1.5rem',
+        }}>
           <div style={{
-            background: 'rgba(248, 250, 252, 0.85)',
-            border: '1px solid rgba(13, 27, 111, 0.1)',
             borderLeft: '4px solid #0d1b6f',
-            borderRadius: '0 0.75rem 0.75rem 0',
-            padding: isMobile ? '0.75rem 1rem' : '1rem 1.25rem',
-            marginTop: '1rem',
+            paddingLeft: '1rem',
           }}>
             <p style={{ color: '#0d1b6f', fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', margin: 0 }}>
               Aviso de privacidad
@@ -1158,7 +1512,6 @@ export default function RecomendadorFriko() {
               Este es un proyecto académico desarrollado en el marco del Reto 12 del NODO EAFIT, sin fines comerciales ni operación real en producción. La aplicación no solicita, recolecta ni almacena datos personales de los usuarios: las selecciones de región, ocasión, método de preparación y número de comensales son parámetros anónimos que no permiten identificar a la persona que las realiza. Por lo anterior, al no existir tratamiento de datos personales en los términos del artículo 3 de la Ley 1581 de 2012, no se configura la obligación de autorización previa ni las demás cargas derivadas del régimen de protección de datos personales en Colombia.
             </p>
           </div>
-
         </section>
 
       </main>
