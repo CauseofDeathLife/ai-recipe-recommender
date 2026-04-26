@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { domToPng, domToBlob } from 'modern-screenshot'
 
 // ─────────────────────────────────────────────
 // MAPEO DE PROPIEDADES DEL JSON EXTERNO
@@ -142,6 +143,7 @@ async function obtenerRecetaDesdeN8N(producto, preparacionElegida, personas) {
 
   const payload = {
     producto: producto.Producto,
+    marca: producto.Marca,
     descripcion: producto.Descripcion,
     presentacion: producto.Presentacion,
     preparacion_elegida,
@@ -337,7 +339,6 @@ const CarruselFade = ({ imagenes, indice, alt, modo = 'producto' }) => {
 // ─────────────────────────────────────────────
 
 const CARRUSEL_PRODUCTOS = [
-  '/productos%20y%20recetas/producto-01-surtido-pescado.jpg',
   '/productos%20y%20recetas/producto-02-alitas-bbq.webp',
   '/productos%20y%20recetas/producto-03-camaron-tigre.webp',
   '/productos%20y%20recetas/producto-04-filete-robalo.webp',
@@ -351,9 +352,8 @@ const CARRUSEL_PRODUCTOS = [
 const CARRUSEL_RECETAS = [
   '/productos%20y%20recetas/receta-01-arepa-pollo.png',
   '/productos%20y%20recetas/receta-02-banderas-salchicha.jpg',
-  '/productos%20y%20recetas/receta-03-sandwich-pollo.png',
-  '/productos%20y%20recetas/receta-04-canelones-thai.jpg',
-  '/productos%20y%20recetas/receta-05-pescado-alaska.jpg',
+  '/productos%20y%20recetas/receta-03-sandwich-pollo-molido.jpg',
+  '/productos%20y%20recetas/receta-05-fiambre-pollo.jpg',
   '/productos%20y%20recetas/receta-06-muslos-asados.jpg',
   '/productos%20y%20recetas/receta-07-ensalada-pollo.png',
   '/productos%20y%20recetas/receta-08-pizza.png',
@@ -628,23 +628,69 @@ export default function RecomendadorFriko() {
     setOrigenReceta(null)
   }
 
-  const handleCompartir = () => {
+  const handleCompartir = async () => {
     if (!receta || !resultado) return
     const personasText = personas ? `${personas} personas` : resultado.Rango
-    const ingredientesText = receta.ingredientes.map(i => `• ${i}`).join('\n')
-    const pasosText = receta.pasos.map((p, i) => `${i + 1}. ${p}`).join('\n')
-    const texto = `⭐ *${receta.nombre}* (${personasText})\n\n*Ingredientes:*\n${ingredientesText}\n\n*Preparación:*\n${pasosText}\n\nGenerada en https://recetasbios.vercel.app`
-    window.open(`https://wa.me/?text=${encodeURIComponent(texto)}`, '_blank')
+    const urlApp = 'https://recetasbios.vercel.app'
+
+    const textoSaludo = `¡Mira esta receta que generé con productos Friko y Antillana! Pruébala tú también en ${urlApp}`
+    const textoCorto = `Mira esta receta: *${receta.nombre}* (${personasText}) — ${urlApp}`
+
+    if (navigator.share && recetaContainerRef.current) {
+      try {
+        const imgs = recetaContainerRef.current.querySelectorAll('img')
+        await Promise.all(
+          Array.from(imgs).map(img =>
+            img.complete ? Promise.resolve() : new Promise(resolve => {
+              img.onload = resolve
+              img.onerror = resolve
+            })
+          )
+        )
+        await new Promise(r => requestAnimationFrame(r))
+
+        const blob = await domToBlob(recetaContainerRef.current, {
+          scale: 2,
+          backgroundColor: '#f8fafc',
+          useCORS: true,
+        })
+        const file = new File([blob], 'receta.png', { type: 'image/png' })
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            text: textoSaludo,
+          })
+          return
+        }
+      } catch (err) {
+        if (err.name === 'AbortError') return
+        console.warn('navigator.share falló, usando fallback wa.me:', err)
+      }
+    }
+
+    window.open(`https://wa.me/?text=${encodeURIComponent(textoCorto)}`, '_blank')
   }
 
   const handleDescargar = async () => {
     if (!recetaContainerRef.current || !resultado) return
     setDescargando(true)
     try {
-      const { domToPng } = await import('modern-screenshot')
+      const imgs = recetaContainerRef.current.querySelectorAll('img')
+      await Promise.all(
+        Array.from(imgs).map(img =>
+          img.complete ? Promise.resolve() : new Promise(resolve => {
+            img.onload = resolve
+            img.onerror = resolve
+          })
+        )
+      )
+      await new Promise(r => requestAnimationFrame(r))
+
       const dataUrl = await domToPng(recetaContainerRef.current, {
         scale: 2,
         backgroundColor: '#f8fafc',
+        useCORS: true,
       })
       const nombreArchivo = resultado.Producto
         .toLowerCase()
@@ -655,8 +701,14 @@ export default function RecomendadorFriko() {
       link.download = `receta-${nombreArchivo}.png`
       link.href = dataUrl
       link.click()
-    } catch {
-      alert('No se pudo descargar la imagen, intenta de nuevo')
+    } catch (err) {
+      console.error('Error al descargar:', err)
+      const msg = err?.message || ''
+      if (msg.includes('tainted') || msg.includes('CORS')) {
+        alert('No se pudo capturar por restricciones del navegador. Intenta recargar la página')
+      } else {
+        alert('No se pudo descargar la imagen, intenta de nuevo')
+      }
     } finally {
       setDescargando(false)
     }
@@ -683,7 +735,9 @@ export default function RecomendadorFriko() {
   return (
     <div
       style={{
-        background: 'radial-gradient(ellipse at 50% 40%, #1A3BA0 0%, #102B88 60%, #0A1F66 100%)',
+        // TEMA AZUL ORIGINAL (respaldo, restaurar si el blanco no funciona):
+        // background: 'radial-gradient(ellipse at 50% 40%, #1A3BA0 0%, #102B88 60%, #0A1F66 100%)',
+        background: 'radial-gradient(ellipse at 50% 40%, #EEF2F8 0%, #D5DEED 60%, #BCC8DD 100%)',
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
@@ -694,6 +748,41 @@ export default function RecomendadorFriko() {
         overflowX: 'hidden',
       }}
     >
+
+      {/* Blobs decorativos para glassmorphism */}
+      <div style={{
+        position: 'absolute',
+        top: '15%',
+        left: '-10%',
+        width: '450px',
+        height: '450px',
+        background: 'radial-gradient(circle, rgba(251, 191, 36, 0.45) 0%, transparent 70%)',
+        filter: 'blur(80px)',
+        zIndex: 0,
+        pointerEvents: 'none',
+      }} />
+      <div style={{
+        position: 'absolute',
+        top: '50%',
+        right: '-15%',
+        width: '550px',
+        height: '550px',
+        background: 'radial-gradient(circle, rgba(196, 30, 36, 0.30) 0%, transparent 70%)',
+        filter: 'blur(100px)',
+        zIndex: 0,
+        pointerEvents: 'none',
+      }} />
+      <div style={{
+        position: 'absolute',
+        bottom: '10%',
+        left: '20%',
+        width: '400px',
+        height: '400px',
+        background: 'radial-gradient(circle, rgba(59, 130, 246, 0.20) 0%, transparent 70%)',
+        filter: 'blur(90px)',
+        zIndex: 0,
+        pointerEvents: 'none',
+      }} />
 
       {/* ── CONTENEDOR PRINCIPAL (tres paneles) ── */}
       <main style={{
@@ -774,7 +863,7 @@ export default function RecomendadorFriko() {
           WebkitBackdropFilter: 'blur(20px)',
           borderRadius: '2rem',
           border: '1.5px solid rgba(220, 225, 240, 0.75)',
-          boxShadow: '0 15px 40px rgba(30, 40, 80, 0.18), inset 0 0 25px rgba(180, 190, 220, 0.15), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -2px 5px rgba(30, 40, 80, 0.06)',
+          boxShadow: '0 25px 60px rgba(20, 30, 70, 0.30), 0 8px 20px rgba(20, 30, 70, 0.18), inset 0 0 90px rgba(20, 30, 70, 0.28), inset 0 0 35px rgba(20, 30, 70, 0.15), inset 0 3px 6px rgba(255, 255, 255, 1), inset 0 -3px 6px rgba(20, 30, 70, 0.12)',
           padding: isMobile ? '1rem 0.75rem' : '2rem',
           display: 'flex',
           flexDirection: 'column',
@@ -805,20 +894,33 @@ export default function RecomendadorFriko() {
           )}
 
           {/* ── SELECTORES 2×2 ── */}
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap: isMobile ? '0.75rem' : '1.25rem' }}>
+          <div style={{ display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? '0.75rem' : '1.25rem' }}>
 
             {/* Dónde estás (región) */}
             <div>
-              <label style={{ ...labelStyle, color: '#0d1b6f', fontSize: isMobile ? '12px' : '15px' }}>
-                <IconRegion color="#0d1b6f" /> Dónde estás
+              <label style={{ ...labelStyle, color: '#0d1b6f', fontSize: isMobile ? '13px' : '15px' }}>
+                <IconRegion color="#0d1b6f" /> Dónde estás?
               </label>
               <select
                 value={region}
                 onChange={(e) => setRegion(e.target.value)}
                 disabled={cargando}
-                style={{ ...selectStyle, opacity: cargando ? 0.5 : 1 }}
-                onFocus={(e) => { e.currentTarget.style.boxShadow = '0 0 0 3px rgba(13,27,111,0.2)'; e.currentTarget.style.borderColor = '#0d1b6f' }}
-                onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#e2e8f0' }}
+                style={{
+                  ...selectStyle,
+                  opacity: cargando ? 0.5 : 1,
+                  borderColor: region ? '#0d1b6f' : '#e2e8f0',
+                  boxShadow: region ? '0 0 0 2px rgba(13,27,111,0.18)' : 'none',
+                }}
+                onFocus={(e) => { e.currentTarget.style.boxShadow = '0 0 0 3px rgba(13,27,111,0.45)'; e.currentTarget.style.borderColor = '#0d1b6f' }}
+                onBlur={(e) => {
+                  if (region) {
+                    e.currentTarget.style.boxShadow = '0 0 0 2px rgba(13,27,111,0.18)'
+                    e.currentTarget.style.borderColor = '#0d1b6f'
+                  } else {
+                    e.currentTarget.style.boxShadow = 'none'
+                    e.currentTarget.style.borderColor = '#e2e8f0'
+                  }
+                }}
               >
                 <option value="" style={{ background: '#ffffff', color: '#1e293b' }}>Todas las regiones</option>
                 {regiones.map((r) => <option key={r} style={{ background: '#ffffff', color: '#1e293b' }}>{r}</option>)}
@@ -827,15 +929,27 @@ export default function RecomendadorFriko() {
 
             {/* Para qué ocasión */}
             <div>
-              <label style={{ ...labelStyle, color: '#0d1b6f', fontSize: isMobile ? '12px' : '15px' }}>
-                <IconOcasion color="#0d1b6f" /> Para qué ocasión
+              <label style={{ ...labelStyle, color: '#0d1b6f', fontSize: isMobile ? '13px' : '15px' }}>
+                <IconOcasion color="#0d1b6f" /> Para qué ocasión?
               </label>
               <select
                 value={ocasion}
                 onChange={(e) => setOcasion(e.target.value)}
-                style={selectStyle}
-                onFocus={(e) => { e.currentTarget.style.boxShadow = '0 0 0 3px rgba(13,27,111,0.2)'; e.currentTarget.style.borderColor = '#0d1b6f' }}
-                onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#e2e8f0' }}
+                style={{
+                  ...selectStyle,
+                  borderColor: ocasion ? '#0d1b6f' : '#e2e8f0',
+                  boxShadow: ocasion ? '0 0 0 2px rgba(13,27,111,0.18)' : 'none',
+                }}
+                onFocus={(e) => { e.currentTarget.style.boxShadow = '0 0 0 3px rgba(13,27,111,0.45)'; e.currentTarget.style.borderColor = '#0d1b6f' }}
+                onBlur={(e) => {
+                  if (ocasion) {
+                    e.currentTarget.style.boxShadow = '0 0 0 2px rgba(13,27,111,0.18)'
+                    e.currentTarget.style.borderColor = '#0d1b6f'
+                  } else {
+                    e.currentTarget.style.boxShadow = 'none'
+                    e.currentTarget.style.borderColor = '#e2e8f0'
+                  }
+                }}
               >
                 <option value="" style={{ background: '#ffffff', color: '#1e293b' }}>Cualquier ocasión</option>
                 <option style={{ background: '#ffffff', color: '#1e293b' }}>Hogar</option>
@@ -845,26 +959,39 @@ export default function RecomendadorFriko() {
 
             {/* Preparación */}
             <div>
-              <label style={{ ...labelStyle, color: '#0d1b6f', fontSize: isMobile ? '12px' : '15px' }}>
-                <IconPreparacion color="#0d1b6f" /> Preparación
+              <label style={{ ...labelStyle, color: '#0d1b6f', fontSize: isMobile ? '13px' : '15px' }}>
+                <IconPreparacion color="#0d1b6f" /> Tipo de preparación?
               </label>
               <select
                 value={preparacion}
                 onChange={(e) => setPreparacion(e.target.value)}
                 disabled={cargando}
-                style={{ ...selectStyle, opacity: cargando ? 0.5 : 1 }}
-                onFocus={(e) => { e.currentTarget.style.boxShadow = '0 0 0 3px rgba(13,27,111,0.2)'; e.currentTarget.style.borderColor = '#0d1b6f' }}
-                onBlur={(e) => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#e2e8f0' }}
+                style={{
+                  ...selectStyle,
+                  opacity: cargando ? 0.5 : 1,
+                  borderColor: preparacion ? '#0d1b6f' : '#e2e8f0',
+                  boxShadow: preparacion ? '0 0 0 2px rgba(13,27,111,0.18)' : 'none',
+                }}
+                onFocus={(e) => { e.currentTarget.style.boxShadow = '0 0 0 3px rgba(13,27,111,0.45)'; e.currentTarget.style.borderColor = '#0d1b6f' }}
+                onBlur={(e) => {
+                  if (preparacion) {
+                    e.currentTarget.style.boxShadow = '0 0 0 2px rgba(13,27,111,0.18)'
+                    e.currentTarget.style.borderColor = '#0d1b6f'
+                  } else {
+                    e.currentTarget.style.boxShadow = 'none'
+                    e.currentTarget.style.borderColor = '#e2e8f0'
+                  }
+                }}
               >
-                <option value="" style={{ background: '#ffffff', color: '#1e293b' }}>Cualquier método</option>
+                <option value="" style={{ background: '#ffffff', color: '#1e293b' }}>Elige el tipo de preparación</option>
                 {metodos.map((m) => <option key={m} style={{ background: '#ffffff', color: '#1e293b' }}>{m}</option>)}
               </select>
             </div>
 
             {/* Personas — con botones +/- */}
             <div>
-              <label style={{ ...labelStyle, color: '#0d1b6f', fontSize: isMobile ? '12px' : '15px' }}>
-                <IconPersonas color="#0d1b6f" /> Personas
+              <label style={{ ...labelStyle, color: '#0d1b6f', fontSize: isMobile ? '13px' : '15px' }}>
+                <IconPersonas color="#0d1b6f" /> Para cuántas personas?
               </label>
               <div style={{
                 display: 'flex',
@@ -927,7 +1054,7 @@ export default function RecomendadorFriko() {
                   }}
                   onFocus={(e) => {
                     e.currentTarget.parentElement.style.borderColor = '#0d1b6f'
-                    e.currentTarget.parentElement.style.boxShadow = '0 0 0 3px rgba(13,27,111,0.2)'
+                    e.currentTarget.parentElement.style.boxShadow = '0 0 0 3px rgba(13,27,111,0.45)'
                     e.currentTarget.style.color = '#0d1b6f'
                   }}
                   onBlur={(e) => {
@@ -972,17 +1099,17 @@ export default function RecomendadorFriko() {
               onClick={handleGenerar}
               disabled={cargando || !!errorCarga}
               style={{
-                background: 'linear-gradient(180deg, #ef4444 0%, #dc2626 100%)',
-                color: '#fff',
+                background: 'linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%)',
+                color: '#0d1b6f',
                 fontWeight: 700,
                 fontSize: '0.875rem',
                 textTransform: 'uppercase',
                 letterSpacing: '1px',
-                padding: isMobile ? '0.85rem 1.5rem' : '0.85rem 2.5rem',
+                padding: isMobile ? '0.75rem 0.85rem' : '0.75rem 1.1rem',
                 borderRadius: '1rem',
                 border: 'none',
                 cursor: cargando || !!errorCarga ? 'not-allowed' : 'pointer',
-                boxShadow: '0 6px 0 #991b1b, 0 8px 20px rgba(0,0,0,0.3)',
+                boxShadow: '0 6px 0 #b45309, 0 8px 20px rgba(0,0,0,0.3)',
                 transform: 'translateY(0)',
                 transition: 'all 0.15s ease',
                 opacity: cargando || !!errorCarga ? 0.5 : 1,
@@ -991,7 +1118,7 @@ export default function RecomendadorFriko() {
                 if (!e.currentTarget.disabled) {
                   e.currentTarget.style.filter = 'brightness(1.1)'
                   e.currentTarget.style.transform = 'translateY(-2px)'
-                  e.currentTarget.style.boxShadow = '0 8px 0 #991b1b, 0 10px 25px rgba(0,0,0,0.35)'
+                  e.currentTarget.style.boxShadow = '0 8px 0 #b45309, 0 10px 25px rgba(0,0,0,0.35)'
                 }
               }}
               onMouseDown={(e) => {
@@ -1001,56 +1128,56 @@ export default function RecomendadorFriko() {
                 }
               }}
               onMouseUp={(e) => {
-                e.currentTarget.style.boxShadow = '0 6px 0 #991b1b, 0 8px 20px rgba(0,0,0,0.3)'
+                e.currentTarget.style.boxShadow = '0 6px 0 #b45309, 0 8px 20px rgba(0,0,0,0.3)'
                 e.currentTarget.style.transform = 'translateY(0)'
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 6px 0 #991b1b, 0 8px 20px rgba(0,0,0,0.3)'
+                e.currentTarget.style.boxShadow = '0 6px 0 #b45309, 0 8px 20px rgba(0,0,0,0.3)'
                 e.currentTarget.style.transform = 'translateY(0)'
                 e.currentTarget.style.filter = 'brightness(1)'
               }}
             >
-              Generar
+              Generar receta
             </button>
 
             {/* Botón Reiniciar */}
             <button
               onClick={handleReiniciar}
               style={{
-                background: 'linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%)',
-                color: '#1e293b',
+                background: 'linear-gradient(180deg, #ef4444 0%, #dc2626 100%)',
+                color: '#FFFFFF',
                 fontWeight: 700,
                 fontSize: '0.875rem',
                 textTransform: 'uppercase',
                 letterSpacing: '1px',
-                padding: isMobile ? '0.85rem 1.5rem' : '0.85rem 2.5rem',
+                padding: isMobile ? '0.75rem 0.85rem' : '0.75rem 1.1rem',
                 borderRadius: '1rem',
                 border: 'none',
                 cursor: 'pointer',
-                boxShadow: '0 6px 0 #b45309, 0 8px 20px rgba(0,0,0,0.3)',
+                boxShadow: '0 6px 0 #991b1b, 0 8px 20px rgba(0,0,0,0.3)',
                 transform: 'translateY(0)',
                 transition: 'all 0.15s ease',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.filter = 'brightness(1.08)'
+                e.currentTarget.style.filter = 'brightness(1.15)'
                 e.currentTarget.style.transform = 'translateY(-2px)'
-                e.currentTarget.style.boxShadow = '0 8px 0 #b45309, 0 10px 25px rgba(0,0,0,0.35)'
+                e.currentTarget.style.boxShadow = '0 8px 0 #991b1b, 0 10px 25px rgba(0,0,0,0.35)'
               }}
               onMouseDown={(e) => {
                 e.currentTarget.style.boxShadow = 'none'
                 e.currentTarget.style.transform = 'translateY(6px)'
               }}
               onMouseUp={(e) => {
-                e.currentTarget.style.boxShadow = '0 6px 0 #b45309, 0 8px 20px rgba(0,0,0,0.3)'
+                e.currentTarget.style.boxShadow = '0 6px 0 #991b1b, 0 8px 20px rgba(0,0,0,0.3)'
                 e.currentTarget.style.transform = 'translateY(0)'
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 6px 0 #b45309, 0 8px 20px rgba(0,0,0,0.3)'
+                e.currentTarget.style.boxShadow = '0 6px 0 #991b1b, 0 8px 20px rgba(0,0,0,0.3)'
                 e.currentTarget.style.transform = 'translateY(0)'
                 e.currentTarget.style.filter = 'brightness(1)'
               }}
             >
-              Reiniciar
+              Reiniciar receta
             </button>
 
           </div>
@@ -1120,7 +1247,7 @@ export default function RecomendadorFriko() {
             {/* ─── IZQUIERDA: PRODUCTO ─── */}
             {resultado ? (
               <div style={{
-                background: 'rgba(255, 252, 245, 0.75)',
+                background: '#F5EDDC',
                 border: '1.5px solid rgba(13, 27, 111, 0.1)',
                 borderRadius: '1.25rem',
                 padding: isMobile ? '1rem' : '1.25rem',
@@ -1129,7 +1256,7 @@ export default function RecomendadorFriko() {
                 flexDirection: 'column',
                 gap: '0.75rem',
               }}>
-                <span style={{ color:'#7c5a28', fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px' }}>
+                <span style={{ color:'#2DA9E1', fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px' }}>
                   Producto recomendado
                 </span>
 
@@ -1161,13 +1288,13 @@ export default function RecomendadorFriko() {
                     </span>
                   ))}
                   {resultado.Marca === 'FRIKO' ? (
-                    <span style={{ background:'#DBEAFE', color:'#1e40af', fontSize:'11px', fontWeight:600, padding:'3px 10px', borderRadius:'9999px', display:'inline-flex', alignItems:'center', gap:'5px' }}>
-                      <img src="/logo-friko-improved.png" alt="Friko" style={{ height:'16px', width:'auto', objectFit:'contain' }} onError={(e) => { e.currentTarget.style.display='none' }} />
+                    <span style={{ background:'#DBEAFE', color:'#1e40af', fontSize:'11px', fontWeight:700, padding:'3px 10px', borderRadius:'9999px', display:'inline-flex', alignItems:'center', gap:'5px' }}>
+                      <img src="/logo-friko-cropped.png" alt="Friko" style={{ height:'14px', width:'19px', objectFit:'contain' }} onError={(e) => { e.currentTarget.style.display='none' }} />
                       FRIKO
                     </span>
                   ) : (
-                    <span style={{ background:'#CCFBF1', color:'#115e59', fontSize:'11px', fontWeight:600, padding:'3px 10px', borderRadius:'9999px', display:'inline-flex', alignItems:'center', gap:'5px' }}>
-                      <img src="/logo-antillana-improved.png" alt="Antillana" style={{ height:'14px', width:'auto', objectFit:'contain' }} onError={(e) => { e.currentTarget.style.display='none' }} />
+                    <span style={{ background:'#CCFBF1', color:'#115e59', fontSize:'11px', fontWeight:700, padding:'3px 10px', borderRadius:'9999px', display:'inline-flex', alignItems:'center', gap:'5px' }}>
+                      <img src="/logo-antillana-improved.png" alt="Antillana" style={{ height:'11px', width:'24px', objectFit:'contain' }} onError={(e) => { e.currentTarget.style.display='none' }} />
                       ANTILLANA
                     </span>
                   )}
@@ -1209,7 +1336,6 @@ export default function RecomendadorFriko() {
                   />
                 </a>
                 <span style={{ color: 'rgba(13, 27, 111, 0.75)', fontSize: '16px', fontWeight: 600 }}>Producto recomendado</span>
-                <span style={{ color: 'rgba(13, 27, 111, 0.60)', fontSize: '14px' }}>Aparecerá aquí al generar</span>
               </div>
             )}
 
@@ -1230,7 +1356,7 @@ export default function RecomendadorFriko() {
                 {/* Logo spinner: Friko y Antillana alternándose con CSS */}
                 <div style={{ position: 'relative', width: '149px', height: '87px' }}>
                   <img
-                    src="/logo-friko-improved.png"
+                    src="/logo-friko-cropped.png"
                     alt="Friko"
                     style={{
                       position: 'absolute',
@@ -1263,7 +1389,7 @@ export default function RecomendadorFriko() {
               </div>
             ) : resultado && receta ? (
               <div style={{
-                background: 'rgba(255, 252, 245, 0.75)',
+                background: '#F5EDDC',
                 border: '1.5px solid rgba(13, 27, 111, 0.1)',
                 borderRadius: '1.25rem',
                 padding: isMobile ? '1rem' : '1.25rem',
@@ -1273,7 +1399,7 @@ export default function RecomendadorFriko() {
                 gap: '0.75rem',
               }}>
                 <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-                  <span style={{ color:'#7c5a28', fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px' }}>
+                  <span style={{ color:'#2DA9E1', fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px' }}>
                     Receta sugerida
                   </span>
                   {origenReceta === 'ia' && (
@@ -1293,7 +1419,7 @@ export default function RecomendadorFriko() {
                 </h2>
 
                 <div>
-                  <p style={{ color:'#7c5a28', fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px', marginBottom:'8px', marginTop:0 }}>
+                  <p style={{ color:'#2DA9E1', fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px', marginBottom:'8px', marginTop:0 }}>
                     Ingredientes
                   </p>
                   <ul style={{ listStyle:'none', margin:0, padding:0, display:'flex', flexDirection:'column', gap:'4px' }}>
@@ -1307,7 +1433,7 @@ export default function RecomendadorFriko() {
                 </div>
 
                 <div>
-                  <p style={{ color:'#7c5a28', fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px', marginBottom:'8px', marginTop:0 }}>
+                  <p style={{ color:'#2DA9E1', fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px', marginBottom:'8px', marginTop:0 }}>
                     Preparación
                   </p>
                   <ol style={{ listStyle:'none', margin:0, padding:0, display:'flex', flexDirection:'column', gap:'8px' }}>
@@ -1351,7 +1477,6 @@ export default function RecomendadorFriko() {
                   />
                 </a>
                 <span style={{ color: 'rgba(13, 27, 111, 0.75)', fontSize: '16px', fontWeight: 600 }}>Receta sugerida</span>
-                <span style={{ color: 'rgba(13, 27, 111, 0.60)', fontSize: '14px' }}>Aparecerá aquí al generar</span>
               </div>
             )}
 
@@ -1376,15 +1501,17 @@ export default function RecomendadorFriko() {
                   color: '#fff',
                   fontWeight: 700,
                   fontSize: '0.875rem',
-                  padding: isMobile ? '0.65rem 1.2rem' : '0.65rem 1.5rem',
+                  padding: isMobile ? '0.6rem 0.75rem' : '0.6rem 0.9rem',
                   borderRadius: '0.75rem',
                   border: 'none',
                   cursor: 'pointer',
-                  boxShadow: '0 3px 0 #1aab52, 0 4px 12px rgba(0,0,0,0.2)',
+                  boxShadow: '0 6px 0 #1aab52, 0 8px 20px rgba(0,0,0,0.3)',
                   transition: 'all 0.15s ease',
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.filter = 'brightness(1.08)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
-                onMouseLeave={(e) => { e.currentTarget.style.filter = 'brightness(1)'; e.currentTarget.style.transform = 'translateY(0)' }}
+                onMouseEnter={(e) => { e.currentTarget.style.filter = 'brightness(1.15)'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 0 #1aab52, 0 10px 25px rgba(0,0,0,0.35)' }}
+                onMouseDown={(e) => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(6px)' }}
+                onMouseUp={(e) => { e.currentTarget.style.boxShadow = '0 6px 0 #1aab52, 0 8px 20px rgba(0,0,0,0.3)'; e.currentTarget.style.transform = 'translateY(0)' }}
+                onMouseLeave={(e) => { e.currentTarget.style.filter = 'brightness(1)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 0 #1aab52, 0 8px 20px rgba(0,0,0,0.3)' }}
               >
                 <IconWhatsApp />
                 Compartir por WhatsApp
@@ -1397,30 +1524,32 @@ export default function RecomendadorFriko() {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '8px',
-                  background: '#0d1b6f',
+                  background: 'linear-gradient(180deg, #475569 0%, #334155 100%)',
                   color: '#fff',
                   fontWeight: 700,
                   fontSize: '0.875rem',
-                  padding: isMobile ? '0.65rem 1.2rem' : '0.65rem 1.5rem',
+                  padding: isMobile ? '0.6rem 0.75rem' : '0.6rem 0.9rem',
                   borderRadius: '0.75rem',
                   border: 'none',
                   cursor: descargando ? 'not-allowed' : 'pointer',
-                  boxShadow: '0 3px 0 #050d3a, 0 4px 12px rgba(0,0,0,0.2)',
+                  boxShadow: '0 6px 0 #1e293b, 0 8px 20px rgba(0,0,0,0.3)',
                   transition: 'all 0.15s ease',
                   opacity: descargando ? 0.7 : 1,
                 }}
-                onMouseEnter={(e) => { if (!descargando) { e.currentTarget.style.filter = 'brightness(1.2)'; e.currentTarget.style.transform = 'translateY(-1px)' } }}
-                onMouseLeave={(e) => { e.currentTarget.style.filter = 'brightness(1)'; e.currentTarget.style.transform = 'translateY(0)' }}
+                onMouseEnter={(e) => { if (!descargando) { e.currentTarget.style.filter = 'brightness(1.15)'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 0 #1e293b, 0 10px 25px rgba(0,0,0,0.35)' } }}
+                onMouseDown={(e) => { if (!descargando) { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(6px)' } }}
+                onMouseUp={(e) => { e.currentTarget.style.boxShadow = '0 6px 0 #1e293b, 0 8px 20px rgba(0,0,0,0.3)'; e.currentTarget.style.transform = 'translateY(0)' }}
+                onMouseLeave={(e) => { e.currentTarget.style.filter = 'brightness(1)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 0 #1e293b, 0 8px 20px rgba(0,0,0,0.3)' }}
               >
                 <IconDownload />
-                {descargando ? 'Generando imagen...' : 'Descargar imagen'}
+                {descargando ? 'Generando receta...' : 'Descargar receta'}
               </button>
             </div>
           )}
 
           {/* ── PUNTOS DE VENTA — solo cuando hay región y resultado ── */}
           {region && resultado && tiendas.length > 0 && (
-            <div>
+            <div style={{ marginTop: '2.5rem' }}>
               <p style={{
                 color: '#0d1b6f',
                 fontSize: '13px',
@@ -1429,6 +1558,7 @@ export default function RecomendadorFriko() {
                 letterSpacing: '1.5px',
                 marginBottom: '0.75rem',
                 marginTop: 0,
+                textAlign: 'center',
               }}>
                 Puntos de venta en tu región
               </p>
@@ -1498,7 +1628,7 @@ export default function RecomendadorFriko() {
           WebkitBackdropFilter: 'blur(20px)',
           borderRadius: '2rem',
           border: '1.5px solid rgba(255, 255, 255, 0.6)',
-          boxShadow: '0 18px 40px rgba(20, 30, 70, 0.22), 0 4px 12px rgba(20, 30, 70, 0.12), inset 0 2px 4px rgba(255, 255, 255, 1), inset 0 -1px 2px rgba(20, 30, 70, 0.08)',
+          boxShadow: '0 18px 40px rgba(20, 30, 70, 0.22), 0 4px 12px rgba(20, 30, 70, 0.12), inset 0 0 50px rgba(20, 30, 70, 0.18), inset 0 2px 4px rgba(255, 255, 255, 1), inset 0 -1px 2px rgba(20, 30, 70, 0.08)',
           padding: isMobile ? '1rem 1rem' : '1.25rem 1.5rem',
         }}>
           <div style={{
@@ -1518,7 +1648,7 @@ export default function RecomendadorFriko() {
 
       {/* ── FOOTER ── */}
       <footer style={{
-        color: 'rgba(255, 255, 255, 0.6)',
+        color: 'rgba(13, 27, 111, 0.55)',
         fontSize: '0.75rem',
         fontWeight: 300,
         letterSpacing: '2px',
@@ -1536,7 +1666,7 @@ export default function RecomendadorFriko() {
                   href={p.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ color: 'rgba(255, 255, 255, 0.6)', textDecoration: 'none' }}
+                  style={{ color: 'rgba(13, 27, 111, 0.55)', textDecoration: 'none' }}
                   onMouseOver={(e) => { e.currentTarget.style.textDecoration = 'underline' }}
                   onMouseOut={(e) => { e.currentTarget.style.textDecoration = 'none' }}
                 >
