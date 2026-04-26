@@ -291,7 +291,7 @@ const labelStyle = {
   gap: '6px',
   color: '#475569',
   fontSize: '15px',
-  fontWeight: 600,
+  fontWeight: 800,
   textTransform: 'uppercase',
   letterSpacing: '1.5px',
   marginBottom: '6px',
@@ -803,7 +803,7 @@ export default function RecomendadorFriko() {
           WebkitBackdropFilter: 'blur(20px)',
           borderRadius: '2rem',
           border: '2px solid rgba(212, 135, 16, 0.55)',
-          boxShadow: '0 15px 40px rgba(200, 130, 20, 0.35), inset 0 0 35px rgba(0, 0, 0, 0.08), inset 0 2px 4px rgba(255, 255, 255, 0.80), inset 0 -3px 6px rgba(150, 100, 10, 0.18)',
+          boxShadow: '0 25px 60px rgba(20, 30, 70, 0.30), 0 8px 20px rgba(20, 30, 70, 0.18), inset 0 0 90px rgba(20, 30, 70, 0.06), inset 0 0 35px rgba(20, 30, 70, 0.03), inset 0 2px 4px rgba(255, 255, 255, 0.80), inset 0 -3px 6px rgba(150, 100, 10, 0.18)',
           padding: isMobile ? '1.25rem 1rem 1rem' : '2rem 2rem 1.5rem',
           display: 'flex',
           flexDirection: 'column',
@@ -822,14 +822,38 @@ export default function RecomendadorFriko() {
             <img
               src="/logo-friko-cropped.png"
               alt="Friko"
-              style={{ height: '87px', width: '120px', objectFit: 'contain' }}
+              style={{ height: '87px', width: '120px', objectFit: 'contain', transition: 'transform 0.2s ease, filter 0.2s ease', cursor: 'default' }}
               onError={(e) => { e.currentTarget.style.display = 'none' }}
+              onMouseEnter={(e) => {
+                if (!isMobile) {
+                  e.currentTarget.style.transform = 'scale(1.08)'
+                  e.currentTarget.style.filter = 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25))'
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isMobile) {
+                  e.currentTarget.style.transform = 'scale(1)'
+                  e.currentTarget.style.filter = 'none'
+                }
+              }}
             />
             <img
               src="/logo-antillana-improved.png"
               alt="Antillana"
-              style={{ height: '70px', width: '149px', objectFit: 'contain' }}
+              style={{ height: '70px', width: '149px', objectFit: 'contain', transition: 'transform 0.2s ease, filter 0.2s ease', cursor: 'default' }}
               onError={(e) => { e.currentTarget.style.display = 'none' }}
+              onMouseEnter={(e) => {
+                if (!isMobile) {
+                  e.currentTarget.style.transform = 'scale(1.08)'
+                  e.currentTarget.style.filter = 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25))'
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isMobile) {
+                  e.currentTarget.style.transform = 'scale(1)'
+                  e.currentTarget.style.filter = 'none'
+                }
+              }}
             />
           </div>
 
@@ -858,13 +882,13 @@ export default function RecomendadorFriko() {
 
         {/* ── PANEL B: Blanco — selectores, botones, resultados ── */}
         <section style={{
-          background: 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.78) 65%, rgba(255, 255, 255, 0.92) 100%)',
+          background: 'radial-gradient(ellipse at center, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 60%, rgba(255, 255, 255, 0.92) 100%)',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
           borderRadius: '2rem',
           border: '1.5px solid rgba(220, 225, 240, 0.75)',
-          boxShadow: '0 25px 60px rgba(20, 30, 70, 0.30), 0 8px 20px rgba(20, 30, 70, 0.18), inset 0 0 90px rgba(20, 30, 70, 0.28), inset 0 0 35px rgba(20, 30, 70, 0.15), inset 0 3px 6px rgba(255, 255, 255, 1), inset 0 -3px 6px rgba(20, 30, 70, 0.12)',
-          padding: isMobile ? '1rem 0.75rem' : '2rem',
+          boxShadow: '0 25px 60px rgba(20, 30, 70, 0.30), 0 8px 20px rgba(20, 30, 70, 0.18), inset 0 0 90px rgba(20, 30, 70, 0.06), inset 0 0 35px rgba(20, 30, 70, 0.03), inset 0 3px 6px rgba(255, 255, 255, 1), inset 0 -3px 6px rgba(20, 30, 70, 0.03)',
+          padding: isMobile ? '1rem 0.75rem 1.75rem' : '2rem 2rem 2.75rem',
           display: 'flex',
           flexDirection: 'column',
           gap: '1.25rem',
@@ -1092,7 +1116,7 @@ export default function RecomendadorFriko() {
           </div>
 
           {/* ── BOTONES ── */}
-          <div style={{ display:'flex', justifyContent:'center', gap: isMobile ? '0.75rem' : '1rem' }}>
+          <div style={{ display:'flex', justifyContent:'center', gap: isMobile ? '0.75rem' : '1rem', marginTop: isMobile ? '1.5rem' : '2rem' }}>
 
             {/* Botón Generar */}
             <button
@@ -1105,7 +1129,11 @@ export default function RecomendadorFriko() {
                 fontSize: '0.875rem',
                 textTransform: 'uppercase',
                 letterSpacing: '1px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 padding: isMobile ? '0.75rem 0.85rem' : '0.75rem 1.1rem',
+                minWidth: isMobile ? '160px' : '220px',
                 borderRadius: '1rem',
                 border: 'none',
                 cursor: cargando || !!errorCarga ? 'not-allowed' : 'pointer',
@@ -1150,7 +1178,11 @@ export default function RecomendadorFriko() {
                 fontSize: '0.875rem',
                 textTransform: 'uppercase',
                 letterSpacing: '1px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 padding: isMobile ? '0.75rem 0.85rem' : '0.75rem 1.1rem',
+                minWidth: isMobile ? '160px' : '220px',
                 borderRadius: '1rem',
                 border: 'none',
                 cursor: 'pointer',
@@ -1255,16 +1287,30 @@ export default function RecomendadorFriko() {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '0.75rem',
+                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                cursor: 'default',
+              }}
+              onMouseEnter={(e) => {
+                if (!isMobile) {
+                  e.currentTarget.style.transform = 'scale(1.02)'
+                  e.currentTarget.style.boxShadow = '0 12px 28px rgba(13, 27, 111, 0.18)'
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isMobile) {
+                  e.currentTarget.style.transform = 'scale(1)'
+                  e.currentTarget.style.boxShadow = 'none'
+                }
               }}>
                 <span style={{ color:'#2DA9E1', fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px' }}>
                   Producto recomendado
                 </span>
 
                 <div>
-                  <h2 style={{ color:'#1a2332', fontSize:'18px', fontWeight:800, lineHeight:1.3, margin:0 }}>
+                  <h2 style={{ color:'#0d1b6f', fontSize:'18px', fontWeight:800, lineHeight:1.3, margin:0 }}>
                     {resultado.Producto}
                   </h2>
-                  <p style={{ color:'#374151', fontSize:'14px', marginTop:'4px', marginBottom:0 }}>
+                  <p style={{ color:'#0d1b6f', fontSize:'14px', marginTop:'4px', marginBottom:0 }}>
                     {resultado.Descripcion}
                   </p>
                 </div>
@@ -1272,11 +1318,11 @@ export default function RecomendadorFriko() {
                 <div style={{ display:'flex', flexDirection:'column', gap:'4px', fontSize:'13px' }}>
                   <span>
                     <span style={{ color:'#5a6b7a', fontWeight:600 }}>Presentación:</span>
-                    <span style={{ color:'#1a2332' }}>{resultado.Presentacion}</span>
+                    <span style={{ color:'#0d1b6f' }}>{resultado.Presentacion}</span>
                   </span>
                   <span>
                     <span style={{ color:'#5a6b7a', fontWeight:600 }}>Categoría:</span>
-                    <span style={{ color:'#1a2332' }}>{resultado.Categoria}</span>
+                    <span style={{ color:'#0d1b6f' }}>{resultado.Categoria}</span>
                   </span>
                 </div>
 
@@ -1397,6 +1443,20 @@ export default function RecomendadorFriko() {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '0.75rem',
+                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                cursor: 'default',
+              }}
+              onMouseEnter={(e) => {
+                if (!isMobile) {
+                  e.currentTarget.style.transform = 'scale(1.02)'
+                  e.currentTarget.style.boxShadow = '0 12px 28px rgba(13, 27, 111, 0.18)'
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isMobile) {
+                  e.currentTarget.style.transform = 'scale(1)'
+                  e.currentTarget.style.boxShadow = 'none'
+                }
               }}>
                 <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
                   <span style={{ color:'#2DA9E1', fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px' }}>
@@ -1414,7 +1474,7 @@ export default function RecomendadorFriko() {
                   )}
                 </div>
 
-                <h2 style={{ color:'#1a2332', fontSize:'18px', fontWeight:800, lineHeight:1.3, margin:0 }}>
+                <h2 style={{ color:'#0d1b6f', fontSize:'18px', fontWeight:800, lineHeight:1.3, margin:0 }}>
                   {receta.nombre}
                 </h2>
 
@@ -1424,7 +1484,7 @@ export default function RecomendadorFriko() {
                   </p>
                   <ul style={{ listStyle:'none', margin:0, padding:0, display:'flex', flexDirection:'column', gap:'4px' }}>
                     {receta.ingredientes.map((ing, i) => (
-                      <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:'8px', fontSize:'13px', color:'#374151' }}>
+                      <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:'8px', fontSize:'13px', color:'#0d1b6f' }}>
                         <span style={{ width:'6px', height:'6px', borderRadius:'50%', background:'#fbbf24', flexShrink:0, marginTop:'5px' }} />
                         {ing}
                       </li>
@@ -1438,7 +1498,7 @@ export default function RecomendadorFriko() {
                   </p>
                   <ol style={{ listStyle:'none', margin:0, padding:0, display:'flex', flexDirection:'column', gap:'8px' }}>
                     {receta.pasos.map((paso, i) => (
-                      <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:'8px', fontSize:'13px', color:'#374151' }}>
+                      <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:'8px', fontSize:'13px', color:'#0d1b6f' }}>
                         <span style={{ background:'#dc2626', color:'#fff', width:'20px', height:'20px', borderRadius:'50%', fontSize:'10px', fontWeight:800, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginTop:'1px' }}>
                           {i + 1}
                         </span>
@@ -1496,13 +1556,15 @@ export default function RecomendadorFriko() {
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
+                  justifyContent: 'center',
                   gap: '8px',
                   background: '#25D366',
                   color: '#fff',
                   fontWeight: 700,
                   fontSize: '0.875rem',
-                  padding: isMobile ? '0.6rem 0.75rem' : '0.6rem 0.9rem',
-                  borderRadius: '0.75rem',
+                  padding: isMobile ? '0.75rem 0.85rem' : '0.75rem 1.1rem',
+                  minWidth: isMobile ? '160px' : '220px',
+                  borderRadius: '1rem',
                   border: 'none',
                   cursor: 'pointer',
                   boxShadow: '0 6px 0 #1aab52, 0 8px 20px rgba(0,0,0,0.3)',
@@ -1523,23 +1585,25 @@ export default function RecomendadorFriko() {
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
+                  justifyContent: 'center',
                   gap: '8px',
-                  background: 'linear-gradient(180deg, #475569 0%, #334155 100%)',
+                  background: 'linear-gradient(180deg, #4FC3F7 0%, #2DA9E1 100%)',
                   color: '#fff',
                   fontWeight: 700,
                   fontSize: '0.875rem',
-                  padding: isMobile ? '0.6rem 0.75rem' : '0.6rem 0.9rem',
-                  borderRadius: '0.75rem',
+                  padding: isMobile ? '0.75rem 0.85rem' : '0.75rem 1.1rem',
+                  minWidth: isMobile ? '160px' : '220px',
+                  borderRadius: '1rem',
                   border: 'none',
                   cursor: descargando ? 'not-allowed' : 'pointer',
-                  boxShadow: '0 6px 0 #1e293b, 0 8px 20px rgba(0,0,0,0.3)',
+                  boxShadow: '0 6px 0 #1e88c4, 0 8px 20px rgba(0,0,0,0.3)',
                   transition: 'all 0.15s ease',
                   opacity: descargando ? 0.7 : 1,
                 }}
-                onMouseEnter={(e) => { if (!descargando) { e.currentTarget.style.filter = 'brightness(1.15)'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 0 #1e293b, 0 10px 25px rgba(0,0,0,0.35)' } }}
+                onMouseEnter={(e) => { if (!descargando) { e.currentTarget.style.filter = 'brightness(1.15)'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 0 #1e88c4, 0 10px 25px rgba(0,0,0,0.35)' } }}
                 onMouseDown={(e) => { if (!descargando) { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(6px)' } }}
-                onMouseUp={(e) => { e.currentTarget.style.boxShadow = '0 6px 0 #1e293b, 0 8px 20px rgba(0,0,0,0.3)'; e.currentTarget.style.transform = 'translateY(0)' }}
-                onMouseLeave={(e) => { e.currentTarget.style.filter = 'brightness(1)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 0 #1e293b, 0 8px 20px rgba(0,0,0,0.3)' }}
+                onMouseUp={(e) => { e.currentTarget.style.boxShadow = '0 6px 0 #1e88c4, 0 8px 20px rgba(0,0,0,0.3)'; e.currentTarget.style.transform = 'translateY(0)' }}
+                onMouseLeave={(e) => { e.currentTarget.style.filter = 'brightness(1)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 0 #1e88c4, 0 8px 20px rgba(0,0,0,0.3)' }}
               >
                 <IconDownload />
                 {descargando ? 'Generando receta...' : 'Descargar receta'}
@@ -1547,88 +1611,110 @@ export default function RecomendadorFriko() {
             </div>
           )}
 
-          {/* ── PUNTOS DE VENTA — solo cuando hay región y resultado ── */}
-          {region && resultado && tiendas.length > 0 && (
-            <div style={{ marginTop: '2.5rem' }}>
-              <p style={{
-                color: '#0d1b6f',
-                fontSize: '13px',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: '1.5px',
-                marginBottom: '0.75rem',
-                marginTop: 0,
-                textAlign: 'center',
-              }}>
-                Puntos de venta en tu región
-              </p>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: isMobile
-                  ? '1fr'
-                  : tiendas.length === 2
-                  ? '1fr 1fr'
-                  : '1fr 1fr 1fr',
-                gap: '0.75rem',
-              }}>
-                {tiendas.map((tienda, i) => (
-                  <div key={i} style={{
-                    background: 'rgba(255, 255, 255, 0.85)',
-                    border: '1px solid rgba(13, 27, 111, 0.1)',
-                    borderRadius: '1rem',
-                    padding: '0.875rem 1rem',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    gap: '0.75rem',
-                    alignItems: 'flex-start',
-                  }}>
-                    <img
-                      src="/marcador-de-posicion.png"
-                      alt=""
-                      style={{
-                        width: isMobile ? '40px' : '48px',
-                        height: isMobile ? '40px' : '48px',
-                        objectFit: 'contain',
-                        flexShrink: 0,
-                        alignSelf: 'flex-start',
-                      }}
-                    />
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', flex: 1, minWidth: 0 }}>
-                      <p style={{ color: '#0d1b6f', fontSize: isMobile ? '16px' : '17px', fontWeight: 700, margin: 0, lineHeight: 1.2 }}>
-                        {tienda.nombre}
-                      </p>
-                      <p style={{ color: '#374151', fontSize: '12px', margin: 0, lineHeight: 1.4 }}>
-                        {tienda.direccion}
-                      </p>
-                      <p style={{ color: '#7b8fa8', fontSize: '11px', margin: 0 }}>
-                        {tienda.ciudad}
-                      </p>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
-                        <IconPhone />
-                        <span style={{ color: '#7b8fa8', fontSize: '11px' }}>{tienda.telefono}</span>
-                      </div>
-                      <div style={{ marginTop: '2px', display: 'flex', flexDirection: 'column', gap: '1px' }}>
-                        {tienda.horarios.map((h, hi) => (
-                          <span key={hi} style={{ color: '#7b8fa8', fontSize: '11px' }}>{h}</span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
         </section>
 
-        {/* ── PANEL C: Aviso de privacidad — panel independiente ── */}
+        {/* ── PANEL C: Puntos de venta — panel independiente ── */}
+        {region && resultado && tiendas.length > 0 && (
+          <section style={{
+            background: 'radial-gradient(ellipse at center, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 60%, rgba(255, 255, 255, 0.92) 100%)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            borderRadius: '2rem',
+            border: '1.5px solid rgba(220, 225, 240, 0.75)',
+            boxShadow: '0 25px 60px rgba(20, 30, 70, 0.30), 0 8px 20px rgba(20, 30, 70, 0.18), inset 0 0 90px rgba(20, 30, 70, 0.06), inset 0 0 35px rgba(20, 30, 70, 0.03), inset 0 3px 6px rgba(255, 255, 255, 1), inset 0 -3px 6px rgba(20, 30, 70, 0.03)',
+            padding: isMobile ? '1.25rem 1rem' : '2rem',
+          }}>
+            <p style={{
+              color: '#0d1b6f',
+              fontSize: '16px',
+              fontWeight: 800,
+              textTransform: 'uppercase',
+              letterSpacing: '1.5px',
+              marginBottom: '1.5rem',
+              marginTop: 0,
+              textAlign: 'center',
+            }}>
+              Puntos de venta en tu región
+            </p>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: isMobile
+                ? '1fr'
+                : tiendas.length === 2
+                ? '1fr 1fr'
+                : '1fr 1fr 1fr',
+              gap: '0.75rem',
+            }}>
+              {tiendas.map((tienda, i) => (
+                <div key={i} style={{
+                  background: 'rgba(255, 255, 255, 0.85)',
+                  border: '1px solid rgba(13, 27, 111, 0.1)',
+                  borderRadius: '1rem',
+                  padding: '0.875rem 1rem',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  gap: '0.75rem',
+                  alignItems: 'flex-start',
+                  transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                  cursor: 'default',
+                }}
+                onMouseEnter={(e) => {
+                  if (!isMobile) {
+                    e.currentTarget.style.transform = 'scale(1.02)'
+                    e.currentTarget.style.boxShadow = '0 8px 20px rgba(13, 27, 111, 0.15)'
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isMobile) {
+                    e.currentTarget.style.transform = 'scale(1)'
+                    e.currentTarget.style.boxShadow = 'none'
+                  }
+                }}>
+                  <img
+                    src="/marcador-de-posicion.png"
+                    alt=""
+                    style={{
+                      width: isMobile ? '40px' : '48px',
+                      height: isMobile ? '40px' : '48px',
+                      objectFit: 'contain',
+                      flexShrink: 0,
+                      alignSelf: 'flex-start',
+                    }}
+                  />
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', flex: 1, minWidth: 0 }}>
+                    <p style={{ color: '#0d1b6f', fontSize: isMobile ? '16px' : '17px', fontWeight: 700, margin: 0, lineHeight: 1.2 }}>
+                      {tienda.nombre}
+                    </p>
+                    <p style={{ color: '#374151', fontSize: '12px', margin: 0, lineHeight: 1.4 }}>
+                      {tienda.direccion}
+                    </p>
+                    <p style={{ color: '#7b8fa8', fontSize: '11px', margin: 0 }}>
+                      {tienda.ciudad}
+                    </p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
+                      <IconPhone />
+                      <span style={{ color: '#7b8fa8', fontSize: '11px' }}>{tienda.telefono}</span>
+                    </div>
+                    <div style={{ marginTop: '2px', display: 'flex', flexDirection: 'column', gap: '1px' }}>
+                      {tienda.horarios.map((h, hi) => (
+                        <span key={hi} style={{ color: '#7b8fa8', fontSize: '11px' }}>{h}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ── PANEL D: Aviso de privacidad — panel independiente ── */}
         <section style={{
-          background: 'radial-gradient(ellipse at top, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.78) 50%, rgba(255, 255, 255, 0.62) 100%)',
+          background: 'radial-gradient(ellipse at center, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 60%, rgba(255, 255, 255, 0.92) 100%)',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
           borderRadius: '2rem',
-          border: '1.5px solid rgba(255, 255, 255, 0.6)',
-          boxShadow: '0 18px 40px rgba(20, 30, 70, 0.22), 0 4px 12px rgba(20, 30, 70, 0.12), inset 0 0 50px rgba(20, 30, 70, 0.18), inset 0 2px 4px rgba(255, 255, 255, 1), inset 0 -1px 2px rgba(20, 30, 70, 0.08)',
+          border: '1.5px solid rgba(220, 225, 240, 0.75)',
+          boxShadow: '0 25px 60px rgba(20, 30, 70, 0.30), 0 8px 20px rgba(20, 30, 70, 0.18), inset 0 0 90px rgba(20, 30, 70, 0.06), inset 0 0 35px rgba(20, 30, 70, 0.03), inset 0 3px 6px rgba(255, 255, 255, 1), inset 0 -3px 6px rgba(20, 30, 70, 0.03)',
           padding: isMobile ? '1rem 1rem' : '1.25rem 1.5rem',
         }}>
           <div style={{
