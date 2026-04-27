@@ -277,17 +277,20 @@ const selectStyle = {
   border: '1.5px solid #e2e8f0',
   borderRadius: '0.75rem',
   padding: '0.75rem 1rem',
-  fontSize: '0.9rem',
+  fontSize: '1.0625rem',
   color: '#0d1b6f',
   width: '100%',
   outline: 'none',
   transition: 'all 0.2s',
   cursor: 'pointer',
+  textAlign: 'center',
+  textAlignLast: 'center',
 }
 
 const labelStyle = {
   display: 'flex',
   alignItems: 'center',
+  justifyContent: 'center',
   gap: '6px',
   color: '#475569',
   fontSize: '15px',
@@ -923,7 +926,7 @@ export default function RecomendadorFriko() {
             {/* Dónde estás (región) */}
             <div>
               <label style={{ ...labelStyle, color: '#0d1b6f', fontSize: isMobile ? '13px' : '15px' }}>
-                <IconRegion color="#0d1b6f" /> Dónde estás?
+                <IconRegion color="#0d1b6f" /> ¿Dónde estás?
               </label>
               <select
                 value={region}
@@ -954,7 +957,7 @@ export default function RecomendadorFriko() {
             {/* Para qué ocasión */}
             <div>
               <label style={{ ...labelStyle, color: '#0d1b6f', fontSize: isMobile ? '13px' : '15px' }}>
-                <IconOcasion color="#0d1b6f" /> Para qué ocasión?
+                <IconOcasion color="#0d1b6f" /> ¿Para qué ocasión?
               </label>
               <select
                 value={ocasion}
@@ -984,7 +987,7 @@ export default function RecomendadorFriko() {
             {/* Preparación */}
             <div>
               <label style={{ ...labelStyle, color: '#0d1b6f', fontSize: isMobile ? '13px' : '15px' }}>
-                <IconPreparacion color="#0d1b6f" /> Tipo de preparación?
+                <IconPreparacion color="#0d1b6f" /> ¿Tipo de preparación?
               </label>
               <select
                 value={preparacion}
@@ -1013,9 +1016,9 @@ export default function RecomendadorFriko() {
             </div>
 
             {/* Personas — con botones +/- */}
-            <div>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <label style={{ ...labelStyle, color: '#0d1b6f', fontSize: isMobile ? '13px' : '15px' }}>
-                <IconPersonas color="#0d1b6f" /> Para cuántas personas?
+                <IconPersonas color="#0d1b6f" /> ¿Para cuántas personas?
               </label>
               <div style={{
                 display: 'flex',
@@ -1025,6 +1028,8 @@ export default function RecomendadorFriko() {
                 overflow: 'hidden',
                 background: 'rgba(255, 255, 255, 0.95)',
                 transition: 'border-color 0.2s',
+                width: '280px',
+                maxWidth: '100%',
               }}>
                 <button
                   type="button"
@@ -1065,13 +1070,14 @@ export default function RecomendadorFriko() {
                   style={{
                     flex: 1,
                     minWidth: 0,
+                    width: '100%',
                     background: 'transparent',
                     border: 'none',
                     borderLeft: '1.5px solid #e2e8f0',
                     borderRight: '1.5px solid #e2e8f0',
                     borderRadius: 0,
                     padding: '0.75rem 0.5rem',
-                    fontSize: '0.9rem',
+                    fontSize: '1.0625rem',
                     color: personas ? '#0d1b6f' : '#7b8fa8',
                     textAlign: 'center',
                     outline: 'none',
@@ -1132,8 +1138,7 @@ export default function RecomendadorFriko() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: isMobile ? '0.75rem 0.85rem' : '0.75rem 1.1rem',
-                minWidth: isMobile ? '160px' : '220px',
+                padding: isMobile ? '0.875rem 1rem' : '0.875rem 1.25rem',
                 borderRadius: '1rem',
                 border: 'none',
                 cursor: cargando || !!errorCarga ? 'not-allowed' : 'pointer',
@@ -1181,8 +1186,7 @@ export default function RecomendadorFriko() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: isMobile ? '0.75rem 0.85rem' : '0.75rem 1.1rem',
-                minWidth: isMobile ? '160px' : '220px',
+                padding: isMobile ? '0.875rem 1rem' : '0.875rem 1.25rem',
                 borderRadius: '1rem',
                 border: 'none',
                 cursor: 'pointer',
@@ -1209,7 +1213,7 @@ export default function RecomendadorFriko() {
                 e.currentTarget.style.filter = 'brightness(1)'
               }}
             >
-              Reiniciar receta
+              Nueva búsqueda
             </button>
 
           </div>
@@ -1302,20 +1306,20 @@ export default function RecomendadorFriko() {
                   e.currentTarget.style.boxShadow = 'none'
                 }
               }}>
-                <span style={{ color:'#2DA9E1', fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px' }}>
+                <span style={{ color:'#2DA9E1', fontSize:'11px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px' }}>
                   Producto recomendado
                 </span>
 
                 <div>
-                  <h2 style={{ color:'#0d1b6f', fontSize:'18px', fontWeight:800, lineHeight:1.3, margin:0 }}>
+                  <h2 style={{ color:'#0d1b6f', fontSize:'19px', fontWeight:800, lineHeight:1.3, margin:0 }}>
                     {resultado.Producto}
                   </h2>
-                  <p style={{ color:'#0d1b6f', fontSize:'14px', marginTop:'4px', marginBottom:0 }}>
+                  <p style={{ color:'#0d1b6f', fontSize:'15px', marginTop:'4px', marginBottom:0 }}>
                     {resultado.Descripcion}
                   </p>
                 </div>
 
-                <div style={{ display:'flex', flexDirection:'column', gap:'4px', fontSize:'13px' }}>
+                <div style={{ display:'flex', flexDirection:'column', gap:'4px', fontSize:'14px' }}>
                   <span>
                     <span style={{ color:'#5a6b7a', fontWeight:600 }}>Presentación:</span>
                     <span style={{ color:'#0d1b6f' }}>{resultado.Presentacion}</span>
@@ -1329,17 +1333,17 @@ export default function RecomendadorFriko() {
                 {/* Badges preparación + marca */}
                 <div style={{ display:'flex', flexWrap:'wrap', gap:'6px', marginTop:'4px' }}>
                   {resultado.Preparacion.map((m) => (
-                    <span key={m} style={{ background:'#FEF3C7', color:'#92400e', fontSize:'11px', fontWeight:600, padding:'3px 10px', borderRadius:'9999px' }}>
+                    <span key={m} style={{ background:'#FEF3C7', color:'#92400e', fontSize:'12px', fontWeight:600, padding:'3px 10px', borderRadius:'9999px' }}>
                       {m}
                     </span>
                   ))}
                   {resultado.Marca === 'FRIKO' ? (
-                    <span style={{ background:'#DBEAFE', color:'#1e40af', fontSize:'11px', fontWeight:700, padding:'3px 10px', borderRadius:'9999px', display:'inline-flex', alignItems:'center', gap:'5px' }}>
+                    <span style={{ background:'#DBEAFE', color:'#1e40af', fontSize:'12px', fontWeight:700, padding:'3px 10px', borderRadius:'9999px', display:'inline-flex', alignItems:'center', gap:'5px' }}>
                       <img src="/logo-friko-cropped.png" alt="Friko" style={{ height:'14px', width:'19px', objectFit:'contain' }} onError={(e) => { e.currentTarget.style.display='none' }} />
                       FRIKO
                     </span>
                   ) : (
-                    <span style={{ background:'#CCFBF1', color:'#115e59', fontSize:'11px', fontWeight:700, padding:'3px 10px', borderRadius:'9999px', display:'inline-flex', alignItems:'center', gap:'5px' }}>
+                    <span style={{ background:'#CCFBF1', color:'#115e59', fontSize:'12px', fontWeight:700, padding:'3px 10px', borderRadius:'9999px', display:'inline-flex', alignItems:'center', gap:'5px' }}>
                       <img src="/logo-antillana-improved.png" alt="Antillana" style={{ height:'11px', width:'24px', objectFit:'contain' }} onError={(e) => { e.currentTarget.style.display='none' }} />
                       ANTILLANA
                     </span>
@@ -1347,7 +1351,7 @@ export default function RecomendadorFriko() {
                 </div>
 
                 {/* Footer región/rango */}
-                <div style={{ marginTop:'auto', paddingTop:'10px', borderTop:'1px solid rgba(255,255,255,0.3)', color:'#5a6b7a', fontSize:'12px' }}>
+                <div style={{ marginTop:'auto', paddingTop:'10px', borderTop:'1px solid rgba(255,255,255,0.3)', color:'#5a6b7a', fontSize:'13px' }}>
                   Región: <span style={{ fontWeight:600, color:'#374151' }}>{resultado.Region}</span>
                   {' · '}
                   {resultado.Rango}
@@ -1459,32 +1463,32 @@ export default function RecomendadorFriko() {
                 }
               }}>
                 <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-                  <span style={{ color:'#2DA9E1', fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px' }}>
+                  <span style={{ color:'#2DA9E1', fontSize:'11px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px' }}>
                     Receta sugerida
                   </span>
                   {origenReceta === 'ia' && (
-                    <span style={{ background:'#D1FAE5', color:'#065f46', fontSize:'10px', fontWeight:700, padding:'3px 10px', borderRadius:'9999px', display:'inline-flex', alignItems:'center', gap:'4px' }}>
+                    <span style={{ background:'#D1FAE5', color:'#065f46', fontSize:'11px', fontWeight:700, padding:'3px 10px', borderRadius:'9999px', display:'inline-flex', alignItems:'center', gap:'4px' }}>
                       <IconStar /> Generado por IA
                     </span>
                   )}
                   {origenReceta === 'local' && (
-                    <span style={{ background:'#E0E7FF', color:'#3730a3', fontSize:'10px', fontWeight:700, padding:'3px 10px', borderRadius:'9999px', display:'inline-flex', alignItems:'center', gap:'4px' }}>
+                    <span style={{ background:'#E0E7FF', color:'#3730a3', fontSize:'11px', fontWeight:700, padding:'3px 10px', borderRadius:'9999px', display:'inline-flex', alignItems:'center', gap:'4px' }}>
                       <IconBook /> Receta sugerida
                     </span>
                   )}
                 </div>
 
-                <h2 style={{ color:'#0d1b6f', fontSize:'18px', fontWeight:800, lineHeight:1.3, margin:0 }}>
+                <h2 style={{ color:'#0d1b6f', fontSize:'19px', fontWeight:800, lineHeight:1.3, margin:0 }}>
                   {receta.nombre}
                 </h2>
 
                 <div>
-                  <p style={{ color:'#2DA9E1', fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px', marginBottom:'8px', marginTop:0 }}>
+                  <p style={{ color:'#2DA9E1', fontSize:'11px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px', marginBottom:'8px', marginTop:0 }}>
                     Ingredientes
                   </p>
                   <ul style={{ listStyle:'none', margin:0, padding:0, display:'flex', flexDirection:'column', gap:'4px' }}>
                     {receta.ingredientes.map((ing, i) => (
-                      <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:'8px', fontSize:'13px', color:'#0d1b6f' }}>
+                      <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:'8px', fontSize:'14px', color:'#0d1b6f' }}>
                         <span style={{ width:'6px', height:'6px', borderRadius:'50%', background:'#fbbf24', flexShrink:0, marginTop:'5px' }} />
                         {ing}
                       </li>
@@ -1493,13 +1497,13 @@ export default function RecomendadorFriko() {
                 </div>
 
                 <div>
-                  <p style={{ color:'#2DA9E1', fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px', marginBottom:'8px', marginTop:0 }}>
+                  <p style={{ color:'#2DA9E1', fontSize:'11px', fontWeight:700, textTransform:'uppercase', letterSpacing:'2px', marginBottom:'8px', marginTop:0 }}>
                     Preparación
                   </p>
                   <ol style={{ listStyle:'none', margin:0, padding:0, display:'flex', flexDirection:'column', gap:'8px' }}>
                     {receta.pasos.map((paso, i) => (
-                      <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:'8px', fontSize:'13px', color:'#0d1b6f' }}>
-                        <span style={{ background:'#dc2626', color:'#fff', width:'20px', height:'20px', borderRadius:'50%', fontSize:'10px', fontWeight:800, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginTop:'1px' }}>
+                      <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:'8px', fontSize:'14px', color:'#0d1b6f' }}>
+                        <span style={{ background:'#dc2626', color:'#fff', width:'20px', height:'20px', borderRadius:'50%', fontSize:'11px', fontWeight:800, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginTop:'1px' }}>
                           {i + 1}
                         </span>
                         {paso}
@@ -1548,8 +1552,9 @@ export default function RecomendadorFriko() {
             <div style={{
               display: 'flex',
               justifyContent: 'center',
-              gap: '0.75rem',
+              gap: isMobile ? '0.75rem' : '1rem',
               flexWrap: 'wrap',
+              transform: isMobile ? 'none' : 'translateX(-30px)',
             }}>
               <button
                 onClick={handleCompartir}
@@ -1562,8 +1567,7 @@ export default function RecomendadorFriko() {
                   color: '#fff',
                   fontWeight: 700,
                   fontSize: '0.875rem',
-                  padding: isMobile ? '0.75rem 0.85rem' : '0.75rem 1.1rem',
-                  minWidth: isMobile ? '160px' : '220px',
+                  padding: isMobile ? '0.875rem 1rem' : '0.875rem 1.25rem',
                   borderRadius: '1rem',
                   border: 'none',
                   cursor: 'pointer',
@@ -1591,8 +1595,7 @@ export default function RecomendadorFriko() {
                   color: '#fff',
                   fontWeight: 700,
                   fontSize: '0.875rem',
-                  padding: isMobile ? '0.75rem 0.85rem' : '0.75rem 1.1rem',
-                  minWidth: isMobile ? '160px' : '220px',
+                  padding: isMobile ? '0.875rem 1rem' : '0.875rem 1.25rem',
                   borderRadius: '1rem',
                   border: 'none',
                   cursor: descargando ? 'not-allowed' : 'pointer',
@@ -1682,22 +1685,22 @@ export default function RecomendadorFriko() {
                     }}
                   />
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', flex: 1, minWidth: 0 }}>
-                    <p style={{ color: '#0d1b6f', fontSize: isMobile ? '16px' : '17px', fontWeight: 700, margin: 0, lineHeight: 1.2 }}>
+                    <p style={{ color: '#0d1b6f', fontSize: isMobile ? '17px' : '18px', fontWeight: 700, margin: 0, lineHeight: 1.2 }}>
                       {tienda.nombre}
                     </p>
-                    <p style={{ color: '#374151', fontSize: '12px', margin: 0, lineHeight: 1.4 }}>
+                    <p style={{ color: '#374151', fontSize: '13px', margin: 0, lineHeight: 1.4 }}>
                       {tienda.direccion}
                     </p>
-                    <p style={{ color: '#7b8fa8', fontSize: '11px', margin: 0 }}>
+                    <p style={{ color: '#7b8fa8', fontSize: '12px', margin: 0 }}>
                       {tienda.ciudad}
                     </p>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
                       <IconPhone />
-                      <span style={{ color: '#7b8fa8', fontSize: '11px' }}>{tienda.telefono}</span>
+                      <span style={{ color: '#7b8fa8', fontSize: '12px' }}>{tienda.telefono}</span>
                     </div>
                     <div style={{ marginTop: '2px', display: 'flex', flexDirection: 'column', gap: '1px' }}>
                       {tienda.horarios.map((h, hi) => (
-                        <span key={hi} style={{ color: '#7b8fa8', fontSize: '11px' }}>{h}</span>
+                        <span key={hi} style={{ color: '#7b8fa8', fontSize: '12px' }}>{h}</span>
                       ))}
                     </div>
                   </div>
@@ -1743,7 +1746,7 @@ export default function RecomendadorFriko() {
         zIndex: 1,
         position: 'relative',
       }}>
-        <div>Reto 12 · Grupo 5 · NODO EAFIT × Friko</div>
+        <div>Reto 12 · Grupo 5 · NODO EAFIT — Grupo Bios</div>
         <div style={{ marginTop: '4px', letterSpacing: '1px' }}>
           {INTEGRANTES.map((p, i) => (
             <span key={p.nombre}>
