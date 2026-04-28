@@ -313,7 +313,6 @@ const CarruselFade = ({ imagenes, indice, alt, modo = 'producto' }) => {
       overflow: 'hidden',
       borderRadius: '12px',
       backgroundColor: esReceta ? 'transparent' : '#FFFFFF',
-      padding: esReceta ? 0 : '8px',
       boxSizing: 'border-box',
     }}>
       {imagenes.map((src, i) => (
@@ -323,10 +322,10 @@ const CarruselFade = ({ imagenes, indice, alt, modo = 'producto' }) => {
           alt={alt}
           style={{
             position: 'absolute',
-            top: esReceta ? 0 : '8px',
-            left: esReceta ? 0 : '8px',
-            width: esReceta ? '100%' : 'calc(100% - 16px)',
-            height: esReceta ? '100%' : 'calc(100% - 16px)',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
             objectFit: esReceta ? 'cover' : 'contain',
             opacity: i === indice ? 1 : 0,
             transition: 'opacity 1.2s ease-in-out',
@@ -345,9 +344,8 @@ const CARRUSEL_PRODUCTOS = [
   '/productos-y-recetas/producto-02-alitas-bbq.webp',
   '/productos-y-recetas/producto-03-camaron-tigre.webp',
   '/productos-y-recetas/producto-04-filete-robalo.webp',
-  '/productos-y-recetas/producto-05-filete-salmon.webp',
+  '/productos-y-recetas/producto-05-perniles-pollo.png',
   '/productos-y-recetas/producto-06-muslos-pollo.webp',
-  '/productos-y-recetas/producto-07-trucha-mariposa.webp',
   '/productos-y-recetas/producto-08-pollo-molido.png',
   '/productos-y-recetas/producto-09-salmon-noruego.webp',
 ]
@@ -355,7 +353,6 @@ const CARRUSEL_PRODUCTOS = [
 const CARRUSEL_RECETAS = [
   '/productos-y-recetas/receta-01-arepa-pollo.png',
   '/productos-y-recetas/receta-02-banderas-salchicha.jpg',
-  '/productos-y-recetas/receta-03-sandwich-pollo-molido.jpg',
   '/productos-y-recetas/receta-05-fiambre-pollo.jpg',
   '/productos-y-recetas/receta-06-muslos-asados.jpg',
   '/productos-y-recetas/receta-07-ensalada-pollo.png',
