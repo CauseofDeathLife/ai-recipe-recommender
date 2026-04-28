@@ -342,24 +342,24 @@ const CarruselFade = ({ imagenes, indice, alt, modo = 'producto' }) => {
 // ─────────────────────────────────────────────
 
 const CARRUSEL_PRODUCTOS = [
-  '/productos%20y%20recetas/producto-02-alitas-bbq.webp',
-  '/productos%20y%20recetas/producto-03-camaron-tigre.webp',
-  '/productos%20y%20recetas/producto-04-filete-robalo.webp',
-  '/productos%20y%20recetas/producto-05-filete-salmon.webp',
-  '/productos%20y%20recetas/producto-06-muslos-pollo.webp',
-  '/productos%20y%20recetas/producto-07-trucha-mariposa.webp',
-  '/productos%20y%20recetas/producto-08-pollo-molido.png',
-  '/productos%20y%20recetas/producto-09-salmon-noruego.webp',
+  '/productos-y-recetas/producto-02-alitas-bbq.webp',
+  '/productos-y-recetas/producto-03-camaron-tigre.webp',
+  '/productos-y-recetas/producto-04-filete-robalo.webp',
+  '/productos-y-recetas/producto-05-filete-salmon.webp',
+  '/productos-y-recetas/producto-06-muslos-pollo.webp',
+  '/productos-y-recetas/producto-07-trucha-mariposa.webp',
+  '/productos-y-recetas/producto-08-pollo-molido.png',
+  '/productos-y-recetas/producto-09-salmon-noruego.webp',
 ]
 
 const CARRUSEL_RECETAS = [
-  '/productos%20y%20recetas/receta-01-arepa-pollo.png',
-  '/productos%20y%20recetas/receta-02-banderas-salchicha.jpg',
-  '/productos%20y%20recetas/receta-03-sandwich-pollo-molido.jpg',
-  '/productos%20y%20recetas/receta-05-fiambre-pollo.jpg',
-  '/productos%20y%20recetas/receta-06-muslos-asados.jpg',
-  '/productos%20y%20recetas/receta-07-ensalada-pollo.png',
-  '/productos%20y%20recetas/receta-08-pizza.png',
+  '/productos-y-recetas/receta-01-arepa-pollo.png',
+  '/productos-y-recetas/receta-02-banderas-salchicha.jpg',
+  '/productos-y-recetas/receta-03-sandwich-pollo-molido.jpg',
+  '/productos-y-recetas/receta-05-fiambre-pollo.jpg',
+  '/productos-y-recetas/receta-06-muslos-asados.jpg',
+  '/productos-y-recetas/receta-07-ensalada-pollo.png',
+  '/productos-y-recetas/receta-08-pizza.png',
 ]
 
 const INTEGRANTES = [
@@ -428,7 +428,7 @@ export default function RecomendadorFriko() {
   const [errorCarga, setErrorCarga] = useState('')
 
   useEffect(() => {
-    fetch('/catalogo_friko_limpio.json')
+    fetch('/data/catalogo_friko_limpio.json')
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         return res.json()
@@ -438,7 +438,7 @@ export default function RecomendadorFriko() {
         setCargando(false)
       })
       .catch((err) => {
-        setErrorCarga(`No se pudo cargar el catálogo (${err.message}). Verifica que catalogo_friko_limpio.json esté en public/.`)
+        setErrorCarga(`No se pudo cargar el catálogo (${err.message}). Verifica que catalogo_friko_limpio.json esté en public/data/.`)
         setCargando(false)
       })
   }, [])
@@ -447,7 +447,7 @@ export default function RecomendadorFriko() {
   const [tiendasData, setTiendasData] = useState(null)
 
   useEffect(() => {
-    fetch('/tiendas_friko.json')
+    fetch('/data/tiendas_friko.json')
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         return res.json()
@@ -823,7 +823,7 @@ export default function RecomendadorFriko() {
             marginBottom: '16px',
           }}>
             <img
-              src="/logo-friko-cropped.png"
+              src="/logos/friko.png"
               alt="Friko"
               style={{ height: '87px', width: '120px', objectFit: 'contain', transition: 'transform 0.2s ease, filter 0.2s ease', cursor: 'default' }}
               onError={(e) => { e.currentTarget.style.display = 'none' }}
@@ -841,7 +841,7 @@ export default function RecomendadorFriko() {
               }}
             />
             <img
-              src="/logo-antillana-improved.png"
+              src="/logos/antillana.png"
               alt="Antillana"
               style={{ height: '70px', width: '149px', objectFit: 'contain', transition: 'transform 0.2s ease, filter 0.2s ease', cursor: 'default' }}
               onError={(e) => { e.currentTarget.style.display = 'none' }}
@@ -1339,12 +1339,12 @@ export default function RecomendadorFriko() {
                   ))}
                   {resultado.Marca === 'FRIKO' ? (
                     <span style={{ background:'#DBEAFE', color:'#1e40af', fontSize:'12px', fontWeight:700, padding:'3px 10px', borderRadius:'9999px', display:'inline-flex', alignItems:'center', gap:'5px' }}>
-                      <img src="/logo-friko-cropped.png" alt="Friko" style={{ height:'14px', width:'19px', objectFit:'contain' }} onError={(e) => { e.currentTarget.style.display='none' }} />
+                      <img src="/logos/friko.png" alt="Friko" style={{ height:'14px', width:'19px', objectFit:'contain' }} onError={(e) => { e.currentTarget.style.display='none' }} />
                       FRIKO
                     </span>
                   ) : (
                     <span style={{ background:'#CCFBF1', color:'#115e59', fontSize:'12px', fontWeight:700, padding:'3px 10px', borderRadius:'9999px', display:'inline-flex', alignItems:'center', gap:'5px' }}>
-                      <img src="/logo-antillana-improved.png" alt="Antillana" style={{ height:'11px', width:'24px', objectFit:'contain' }} onError={(e) => { e.currentTarget.style.display='none' }} />
+                      <img src="/logos/antillana.png" alt="Antillana" style={{ height:'11px', width:'24px', objectFit:'contain' }} onError={(e) => { e.currentTarget.style.display='none' }} />
                       ANTILLANA
                     </span>
                   )}
@@ -1406,7 +1406,7 @@ export default function RecomendadorFriko() {
                 {/* Logo spinner: Friko y Antillana alternándose con CSS */}
                 <div style={{ position: 'relative', width: '149px', height: '87px' }}>
                   <img
-                    src="/logo-friko-cropped.png"
+                    src="/logos/friko.png"
                     alt="Friko"
                     style={{
                       position: 'absolute',
@@ -1420,7 +1420,7 @@ export default function RecomendadorFriko() {
                     }}
                   />
                   <img
-                    src="/logo-antillana-improved.png"
+                    src="/logos/antillana.png"
                     alt="Antillana"
                     style={{
                       position: 'absolute',
@@ -1674,7 +1674,7 @@ export default function RecomendadorFriko() {
                   }
                 }}>
                   <img
-                    src="/marcador-de-posicion.png"
+                    src="/logos/marcador-posicion.png"
                     alt=""
                     style={{
                       width: isMobile ? '40px' : '48px',

@@ -1,0 +1,491 @@
+{
+  "updatedAt": "2026-04-26T21:14:28.820Z",
+  "createdAt": "2026-04-15T22:15:46.848Z",
+  "id": "VLNv0omGBBVHnImf",
+  "name": "My workflow",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generar-receta",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1040,
+        -208
+      ],
+      "id": "8a1d2e51-3dac-420f-80a2-be65f45bfb8c",
+      "name": "Recibe Solicitud del WEBSITE",
+      "webhookId": "b37032bb-08e2-4c04-90c7-ec379fe25522"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        -16,
+        -208
+      ],
+      "id": "1fd40a34-9145-4568-a6e4-b322884c3b69",
+      "name": "Devuelve Respuesta al WEBSITE"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Capturamos la entrada del nodo que haya ejecutado exitosamente\nconst inputData = $input.first().json;\nlet textoIA = \"\";\n\n// 2. Evaluamos dinámicamente de qué modelo viene la respuesta\nif (inputData?.content?.parts?.[0]?.text) {\n    // Estructura de Gemini\n    textoIA = inputData.content.parts[0].text;\n} \nelse if (inputData?.output?.[0]?.content?.[0]?.text) {\n    // Estructura del segundo modelo \n    textoIA = inputData.output[0].content[0].text;\n} \nelse if (inputData?.choices?.[0]?.message?.content) {\n    // Estructura estándar de OpenAI (por si en el futuro cambiamos el nodo a OpenAI puro)\n    textoIA = inputData.choices[0].message.content;\n}\n\n// 3. Procesamos el texto limpiando el Markdown\ntry {\n  // Si por alguna razón la IA devolvió algo raro y no hay texto, forzamos el catch\n  if (!textoIA) throw new Error(\"No se encontró el texto en la estructura del JSON\");\n  \n  // Limpieza de etiquetas markdown (```json y ```)\n  const limpio = textoIA.replace(/```json/g, '').replace(/```/g, '').trim();\n  \n  // Parseo a JSON puro\n  const receta = JSON.parse(limpio);\n  return receta;\n  \n} catch (e) {\n  // 4. Fallback si el parseo falla o si el texto vino vacío\n  return {\n    nombre: \"Receta no disponible\",\n    ingredientes: [\"No pudimos generar la receta en este momento\"],\n    pasos: [\"Por favor intenta de nuevo en unos segundos\"]\n  };\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        -96
+      ],
+      "id": "1baa56ac-4c6c-4791-a240-0dcd34a5ff91",
+      "name": "Procesa respuesta de IA"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "={{ $('Arma prompt para AI2').item.json.prompt }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        -608,
+        64
+      ],
+      "id": "faf47a37-4001-4161-88bc-e8b528215086",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "9MLSWMMPG0Vd3oAn",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemma-3-27b-it",
+          "mode": "list",
+          "cachedResultName": "models/gemma-3-27b-it"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -624,
+        -208
+      ],
+      "id": "8fb1b686-ed42-42af-9536-3acc69b45a64",
+      "name": "Gemini",
+      "retryOnFail": false,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "NpqcB5yJirnukDjf",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Este nodo recibe el payload del Webhook con los datos del producto ya\n// elegido por el React, y arma el prompt que le vamos a pasar a Gemini.\n// No filtra nada, no decide nada. Solo transforma datos en un prompt.\n\nconst datos = $json.body;\n\n// Validación defensiva: si faltan campos críticos, fallamos temprano con un\n// mensaje claro en vez de mandar un prompt roto a Gemini.\nif (!datos.producto || !datos.preparacion_elegida || !datos.personas) {\n  throw new Error('Faltan campos obligatorios en el payload: producto, preparacion_elegida o personas.');\n}\n\n// Armado del prompt. Es crítico que el prompt pida JSON estricto y que los\n// límites de cinco ingredientes y cuatro pasos estén explícitos, porque los\n// LLMs tienden a excederse si solo se les pide \"máximo X\" sin reforzar.\nconst prompt = `Eres un chef profesional colombiano. Vas a generar una receta en formato JSON estricto.\n\nProducto: ${datos.producto}\nDescripcion: ${datos.descripcion || 'No disponible'}\nPresentacion: ${datos.presentacion || 'No disponible'}\nMetodo de coccion: ${datos.preparacion_elegida}\nNumero de personas: ${datos.personas}\nMarca: ${datos.marca}\n\nInstrucciones obligatorias:\n- Responde UNICAMENTE con JSON valido, sin texto adicional antes ni despues.\n- La receta debe tener EXACTAMENTE 5 ingredientes o menos, nunca mas de 5.\n- La receta debe tener EXACTAMENTE 4 pasos de preparacion o menos, nunca mas de 4.\n- Cada paso debe ser una oracion corta y clara, maximo 20 palabras.\n- Los ingredientes deben estar en cantidades ajustadas para ${datos.personas} personas.\n- El nombre de la receta debe ser breve, maximo 8 palabras y conservar el nombre del producto: ${datos.producto} y el método de cocción ${datos.preparacion_elegida}.\n- El primer ingrediente DEBE incluir la marca \"${datos.marca}\" junto al nombre del producto. Ejemplo: \"1 kg alitas de pollo FRIKO\" o \"600g Brochetas de langostino ANTILLANA\".\n\n### EJEMPLOS DE REFERENCIA (FEW-SHOT):\n\nEjemplo 1:\nEntrada: { \"producto\": \"Brochetas de langostino\", \"descripcion\": \"Langostino en pincho\", \"presentacion\": 6 und / 600 g, \"metodo\": \"Parrilla\", \"personas\": 4 }\nSalida: {\n  \"nombre\": \"Brochetas de langostino a la parrilla con ajo\",\n  \"ingredientes\": [\"600g Brochetas de langostino ANTILLANA\", \"2 dientes de ajo picados\", \"2 cucharadas de aceite de oliva\", \"1 limón\", \"Perejil fresco picado\"],\n  \"preparación\": [\n    \"Marina los langostinos con ajo, aceite y limón.\",\n    \"Ensarta los langostinos ANTILLANA en las brochetas\",\n    \"Cocina a la parrilla por 3-4 minutos por lado.\",\n    \"Sirve con perejil fresco picado.\"\n  ]\n}\n\nEjemplo 2:\nEntrada: { \"producto\": \"Alitas BBQ\", \"descripcion\": \"Alitas marinadas BBQ\", \"ocasion\": \"HOGAR\", \"metodo\": \"Horno\", \"personas\": 4 }\nSalida: {\n  \"nombre\": \"Alitas BBQ Colombianas al horno\",\n  \"ingredientes\": [\"1 kg alitas de pollo FRIKO\", \"150 ml salsa BBQ\", \"2 cucharadas de miel\", \"1 cucharadita pimentón ahumado\", \"Sal y pimienta al gusto\"],\n  \"preparación\": [\n    \"Marinar las alitas con salsa BBQ, miel y especias.\",\n    \" Precalentar el horno a 180°C (350°F).\",\n    \"Hornear las alitas durante 30-40 min.\",\n    \"Servir calientes y disfrutar.\"\n  ]\n}\n\nFormato de respuesta obligatorio (JSON puro, sin markdown, sin backticks):\n{\n  \"nombre\": \"Nombre corto de la receta\",\n  \"ingredientes\": [\"ingrediente 1\", \"ingrediente 2\", \"ingrediente 3\", \"ingrediente 4\", \"ingrediente 5\"],\n  \"pasos\": [\"paso 1\", \"paso 2\", \"paso 3\", \"paso 4\"]\n}`;\n\n\nreturn {\n  prompt: prompt,\n  producto_nombre: datos.producto\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -816,
+        -112
+      ],
+      "id": "5ba05101-091f-4d79-a928-91ed5fbd5c27",
+      "name": "Arma prompt para AI"
+    }
+  ],
+  "connections": {
+    "Recibe Solicitud del WEBSITE": {
+      "main": [
+        [
+          {
+            "node": "Arma prompt para AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Devuelve Respuesta al WEBSITE": {
+      "main": [
+        []
+      ]
+    },
+    "Procesa respuesta de IA": {
+      "main": [
+        [
+          {
+            "node": "Devuelve Respuesta al WEBSITE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Procesa respuesta de IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini": {
+      "main": [
+        [
+          {
+            "node": "Procesa respuesta de IA",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Arma prompt para AI": {
+      "main": [
+        [
+          {
+            "node": "Gemini",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "491af668-9c00-42d0-a46f-b792aca914de",
+  "activeVersionId": "d9e86b06-9e4a-4632-b6ef-e04469643b83",
+  "versionCounter": 498,
+  "triggerCount": 1,
+  "tags": [],
+  "parentFolder": null,
+  "activeVersion": {
+    "updatedAt": "2026-04-26T19:29:41.000Z",
+    "createdAt": "2026-04-26T19:28:58.807Z",
+    "versionId": "d9e86b06-9e4a-4632-b6ef-e04469643b83",
+    "workflowId": "VLNv0omGBBVHnImf",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "generar-receta",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -1040,
+          -208
+        ],
+        "id": "8a1d2e51-3dac-420f-80a2-be65f45bfb8c",
+        "name": "Recibe Solicitud del WEBSITE",
+        "webhookId": "b37032bb-08e2-4c04-90c7-ec379fe25522"
+      },
+      {
+        "parameters": {
+          "respondWith": "allIncomingItems",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          -16,
+          -208
+        ],
+        "id": "1fd40a34-9145-4568-a6e4-b322884c3b69",
+        "name": "Devuelve Respuesta al WEBSITE"
+      },
+      {
+        "parameters": {
+          "jsCode": "// 1. Capturamos la entrada del nodo que haya ejecutado exitosamente\nconst inputData = $input.first().json;\nlet textoIA = \"\";\n\n// 2. Evaluamos dinámicamente de qué modelo viene la respuesta\nif (inputData?.content?.parts?.[0]?.text) {\n    // Estructura de Gemini\n    textoIA = inputData.content.parts[0].text;\n} \nelse if (inputData?.output?.[0]?.content?.[0]?.text) {\n    // Estructura del segundo modelo \n    textoIA = inputData.output[0].content[0].text;\n} \nelse if (inputData?.choices?.[0]?.message?.content) {\n    // Estructura estándar de OpenAI (por si en el futuro cambiamos el nodo a OpenAI puro)\n    textoIA = inputData.choices[0].message.content;\n}\n\n// 3. Procesamos el texto limpiando el Markdown\ntry {\n  // Si por alguna razón la IA devolvió algo raro y no hay texto, forzamos el catch\n  if (!textoIA) throw new Error(\"No se encontró el texto en la estructura del JSON\");\n  \n  // Limpieza de etiquetas markdown (```json y ```)\n  const limpio = textoIA.replace(/```json/g, '').replace(/```/g, '').trim();\n  \n  // Parseo a JSON puro\n  const receta = JSON.parse(limpio);\n  return receta;\n  \n} catch (e) {\n  // 4. Fallback si el parseo falla o si el texto vino vacío\n  return {\n    nombre: \"Receta no disponible\",\n    ingredientes: [\"No pudimos generar la receta en este momento\"],\n    pasos: [\"Por favor intenta de nuevo en unos segundos\"]\n  };\n}"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -240,
+          -96
+        ],
+        "id": "1baa56ac-4c6c-4791-a240-0dcd34a5ff91",
+        "name": "Procesa respuesta de IA"
+      },
+      {
+        "parameters": {
+          "modelId": {
+            "__rl": true,
+            "value": "gpt-4o",
+            "mode": "list",
+            "cachedResultName": "GPT-4O"
+          },
+          "responses": {
+            "values": [
+              {
+                "content": "={{ $('Arma prompt para AI2').item.json.prompt }}"
+              }
+            ]
+          },
+          "builtInTools": {},
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.openAi",
+        "typeVersion": 2.1,
+        "position": [
+          -608,
+          64
+        ],
+        "id": "faf47a37-4001-4161-88bc-e8b528215086",
+        "name": "Message a model",
+        "credentials": {
+          "openAiApi": {
+            "id": "9MLSWMMPG0Vd3oAn",
+            "name": "OpenAI account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "modelId": {
+            "__rl": true,
+            "value": "models/gemma-3-27b-it",
+            "mode": "list",
+            "cachedResultName": "models/gemma-3-27b-it"
+          },
+          "messages": {
+            "values": [
+              {
+                "content": "={{ $json.prompt }}"
+              }
+            ]
+          },
+          "builtInTools": {},
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.googleGemini",
+        "typeVersion": 1.1,
+        "position": [
+          -624,
+          -208
+        ],
+        "id": "8fb1b686-ed42-42af-9536-3acc69b45a64",
+        "name": "Gemini",
+        "retryOnFail": false,
+        "maxTries": 3,
+        "waitBetweenTries": 2000,
+        "credentials": {
+          "googlePalmApi": {
+            "id": "NpqcB5yJirnukDjf",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        },
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Este nodo recibe el payload del Webhook con los datos del producto ya\n// elegido por el React, y arma el prompt que le vamos a pasar a Gemini.\n// No filtra nada, no decide nada. Solo transforma datos en un prompt.\n\nconst datos = $json.body;\n\n// Validación defensiva: si faltan campos críticos, fallamos temprano con un\n// mensaje claro en vez de mandar un prompt roto a Gemini.\nif (!datos.producto || !datos.preparacion_elegida || !datos.personas) {\n  throw new Error('Faltan campos obligatorios en el payload: producto, preparacion_elegida o personas.');\n}\n\n// Armado del prompt. Es crítico que el prompt pida JSON estricto y que los\n// límites de cinco ingredientes y cuatro pasos estén explícitos, porque los\n// LLMs tienden a excederse si solo se les pide \"máximo X\" sin reforzar.\nconst prompt = `Eres un chef profesional colombiano. Vas a generar una receta en formato JSON estricto.\n\nProducto: ${datos.producto}\nDescripcion: ${datos.descripcion || 'No disponible'}\nPresentacion: ${datos.presentacion || 'No disponible'}\nMetodo de coccion: ${datos.preparacion_elegida}\nNumero de personas: ${datos.personas}\nMarca: ${datos.marca}\n\nInstrucciones obligatorias:\n- Responde UNICAMENTE con JSON valido, sin texto adicional antes ni despues.\n- La receta debe tener EXACTAMENTE 5 ingredientes o menos, nunca mas de 5.\n- La receta debe tener EXACTAMENTE 4 pasos de preparacion o menos, nunca mas de 4.\n- Cada paso debe ser una oracion corta y clara, maximo 20 palabras.\n- Los ingredientes deben estar en cantidades ajustadas para ${datos.personas} personas.\n- El nombre de la receta debe ser breve, maximo 8 palabras y conservar el nombre del producto: ${datos.producto} y el método de cocción ${datos.preparacion_elegida}.\n- El primer ingrediente DEBE incluir la marca \"${datos.marca}\" junto al nombre del producto. Ejemplo: \"1 kg alitas de pollo FRIKO\" o \"600g Brochetas de langostino ANTILLANA\".\n\n### EJEMPLOS DE REFERENCIA (FEW-SHOT):\n\nEjemplo 1:\nEntrada: { \"producto\": \"Brochetas de langostino\", \"descripcion\": \"Langostino en pincho\", \"presentacion\": 6 und / 600 g, \"metodo\": \"Parrilla\", \"personas\": 4 }\nSalida: {\n  \"nombre\": \"Brochetas de langostino a la parrilla con ajo\",\n  \"ingredientes\": [\"600g Brochetas de langostino ANTILLANA\", \"2 dientes de ajo picados\", \"2 cucharadas de aceite de oliva\", \"1 limón\", \"Perejil fresco picado\"],\n  \"preparación\": [\n    \"Marina los langostinos con ajo, aceite y limón.\",\n    \"Ensarta los langostinos ANTILLANA en las brochetas\",\n    \"Cocina a la parrilla por 3-4 minutos por lado.\",\n    \"Sirve con perejil fresco picado.\"\n  ]\n}\n\nEjemplo 2:\nEntrada: { \"producto\": \"Alitas BBQ\", \"descripcion\": \"Alitas marinadas BBQ\", \"ocasion\": \"HOGAR\", \"metodo\": \"Horno\", \"personas\": 4 }\nSalida: {\n  \"nombre\": \"Alitas BBQ Colombianas al horno\",\n  \"ingredientes\": [\"1 kg alitas de pollo FRIKO\", \"150 ml salsa BBQ\", \"2 cucharadas de miel\", \"1 cucharadita pimentón ahumado\", \"Sal y pimienta al gusto\"],\n  \"preparación\": [\n    \"Marinar las alitas con salsa BBQ, miel y especias.\",\n    \" Precalentar el horno a 180°C (350°F).\",\n    \"Hornear las alitas durante 30-40 min.\",\n    \"Servir calientes y disfrutar.\"\n  ]\n}\n\nFormato de respuesta obligatorio (JSON puro, sin markdown, sin backticks):\n{\n  \"nombre\": \"Nombre corto de la receta\",\n  \"ingredientes\": [\"ingrediente 1\", \"ingrediente 2\", \"ingrediente 3\", \"ingrediente 4\", \"ingrediente 5\"],\n  \"pasos\": [\"paso 1\", \"paso 2\", \"paso 3\", \"paso 4\"]\n}`;\n\n\nreturn {\n  prompt: prompt,\n  producto_nombre: datos.producto\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -816,
+          -112
+        ],
+        "id": "5ba05101-091f-4d79-a928-91ed5fbd5c27",
+        "name": "Arma prompt para AI"
+      }
+    ],
+    "connections": {
+      "Recibe Solicitud del WEBSITE": {
+        "main": [
+          [
+            {
+              "node": "Arma prompt para AI",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Devuelve Respuesta al WEBSITE": {
+        "main": [
+          []
+        ]
+      },
+      "Procesa respuesta de IA": {
+        "main": [
+          [
+            {
+              "node": "Devuelve Respuesta al WEBSITE",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Message a model": {
+        "main": [
+          [
+            {
+              "node": "Procesa respuesta de IA",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Gemini": {
+        "main": [
+          [
+            {
+              "node": "Procesa respuesta de IA",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Message a model",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Arma prompt para AI": {
+        "main": [
+          [
+            {
+              "node": "Gemini",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Daniel Esteban Quintero Caro",
+    "name": "Version_Estable",
+    "description": "",
+    "autosaved": true,
+    "workflowPublishHistory": [
+      {
+        "createdAt": "2026-04-26T19:29:41.321Z",
+        "id": 77,
+        "workflowId": "VLNv0omGBBVHnImf",
+        "versionId": "d9e86b06-9e4a-4632-b6ef-e04469643b83",
+        "event": "activated",
+        "userId": "49e5ade6-ccd4-4680-bdfe-982da092c978"
+      }
+    ]
+  },
+  "homeProject": {
+    "id": "B8AWedncekMEUVS2",
+    "type": "personal",
+    "name": "Daniel Esteban Quintero Caro <causeofdeathlife@gmail.com>",
+    "icon": null
+  },
+  "sharedWithProjects": [],
+  "usedCredentials": [
+    {
+      "id": "9MLSWMMPG0Vd3oAn",
+      "name": "OpenAI account",
+      "type": "openAiApi",
+      "currentUserHasAccess": true,
+      "homeProject": {
+        "id": "B8AWedncekMEUVS2",
+        "type": "personal",
+        "name": "Daniel Esteban Quintero Caro <causeofdeathlife@gmail.com>",
+        "icon": null
+      },
+      "sharedWithProjects": []
+    },
+    {
+      "id": "NpqcB5yJirnukDjf",
+      "name": "Google Gemini(PaLM) Api account",
+      "type": "googlePalmApi",
+      "currentUserHasAccess": true,
+      "homeProject": {
+        "id": "B8AWedncekMEUVS2",
+        "type": "personal",
+        "name": "Daniel Esteban Quintero Caro <causeofdeathlife@gmail.com>",
+        "icon": null
+      },
+      "sharedWithProjects": []
+    }
+  ],
+  "scopes": [
+    "workflow:create",
+    "workflow:delete",
+    "workflow:execute",
+    "workflow:execute-chat",
+    "workflow:list",
+    "workflow:move",
+    "workflow:publish",
+    "workflow:read",
+    "workflow:share",
+    "workflow:unpublish",
+    "workflow:unshare",
+    "workflow:update",
+    "workflow:updateRedactionSetting"
+  ],
+  "checksum": "4913e1c4df22e0993c0f3f21c296c84f765576e4f06ac4ef64f391c5101ccd12"
+}
