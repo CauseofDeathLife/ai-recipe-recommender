@@ -91,7 +91,7 @@ function generarRecetaPlaceholder(producto) {
     Wok: [
       'Calienta el wok a fuego alto con un poco de aceite de ajonjolí.',
       'Añade jengibre rallado y cebolla en julianas, saltea 1 minuto.',
-      `Agrega los ${nombre} y cocina 5-7 minutos removiendo.',`,
+      `Agrega los ${nombre} y cocina 5-7 minutos removiendo.`,
       'Termina con salsa de soja y sirve sobre arroz blanco.',
     ],
   }
