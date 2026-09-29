@@ -341,22 +341,22 @@ const CarruselFade = ({ imagenes, indice, alt, modo = 'producto' }) => {
 // ─────────────────────────────────────────────
 
 const CARRUSEL_PRODUCTOS = [
-  '/productos-y-recetas/producto-02-alitas-bbq.webp',
-  '/productos-y-recetas/producto-03-camaron-tigre.webp',
-  '/productos-y-recetas/producto-04-filete-robalo.webp',
-  '/productos-y-recetas/producto-05-perniles-pollo.png',
-  '/productos-y-recetas/producto-06-muslos-pollo.webp',
-  '/productos-y-recetas/producto-08-pollo-molido.png',
-  '/productos-y-recetas/producto-09-salmon-noruego.webp',
+  '/images/producto-02-alitas-bbq.webp',
+  '/images/producto-03-camaron-tigre.webp',
+  '/images/producto-04-filete-robalo.webp',
+  '/images/producto-05-perniles-pollo.png',
+  '/images/producto-06-muslos-pollo.webp',
+  '/images/producto-08-pollo-molido.png',
+  '/images/producto-09-salmon-noruego.webp',
 ]
 
 const CARRUSEL_RECETAS = [
-  '/productos-y-recetas/receta-01-arepa-pollo.png',
-  '/productos-y-recetas/receta-02-banderas-salchicha.jpg',
-  '/productos-y-recetas/receta-05-fiambre-pollo.jpg',
-  '/productos-y-recetas/receta-06-muslos-asados.jpg',
-  '/productos-y-recetas/receta-07-ensalada-pollo.png',
-  '/productos-y-recetas/receta-08-pizza.png',
+  '/images/receta-01-arepa-pollo.png',
+  '/images/receta-02-banderas-salchicha.jpg',
+  '/images/receta-05-fiambre-pollo.jpg',
+  '/images/receta-06-muslos-asados.jpg',
+  '/images/receta-07-ensalada-pollo.png',
+  '/images/receta-08-pizza.png',
 ]
 
 const INTEGRANTES = [
