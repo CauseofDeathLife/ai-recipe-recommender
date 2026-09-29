@@ -26,3 +26,12 @@ dist-ssr
 # Python
 __pycache__/
 *.pyc
+
+# Environment files
+.env
+.env.*
+!.env.local.example
+
+# Archives and exported images
+*.zip
+*.tar

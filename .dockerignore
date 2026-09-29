@@ -1,0 +1,15 @@
+node_modules/
+.git/
+src/
+public/
+n8n/
+.env
+.env.*
+*.md
+backup-productos-y-recetas/
+scripts/
+.claude/
+.vscode/
+coverage/
+*.log
+*.tar
