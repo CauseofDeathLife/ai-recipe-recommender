@@ -459,7 +459,6 @@ export default function RecomendadorFriko() {
   const [error, setError] = useState('')
   const [mensajeFallback, setMensajeFallback] = useState('')
   const [nota, setNota] = useState('')
-  const [logoError, setLogoError] = useState(false)
   const [cargandoReceta, setCargandoReceta] = useState(false)
   const [origenReceta, setOrigenReceta] = useState(null)
   const [descargando, setDescargando] = useState(false)
