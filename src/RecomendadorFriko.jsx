@@ -359,14 +359,6 @@ const CARRUSEL_RECETAS = [
   '/images/receta-08-pizza.png',
 ]
 
-const INTEGRANTES = [
-  { nombre: 'Daniel Quintero', url: 'https://www.linkedin.com/in/danielesban/'},
-  { nombre: 'Juan Herrera', url: 'https://www.linkedin.com/in/juanherrera9/'  },
-  { nombre: 'Luisa Quiceno', url: 'https://www.linkedin.com/in/luisafernandaquicenogiraldo' },
-  { nombre: 'Héctor Mejía', url: 'https://www.linkedin.com/in/himv82' },
-  { nombre: 'Brayan Pabón', url: null },
-]
-
 // ─────────────────────────────────────────────
 // MENSAJE DE FALLBACK DINÁMICO
 // ─────────────────────────────────────────────
@@ -631,7 +623,7 @@ export default function RecomendadorFriko() {
   const handleCompartir = async () => {
     if (!receta || !resultado) return
     const personasText = personas ? `${personas} personas` : resultado.Rango
-    const urlApp = 'https://recetasbios.vercel.app'
+    const urlApp = 'https://bios-recetas-ia.vercel.app'
 
     const textoSaludo = `¡Mira esta receta que generé con productos Friko y Antillana! Pruébala tú también en ${urlApp}`
     const textoCorto = `Mira esta receta: *${receta.nombre}* (${personasText}) — ${urlApp}`
@@ -1725,7 +1717,16 @@ export default function RecomendadorFriko() {
               Aviso de privacidad
             </p>
             <p style={{ color: '#374151', fontSize: '12px', lineHeight: 1.6, marginTop: '6px', marginBottom: 0 }}>
-              Este es un proyecto académico desarrollado en el marco del Reto 12 del NODO EAFIT, sin fines comerciales ni operación real en producción. La aplicación no solicita, recolecta ni almacena datos personales de los usuarios: las selecciones de región, ocasión, método de preparación y número de comensales son parámetros anónimos que no permiten identificar a la persona que las realiza. Por lo anterior, al no existir tratamiento de datos personales en los términos del artículo 3 de la Ley 1581 de 2012, no se configura la obligación de autorización previa ni las demás cargas derivadas del régimen de protección de datos personales en Colombia.
+              Proyecto de demostración desarrollado para Grupo BIOS en la Beca SER ANDI (NODO EAFIT), sin fines comerciales.
+            </p>
+            <p style={{ color: '#374151', fontSize: '12px', lineHeight: 1.6, marginTop: '6px', marginBottom: 0 }}>
+              Esta aplicación no solicita, recolecta ni almacena datos personales. Las opciones que eliges (región, ocasión, tipo de preparación y número de personas) son parámetros anónimos. Cuando el servicio está disponible, se envían a un servicio externo de inteligencia artificial para generar la receta; si no lo está, la receta se genera en tu propio navegador.
+            </p>
+            <p style={{ color: '#374151', fontSize: '12px', lineHeight: 1.6, marginTop: '6px', marginBottom: 0 }}>
+              El sitio usa Vercel Analytics para medir visitas de forma anónima y agregada.
+            </p>
+            <p style={{ color: '#374151', fontSize: '12px', lineHeight: 1.6, marginTop: '6px', marginBottom: 0 }}>
+              Por lo anterior, no hay tratamiento de datos personales en los términos del artículo 3 de la Ley 1581 de 2012.
             </p>
           </div>
         </section>
@@ -1743,27 +1744,20 @@ export default function RecomendadorFriko() {
         zIndex: 1,
         position: 'relative',
       }}>
-        <div>Reto 12 · Grupo 5 · NODO EAFIT — Grupo Bios</div>
-        <div style={{ marginTop: '4px', letterSpacing: '1px' }}>
-          {INTEGRANTES.map((p, i) => (
-            <span key={p.nombre}>
-              {p.url ? (
-                <a
-                  href={p.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: 'rgba(13, 27, 111, 0.55)', textDecoration: 'none' }}
-                  onMouseOver={(e) => { e.currentTarget.style.textDecoration = 'underline' }}
-                  onMouseOut={(e) => { e.currentTarget.style.textDecoration = 'none' }}
-                >
-                  {p.nombre}
-                </a>
-              ) : (
-                p.nombre
-              )}
-              {i < INTEGRANTES.length - 1 && ' · '}
-            </span>
-          ))}
+        <div style={{ letterSpacing: '1px' }}>
+          Diseño y desarrollo:{' '}
+          <a
+            href="https://www.linkedin.com/in/danielesban/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Daniel Quintero en LinkedIn (se abre en una pestaña nueva)"
+            style={{ color: '#0d1b6f', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: '3px' }}
+          >
+            Daniel Quintero ↗
+          </a>
+        </div>
+        <div style={{ marginTop: '4px' }}>
+          Proyecto de demostración · Reto empresarial Grupo BIOS · Beca SER ANDI — NODO EAFIT
         </div>
       </footer>
 
