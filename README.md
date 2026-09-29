@@ -10,7 +10,7 @@
 
 An MVP recipe recommender built for **Reto 12 (NODO EAFIT × Grupo Bios)**. Users filter Friko and Antillana products by region, occasion, cooking method, and number of people — the app then recommends a matching product from a 55-item catalog and generates an AI-powered recipe suggestion on demand.
 
-🔗 **Live site:** [recetasbios.vercel.app](https://recetasbios.vercel.app)
+🔗 **Live site:** [bios-recetas-ia.vercel.app](https://bios-recetas-ia.vercel.app)
 
 ---
 
@@ -88,8 +88,8 @@ The user selects up to four filters (region, occasion, cooking method, number of
 ### Installation
 
 ```bash
-git clone https://github.com/CauseofDeathLife/bios-recipercommender-website.git
-cd bios-recipercommender-website
+git clone https://github.com/CauseofDeathLife/bios-reciperecommender-website.git
+cd bios-reciperecommender-website
 npm install
 ```
 
@@ -186,13 +186,8 @@ These assets are included in the repository for demonstration purposes
 only and may not be reused, redistributed, or repurposed without
 explicit permission from Grupo Bios.
 
-Authorship and Collaboration
+**Authorship**
 
-**Full-Stack Development & Software Architect:** Daniel Esteban Quintero Caro (Responsible for all React code, project structure, and ProCode integration logic).
+Developed as a team challenge. **All software (design, architecture and development) was built by Daniel Esteban Quintero Caro, the team's sole developer:** React code, UI design, project structure and the integration with the n8n workflow. The rest of the team contributed research and documentation for the challenge deliverables (presentations and reports).
 
-**Research and Analysis:** Challenge 12 Team (Product research, catalog analysis, and client requirements).
-
-**Quality Assurance (QA) and n8n Support:** Collaborative team effort on stress testing, prompt refinement, and adjustments to LowCode workflows.
-
-
-This repository constitutes a work of individual authorship in terms of its architecture and source code, developed under a group collaboration framework. Credits for all team members for their management and support work are duly integrated into the application’s user interface.
+Built during Stage 3 (Business Challenges) of the Beca SER ANDI, operated by NODO — Universidad EAFIT, as a demonstration project for Grupo Bios.
