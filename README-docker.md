@@ -1,82 +1,48 @@
-# Instrucciones de despliegue — Bios Recipe Recommender
+# Running with Docker — AI Recipe Recommender
 
-Este documento explica cómo ejecutar la aplicación localmente a partir del archivo de imagen Docker que se entrega como parte del Reto 12.
+## What this does
 
----
+The image is built from source in two stages: Node 22 compiles the app with Vite, then nginx serves the resulting static files. No Node.js is needed on the host, only Docker.
 
-## ¿Qué es el archivo `bios-recommender.tar`?
+## Requirements
 
-Es una imagen Docker exportada que contiene la aplicación web lista para correr. No requiere tener Node.js, npm ni acceso al código fuente; solo necesita Docker.
+Docker Desktop (or Docker Engine): https://www.docker.com/products/docker-desktop/
 
----
+## Build the image
 
-## Prerequisito
-
-Tener **Docker Desktop** instalado y en ejecución.
-
-- Descarga: https://www.docker.com/products/docker-desktop/
-
----
-
-## Paso 1 — Cargar la imagen
-
-Desde la carpeta donde esté el archivo `bios-recommender.tar`, ejecutar:
+Run from the repository root:
 
 ```bash
-docker load -i bios-recommender.tar
+docker build -t ai-recipe-recommender .
 ```
 
-Esto registra la imagen `bios-recommender:1.0.0` en Docker local.
+## Optional: enable AI recipe generation
 
----
-
-## Paso 2 — Correr el contenedor
+The app calls an n8n webhook to generate recipes with AI. Without it, the app uses its local fallback generator. To enable the webhook, pass its URL as a build argument:
 
 ```bash
-docker run -d -p 8080:80 --name bios-recommender bios-recommender:1.0.0
+docker build --build-arg VITE_N8N_WEBHOOK_URL=https://your-instance.app.n8n.cloud/webhook/generar-receta -t ai-recipe-recommender .
 ```
 
----
+The URL is embedded in the JavaScript bundle at build time, so it is visible to anyone who loads the app.
 
-## Paso 3 — Abrir la aplicación
+## Run the container
 
-Abrir el navegador en:
-
-```
-http://localhost:8080
+```bash
+docker run -d -p 8080:80 --name ai-recipe-recommender ai-recipe-recommender
 ```
 
----
+Then open `http://localhost:8080`.
 
-## Nota sobre la generación de recetas por IA
+## Useful commands
 
-Si al solicitar una receta aparece un mensaje de error o la respuesta se ve genérica, es porque el webhook de N8N (plan de prueba gratuito) ha expirado. Esto es comportamiento esperado: la aplicación detecta el fallo y cae automáticamente a un generador local de respaldo, por lo que la funcionalidad principal sigue disponible.
-
----
-
-## Comandos útiles
-
-| Acción | Comando |
+| Action | Command |
 |--------|---------|
-| Detener el contenedor | `docker stop bios-recommender` |
-| Eliminar el contenedor | `docker rm bios-recommender` |
-| Eliminar la imagen | `docker rmi bios-recommender:1.0.0` |
-| Ver logs del contenedor | `docker logs bios-recommender` |
+| Stop the container | `docker stop ai-recipe-recommender` |
+| Remove the container | `docker rm ai-recipe-recommender` |
+| Remove the image | `docker rmi ai-recipe-recommender` |
+| View container logs | `docker logs ai-recipe-recommender` |
 
----
+## About the AI flow
 
-## Resumen rápido (todo en un bloque)
-
-```bash
-# Cargar
-docker load -i bios-recommender.tar
-
-# Correr
-docker run -d -p 8080:80 --name bios-recommender bios-recommender:1.0.0
-
-# Abrir en el navegador: http://localhost:8080
-
-# Limpiar cuando termine
-docker stop bios-recommender
-docker rm bios-recommender
-```
+The original n8n Cloud workflow is no longer active, so the public demo and any image built without the build argument use the local fallback generator. The app keeps working and responds immediately.
