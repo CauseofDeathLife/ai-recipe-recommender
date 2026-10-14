@@ -1,7 +1,7 @@
 {
-  "name": "recomendador-friko",
+  "name": "ai-recipe-recommender",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
-    "lucide-react": "^1.8.0",
     "modern-screenshot": "^4.7.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
